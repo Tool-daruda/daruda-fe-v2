@@ -1,0 +1,59 @@
+name: Discord PR Notifications
+
+on:
+  pull_request:
+    types:
+      - opened
+      - closed
+  pull_request_review:
+    types:
+      - submitted
+
+jobs:
+  notify-discord:
+    name: Notify Discord on Pull Request Events
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send Discord Notification
+        env:
+          DISCORD_WEBHOOK_PR: ${{ secrets.DISCORD_WEBHOOK_PR }}
+        run: |
+          EVENT_NAME="${{ github.event_name }}"
+          PR_ACTION="${{ github.event.action }}"
+          PR_URL="${{ github.event.pull_request.html_url }}"
+          PR_TITLE="${{ github.event.pull_request.title }}"
+          PR_AUTHOR="${{ github.event.pull_request.user.login }}"
+          PR_MERGED="${{ github.event.pull_request.merged || 'false' }}"
+          REVIEW_STATE="${{ github.event.review.state || '' }}"
+          REVIEWER="${{ github.event.review.user.login || '' }}"
+          REVIEW_BODY="${{ github.event.review.body || '' }}"
+
+          # PR 생성
+          if [[ "$EVENT_NAME" == "pull_request" && "$PR_ACTION" == "opened" ]]; then
+            curl -X POST -H "Content-Type: application/json" \
+              -d '{
+                "content": "**📣 다루다 레전드 Pull Request 생성 🔥 ((new PR))**\n🔗 **PR 링크**: '"$PR_URL"'\n📄 **제목**: '"$PR_TITLE"'\n👤 **작성자**: '"$PR_AUTHOR"'"
+              }' $DISCORD_WEBHOOK_PR
+
+          # PR 머지
+          elif [[ "$EVENT_NAME" == "pull_request" && "$PR_ACTION" == "closed" && "$PR_MERGED" == "true" ]]; then
+            curl -X POST -H "Content-Type: application/json" \
+              -d '{
+                "content": "**✨ 병합은 영어로 머지 ((merge))**\n🔗 **PR 링크**: '"$PR_URL"'\n📄 **제목**: '"$PR_TITLE"'\n👤 **작성자**: '"$PR_AUTHOR"'"
+              }' $DISCORD_WEBHOOK_PR
+
+          # PR 닫힘 (머지되지 않음)
+          elif [[ "$EVENT_NAME" == "pull_request" && "$PR_ACTION" == "closed" && "$PR_MERGED" != "true" ]]; then
+            curl -X POST -H "Content-Type: application/json" \
+              -d '{
+                "content": "**❌ 히융.. Pull Request 영업종료 ((close))**\n🔗 **PR 링크**: '"$PR_URL"'\n📄 **제목**: '"$PR_TITLE"'\n👤 **작성자**: '"$PR_AUTHOR"'"
+              }' $DISCORD_WEBHOOK_PR
+
+          # PR 리뷰
+          elif [[ "$EVENT_NAME" == "pull_request_review" ]]; then
+            curl -X POST -H "Content-Type: application/json" \
+              -d '{
+                "content": "**📝 띵동 새로운 리뷰 작성**\n🔗 **PR 링크**: '"$PR_URL"'\n📄 **제목**: '"$PR_TITLE"'\n👤 **리뷰어**: '"$REVIEWER"'\n✍️ **리뷰 내용**: '"$REVIEW_BODY"'"
+              }' $DISCORD_WEBHOOK_PR
+          fi
