@@ -1,15 +1,11 @@
 {
 	"$schema": "https://biomejs.dev/schemas/2.2.4/schema.json",
-	"vcs": {
-		"enabled": false,
-		"clientKind": "git",
-		"useIgnoreFile": false
-	},
 	"files": {
 		"includes": [
-		"**",
-		"!**/dist",
-		"!**/storybook-static"
+			"**",
+			"!**/dist",
+			"!**/storybook-static",
+			"**/*.{js,jsx,ts,tsx,json,css,scss,md,mdx}"
 		]
 	},
 	"formatter": {
@@ -17,7 +13,6 @@
 		"indentStyle": "tab",
 		"indentWidth": 2,
 		"lineWidth": 100
-
 	},
 	"linter": {
 		"enabled": true,
@@ -26,11 +21,11 @@
 		}
 	},
 	"javascript": {
-			"formatter": {
-				"quoteStyle": "double",
-				"semicolons": "always", 
-				"trailingCommas": "es5"
-			}
+		"formatter": {
+			"quoteStyle": "double",
+			"semicolons": "always",
+			"trailingCommas": "es5"
+		}
 	},
 	"assist": {
 		"enabled": true,
