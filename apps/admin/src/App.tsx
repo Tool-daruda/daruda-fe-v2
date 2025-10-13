@@ -1,13 +1,27 @@
+import { TextField } from "@repo/ui";
 import { themeClass } from "@repo/ui/foundations";
-import * as styles from "./App.css";
+import { useState } from "react";
 
 function App() {
+	const [value, setValue] = useState("");
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setValue(e.target.value);
+	};
+
+	const handleClear = () => {
+		setValue("");
+	};
+
 	return (
 		<div className={themeClass}>
-			<div className={styles.container}>
-				<p className={styles.title}>디자인 시스템 테스트</p>
-				<p className={styles.description}>zz.</p>
-			</div>
+			<TextField
+				type="text"
+				placeholder="내용을 입력하세요"
+				size="xl"
+				value={value}
+				onChange={handleChange}
+				onClear={handleClear}
+			/>
 		</div>
 	);
 }
