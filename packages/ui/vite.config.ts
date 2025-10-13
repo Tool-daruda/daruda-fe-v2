@@ -1,5 +1,5 @@
+import path from "node:path";
 import { vanillaExtractPlugin } from "@vanilla-extract/vite-plugin";
-import path from "path";
 import { defineConfig } from "vite";
 
 export default defineConfig({
@@ -11,7 +11,7 @@ export default defineConfig({
 				foundations: path.resolve(__dirname, "src/foundations/index.ts"),
 			},
 			formats: ["es"],
-			fileName: (format, entryName) => `${entryName}.js`,
+			fileName: (_format, entryName) => `${entryName}.js`,
 		},
 		rollupOptions: {
 			external: ["react", "react-dom", "@vanilla-extract/css"],
