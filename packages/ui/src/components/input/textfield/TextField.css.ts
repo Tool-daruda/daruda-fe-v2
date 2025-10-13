@@ -15,6 +15,11 @@ export const textFieldRecipe = recipe({
 		padding: `12px 12px 12px 20px`,
 		...themeVars.fonts.caption1_1,
 		boxSizing: "border-box",
+
+		"::placeholder": {
+			color: themeVars.colors.grayscale[500],
+			...themeVars.fonts.caption1_1,
+		},
 	},
 
 	variants: {
@@ -56,6 +61,10 @@ export const inputStyle = style({
 	backgroundColor: "transparent",
 	color: "inherit",
 	font: "inherit",
+	"::placeholder": {
+		color: "inherit",
+		font: "inherit",
+	},
 });
 
 export const buttonStyle = style({

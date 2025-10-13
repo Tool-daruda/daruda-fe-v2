@@ -1,5 +1,5 @@
 import { TextField } from "@repo/ui";
-import { themeClass } from "@repo/ui/foundations";
+import { themeClass, themeVars } from "@repo/ui/foundations";
 import { useState } from "react";
 
 function App() {
@@ -21,6 +21,7 @@ function App() {
 				value={value}
 				onChange={handleChange}
 				onClear={handleClear}
+				style={{ color: themeVars.colors.brand.iris[50] }}
 			/>
 		</div>
 	);
