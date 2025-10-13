@@ -235,4 +235,3 @@ export const typographyTokens = {
 
 export type ColorTokens = typeof colorTokens;
 export type TypographyTokens = typeof typographyTokens;
-
