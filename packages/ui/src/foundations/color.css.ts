@@ -1,60 +1,6 @@
 import { createGlobalTheme } from "@vanilla-extract/css";
+import { colorTokens } from "./tokens";
 
-export const colors = createGlobalTheme(":root", {
-  brand: {
-    iris: {
-      "50": "#EEF2FF",
-      "100": "#E0E7FF",
-      "200": "#C7D2FE",
-      "300": "#A5B3FC",
-      "400": "#818BF8",
-      "500": "#5254F0",
-      "600": "#5046E5",
-      "700": "#4438CA",
-      "800": "#3830A3",
-      "900": "#322E81",
-      "950": "#1E1B4B",
-    },
-    orange: {
-      "50": "#FFF7ED",
-      "100": "#FFEED4",
-      "200": "#FFD9A8",
-      "300": "#FFBE70",
-      "400": "#FF9837",
-      "500": "#FF8222",
-      "600": "#F05C06",
-      "700": "#C74407",
-      "800": "#9E360E",
-      "900": "#7F2F0F",
-      "950": "#451805",
-    },
-  },
+export const colors = createGlobalTheme(":root", colorTokens);
 
-  grayscale: {
-    "0": "#FFFFFF",
-    "5": "#FCFCFC",
-    "25": "#F8F8F8",
-    "50": "#EBEBEB",
-    "100": "#DCDCDC",
-    "200": "#BDBDBD",
-    "300": "#989898",
-    "400": "#7C7C7C",
-    "500": "#656565",
-    "600": "#525252",
-    "700": "#464646",
-    "800": "#3D3D3D",
-    "900": "#292929",
-    "950": "#161616",
-  },
-
-  system: {
-    red: {
-      lt: "#EB210F",
-      dt: "#FF4635",
-    },
-    green: {
-      lt: "#15C440",
-      dt: "#36E361",
-    },
-  },
-});
+export type Colors = typeof colors;
