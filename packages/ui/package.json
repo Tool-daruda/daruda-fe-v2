@@ -19,20 +19,37 @@
 		"dist"
 	],
 	"scripts": {
-		"build": "tsc && vite build",
-		"dev": "rm -rf dist && tsc && vite build --watch",
 		"lint": "eslint . --max-warnings 0",
 		"generate:component": "turbo gen react-component",
-		"check-types": "tsc --noEmit"
+		"check-types": "tsc --noEmit",
+		"dev": "rm -rf dist && tsc && vite build --watch",
+		"dev:storybook": "storybook dev -p 6006",
+		"build": "tsc && vite build",
+		"build:storybook": "storybook build"
 	},
 	"devDependencies": {
+		"@chromatic-com/storybook": "^3",
+		"@storybook/addon-essentials": "8.6.14",
+		"@storybook/addon-interactions": "8.6.14",
+		"@storybook/addon-onboarding": "8.6.14",
+		"@storybook/blocks": "^8.6.14",
+		"@storybook/experimental-addon-test": "^8.6.14",
+		"@storybook/react": "8.6.14",
+		"@storybook/react-vite": "8.6.14",
+		"@storybook/test": "^8.6.14",
 		"@types/node": "^22.15.3",
 		"@types/react": "19.1.0",
 		"@types/react-dom": "19.1.1",
 		"@vanilla-extract/vite-plugin": "^5.1.1",
+		"@vitest/browser": "^3.2.4",
+		"@vitest/coverage-v8": "^3.2.4",
 		"eslint": "^9.34.0",
+		"eslint-plugin-storybook": "^9.1.13",
+		"playwright": "^1.56.1",
+		"storybook": "8.6.14",
 		"typescript": "5.9.2",
-		"vite": "^7.1.7"
+		"vite": "^7.1.7",
+		"vitest": "^3.2.4"
 	},
 	"dependencies": {
 		"@vanilla-extract/css": "^1.17.4",
@@ -45,5 +62,10 @@
 				"dist/*"
 			]
 		}
+	},
+	"eslintConfig": {
+		"extends": [
+			"plugin:storybook/recommended"
+		]
 	}
 }
