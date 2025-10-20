@@ -3,7 +3,7 @@ import { useState } from "react";
 import { TextField } from "./TextField";
 
 const meta: Meta<typeof TextField> = {
-	title: "Form/TextField",
+	title: "Components/Input/TextField",
 	component: TextField,
 	tags: ["autodocs"],
 	argTypes: {
