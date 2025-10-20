@@ -14,7 +14,7 @@ import { useState } from "react";
 
 function App() {
 	const [value, setValue] = useState("");
-	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+	const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 		setValue(e.target.value);
 	};
 
@@ -82,13 +82,7 @@ function App() {
 
 				<p style={{ marginTop: "12px" }}>선택된 값: {selected}</p>
 			</div>
-			<CheckboxGroup
-				name="skills"
-				value={skills}
-				onValueChange={setSkills}
-				legend="관심 분야 선택"
-				describedById="skills-help"
-			>
+			<CheckboxGroup name="skills" value={skills} onValueChange={setSkills}>
 				{OPTIONS.map((o) => (
 					<Checkbox key={o.value} value={o.value}>
 						{o.label}
