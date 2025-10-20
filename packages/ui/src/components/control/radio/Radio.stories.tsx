@@ -21,8 +21,6 @@ const meta: Meta<typeof Radio> = {
 	argTypes: {
 		value: { control: "text", description: "해당 라디오 아이템의 값" },
 		disabled: { control: "boolean" },
-		className: { control: "text" },
-		children: { control: "text" },
 	},
 };
 export default meta;

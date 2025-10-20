@@ -4,7 +4,6 @@ import { inputStyle, textAreaRecipe } from "./TextArea.css";
 import type { TextAreaProps } from "./TextArea.types";
 
 export const TextArea = ({
-	type = "text",
 	size,
 	disabled,
 	className,

@@ -4,6 +4,4 @@ import type { textAreaRecipe } from "./TextArea.css";
 
 type Variants = RecipeVariants<typeof textAreaRecipe>;
 
-export type TextAreaProps = Variants & {
-	type?: "text" | "search";
-} & Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "size">;
+export type TextAreaProps = Variants & Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "size">;

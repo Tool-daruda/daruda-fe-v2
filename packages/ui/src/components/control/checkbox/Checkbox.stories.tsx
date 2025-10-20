@@ -21,13 +21,11 @@ const meta: Meta<typeof Checkbox> = {
 		},
 	},
 	argTypes: {
-		value: { control: "text", description: "그룹 모드에서 항목 식별자" },
 		name: { control: "text", description: "단독 모드에서 폼 제출 name" },
 		checked: { control: "boolean", description: "제어형 (단독)" },
 		defaultChecked: { control: "boolean", description: "비제어형 초기값 (단독)" },
 		indeterminate: { control: "boolean", description: "부분 선택 상태 (단독/상위 토글용)" },
 		disabled: { control: "boolean" },
-		children: { control: "text" },
 	},
 };
 export default meta;

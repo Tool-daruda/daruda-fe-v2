@@ -18,15 +18,12 @@ const meta: Meta<typeof Dropdown> = {
 	tags: ["autodocs"],
 	argTypes: {
 		options: { control: false },
-		value: { control: "text", description: "현재 선택된 value(제어형)" },
 		placeholder: { control: "text" },
 		disabled: { control: "boolean" },
 		maxHeight: {
 			control: { type: "number", min: 0, step: 1 },
 			description: "보여줄 **행 수**. 0 또는 미지정이면 전체 표시",
 		},
-		className: { control: "text" },
-		onChange: { action: "changed" },
 	},
 };
 export default meta;
