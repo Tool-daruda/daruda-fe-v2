@@ -1,5 +1,6 @@
 import type React from "react";
 import { useContext, useId, useState } from "react";
+import * as S from "./Checkbox.css";
 import { CheckboxContext } from "./Checkbox.types";
 
 interface CheckboxGroupProps {
@@ -9,10 +10,10 @@ interface CheckboxGroupProps {
 	name?: string;
 	disabled?: boolean;
 	required?: boolean;
-	legend?: React.ReactNode;
 	describedById?: string;
 	children: React.ReactNode;
 	className?: string;
+	orientation?: "horizontal" | "vertical";
 }
 
 export const CheckboxGroup = ({
@@ -21,10 +22,10 @@ export const CheckboxGroup = ({
 	onValueChange,
 	name,
 	disabled,
-	legend,
 	describedById,
 	children,
 	className,
+	orientation = "horizontal",
 }: CheckboxGroupProps) => {
 	const id = useId();
 	const [internal, setInternal] = useState(new Set(defaultValue ?? []));
@@ -43,8 +44,12 @@ export const CheckboxGroup = ({
 	};
 
 	return (
-		<fieldset className={className} disabled={disabled} aria-describedby={describedById}>
-			{legend && <legend>{legend}</legend>}
+		<fieldset
+			disabled={disabled}
+			data-orientation={orientation}
+			aria-describedby={describedById}
+			className={`${S.checkboxGroupStyle} ${className ?? ""}`}
+		>
 			<CheckboxContext.Provider value={{ name: name ?? `cg-${id}`, values: cur, toggle, disabled }}>
 				{children}
 			</CheckboxContext.Provider>

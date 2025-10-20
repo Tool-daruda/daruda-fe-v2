@@ -1,6 +1,7 @@
 import type React from "react";
 import { useState } from "react";
 import { ToggleBase } from "../_primitives/ToggleBase";
+import * as S from "./Checkbox.css";
 import { useCheckboxContext } from "./CheckboxGroup";
 
 interface CheckboxProps {
@@ -13,8 +14,10 @@ interface CheckboxProps {
 	disabled?: boolean;
 	className?: string;
 	children?: React.ReactNode;
-	indicator?: React.ReactNode;
 }
+
+const IconCheckboxChecked = () => <>✅</>;
+const IconCheckboxUnchecked = () => <>☑</>;
 
 export const Checkbox = (props: CheckboxProps) => {
 	const ctx = useCheckboxContext();
@@ -52,10 +55,17 @@ export const Checkbox = (props: CheckboxProps) => {
 			checked={checked}
 			disabled={(inGroup && ctx ? ctx.disabled : false) || props.disabled}
 			onChange={handleChange}
-			className={props.className}
+			className={`${S.checkboxItem} ${props.className ?? ""}`}
 			indeterminate={props.indeterminate}
 		>
-			<span className="box">{props.indicator}</span>
+			<span className="box">
+				<span className={S.iconUnchecked}>
+					<IconCheckboxUnchecked />
+				</span>
+				<span className={S.iconChecked}>
+					<IconCheckboxChecked />
+				</span>
+			</span>
 			<span className="label">{props.children}</span>
 		</ToggleBase>
 	);

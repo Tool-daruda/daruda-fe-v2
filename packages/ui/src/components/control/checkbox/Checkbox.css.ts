@@ -1,10 +1,13 @@
 import { globalStyle, style } from "@vanilla-extract/css";
 import { themeVars } from "src/foundations";
 
-export const radioGroupStyle = style({
+export const checkboxGroupStyle = style({
 	display: "flex",
 	gap: "24px",
 	flexDirection: "row",
+	border: "none",
+	margin: 0,
+	padding: 0,
 
 	selectors: {
 		'&[data-orientation="vertical"]': {
@@ -13,7 +16,7 @@ export const radioGroupStyle = style({
 	},
 });
 
-export const radioItem = style({
+export const checkboxItem = style({
 	width: "fit-content",
 	cursor: "pointer",
 
@@ -25,13 +28,13 @@ export const radioItem = style({
 	},
 });
 
-globalStyle(`${radioItem} .ctrl-visual`, {
+globalStyle(`${checkboxItem} .ctrl-visual`, {
 	display: "flex",
 	alignItems: "center",
 	gap: "8px",
 });
 
-globalStyle(`${radioItem} .dot`, {
+globalStyle(`${checkboxItem} .box`, {
 	position: "relative",
 	width: "14px",
 	height: "14px",
@@ -64,15 +67,15 @@ export const iconChecked = style([
 	},
 ]);
 
-globalStyle(`${radioItem}[data-state="checked"] .${iconUnchecked}`, {
+globalStyle(`${checkboxItem}[data-state="checked"] .${iconUnchecked}`, {
 	opacity: 0,
 });
 
-globalStyle(`${radioItem}[data-state="checked"] .${iconChecked}`, {
+globalStyle(`${checkboxItem}[data-state="checked"] .${iconChecked}`, {
 	opacity: 1,
 });
 
-globalStyle(`${radioItem} .label`, {
+globalStyle(`${checkboxItem} .label`, {
 	...themeVars.fonts.t4_1,
 	color: themeVars.colors.grayscale[800],
 });
