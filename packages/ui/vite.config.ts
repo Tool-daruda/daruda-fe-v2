@@ -1,9 +1,10 @@
 import path from "node:path";
 import { vanillaExtractPlugin } from "@vanilla-extract/vite-plugin";
 import { defineConfig } from "vite";
+import svgr from "vite-plugin-svgr";
 
 export default defineConfig({
-	plugins: [vanillaExtractPlugin()],
+	plugins: [vanillaExtractPlugin(), svgr()],
 	build: {
 		lib: {
 			entry: {
