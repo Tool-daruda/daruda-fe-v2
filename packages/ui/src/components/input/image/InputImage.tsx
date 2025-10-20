@@ -72,18 +72,18 @@ export const InputImage = ({
 		<div className={`${S.containerStyle} ${className ?? ""}`}>
 			<div className={S.previewContainerStyle}>
 				{canUpload && (
-				<label className={S.uploadButtonRecipe({ disabled })} aria-label={uploadAriaLabel}>
-					<AddIcon />
-					<input
-						ref={inputRef}
-						type="file"
-						multiple
-						accept={accept}
-						className={S.inputStyle}
-						onChange={handleFileChange}
-						disabled={!canUpload}
-					/>
-				</label>
+					<label className={S.uploadButtonRecipe({ disabled })} aria-label={uploadAriaLabel}>
+						<AddIcon />
+						<input
+							ref={inputRef}
+							type="file"
+							multiple
+							accept={accept}
+							className={S.inputStyle}
+							onChange={handleFileChange}
+							disabled={!canUpload}
+						/>
+					</label>
 				)}
 				{existingImages.map((url) => (
 					<div key={url} className={S.imagePreviewStyle}>

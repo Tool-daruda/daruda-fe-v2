@@ -1,8 +1,6 @@
-import { style } from "@vanilla-extract/css";
+import { globalStyle, style } from "@vanilla-extract/css";
 import { recipe } from "@vanilla-extract/recipes";
 import { themeVars } from "src/foundations";
-import { globalStyle } from "@vanilla-extract/css";
-
 
 export const containerStyle = style({
 	position: "relative",
@@ -82,11 +80,11 @@ export const removeButtonRecipe = recipe({
 		transition: "transform 0.2s, background-color 0.2s",
 
 		":hover": {
-			backgroundColor: themeVars.colors.grayscale[0], 
+			backgroundColor: themeVars.colors.grayscale[0],
 		},
 
 		":active": {
-			backgroundColor: themeVars.colors.grayscale[0], 
+			backgroundColor: themeVars.colors.grayscale[0],
 		},
 	},
 
