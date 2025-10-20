@@ -210,21 +210,21 @@ export const typographyTokens = {
 		lineHeight: "14px",
 		letterSpacing: "-0.144px",
 	},
-	caption_1: {
+	caption1_1: {
 		fontFamily: "Pretendard",
 		fontWeight: "400",
 		fontSize: "14px",
 		lineHeight: "20px",
 		letterSpacing: "-0.168px",
 	},
-	caption_2_1: {
+	caption2_1: {
 		fontFamily: "Pretendard",
 		fontWeight: "400",
 		fontSize: "12px",
 		lineHeight: "20px",
 		letterSpacing: "-0.144px",
 	},
-	caption_2_2: {
+	caption2_2: {
 		fontFamily: "Pretendard",
 		fontWeight: "400",
 		fontSize: "12px",
