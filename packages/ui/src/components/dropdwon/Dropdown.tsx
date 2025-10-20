@@ -1,3 +1,4 @@
+import { assignInlineVars } from "@vanilla-extract/dynamic";
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
 import * as S from "./Dropdown.css";
@@ -53,7 +54,6 @@ export const Dropdown = ({
 					open: isOpen,
 					disabled,
 					hasValue: !!selectedOption,
-					maxHeight,
 				})}
 				onClick={handleToggle}
 				disabled={disabled}
@@ -68,7 +68,18 @@ export const Dropdown = ({
 			</button>
 
 			{isOpen && (
-				<ul className={S.optionsListStyle}>
+				<ul
+					className={
+						typeof maxHeight === "number" && maxHeight > 0
+							? `${S.optionsListStyle} ${S.optionsListCapped} `
+							: S.optionsListStyle
+					}
+					style={
+						typeof maxHeight === "number" && maxHeight > 0
+							? assignInlineVars({ [S.rowsVar]: String(maxHeight) })
+							: undefined
+					}
+				>
 					{options.map((option) => (
 						<li
 							key={option.value}

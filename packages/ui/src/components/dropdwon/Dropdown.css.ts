@@ -1,6 +1,9 @@
-import { style } from "@vanilla-extract/css";
+import { createVar, globalStyle, style } from "@vanilla-extract/css";
 import { recipe } from "@vanilla-extract/recipes";
 import { themeVars } from "src/foundations/theme.css";
+
+const ROW_HEIGHT = 44;
+export const rowsVar = createVar();
 
 export const rootStyle = style({
 	position: "relative",
@@ -46,11 +49,6 @@ export const dropdownTriggerRecipe = recipe({
 				color: themeVars.colors.grayscale[500],
 			},
 		},
-		maxHeight: {
-			150: {
-				maxHeight: "150px",
-			},
-		},
 	},
 });
 
@@ -82,14 +80,8 @@ export const optionItemRecipe = recipe({
 		listStyle: "none",
 
 		selectors: {
-			":hover": {
+			"&:hover": {
 				backgroundColor: themeVars.colors.grayscale[50],
-			},
-			"& button": {
-				background: "none",
-				border: "none",
-				color: "inherit",
-				font: "inherit",
 			},
 		},
 	},
@@ -102,6 +94,23 @@ export const optionItemRecipe = recipe({
 			},
 		},
 	},
+});
+
+globalStyle(`${optionItemRecipe} button`, {
+	width: "100%",
+	height: "100%",
+	textAlign: "left",
+	background: "none",
+	border: "none",
+	color: "inherit",
+	font: "inherit",
+	padding: 0,
+	cursor: "pointer",
+});
+
+export const optionsListCapped = style({
+	maxHeight: `calc(${rowsVar} * ${ROW_HEIGHT}px)`,
+	overflowY: "auto",
 });
 
 export const arrowIconStyle = style({
