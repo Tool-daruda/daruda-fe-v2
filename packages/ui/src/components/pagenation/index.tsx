@@ -1,3 +1,5 @@
+import CircleLeft from "../../assets/icons/ic_circle_left.svg?react";
+import CircleRight from "../../assets/icons/ic_circle_right.svg?react";
 import usePagenation from "../../hooks/use-pagenation";
 import * as styles from "./pagenation.css";
 
@@ -26,7 +28,7 @@ const PageNation = ({ page, totalPages, onPageChange }: PageNationProps) => {
 				onClick={handlePrevGroup}
 				disabled={pageGroup === 0}
 			>
-				&lt;
+				<CircleLeft className={styles.arrowIconClass} />
 			</button>
 
 			{/* 페이지 번호 */}
@@ -48,7 +50,7 @@ const PageNation = ({ page, totalPages, onPageChange }: PageNationProps) => {
 				onClick={handleNextGroup}
 				disabled={pageGroup === totalGroups - 1}
 			>
-				&gt;
+				<CircleRight className={styles.arrowIconClass} />
 			</button>
 		</nav>
 	);

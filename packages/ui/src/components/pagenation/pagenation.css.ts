@@ -1,4 +1,4 @@
-import { style } from "@vanilla-extract/css";
+import { globalStyle, style } from "@vanilla-extract/css";
 import { themeVars } from "src/foundations";
 
 export const paginationContainer = style({
@@ -36,4 +36,10 @@ export const pageButton = style({
 export const active = style({
 	background: themeVars.colors.grayscale[600],
 	color: themeVars.colors.grayscale[0],
+});
+
+export const arrowIconClass = style({});
+
+globalStyle(`${arrowIconClass}:hover path`, {
+	stroke: themeVars.colors.grayscale[200],
 });
