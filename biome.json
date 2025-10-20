@@ -4,6 +4,7 @@
 		"includes": [
 			"**",
 			"!**/dist",
+			"!**/.turbo",
 			"!**/storybook-static",
 			"**/*.{js,jsx,ts,tsx,json,css,scss,md,mdx}"
 		]
