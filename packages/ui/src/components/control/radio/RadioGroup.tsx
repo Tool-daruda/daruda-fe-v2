@@ -1,5 +1,6 @@
 import type React from "react";
 import { useContext, useId, useState } from "react";
+import * as S from "./Radio.css";
 import { RadioContext } from "./Radio.types";
 
 interface RadioGroupProps {
@@ -18,7 +19,7 @@ export const RadioGroup = ({
 	onValueChange,
 	name,
 	disabled,
-	orientation = "vertical",
+	orientation = "horizontal",
 	children,
 }: RadioGroupProps) => {
 	const id = useId();
@@ -29,7 +30,7 @@ export const RadioGroup = ({
 	const set = (v: string) => (isCtrl ? onValueChange?.(v) : setInternal(v));
 
 	return (
-		<div role="radiogroup" data-orientation={orientation}>
+		<div role="radiogroup" data-orientation={orientation} className={S.radioGroupStyle}>
 			<RadioContext.Provider value={{ name: groupName, value: cur, setValue: set, disabled }}>
 				{children}
 			</RadioContext.Provider>
