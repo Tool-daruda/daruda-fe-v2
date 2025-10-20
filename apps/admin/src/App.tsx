@@ -1,4 +1,4 @@
-import { InputImage, TextArea, TextField } from "@repo/ui";
+import { Dropdown, InputImage, type Option, TextArea, TextField } from "@repo/ui";
 import { themeClass } from "@repo/ui/foundations";
 import { useState } from "react";
 
@@ -34,8 +34,30 @@ function App() {
 		alert(`[${error.type}] ${error.message}`);
 	};
 
+	const dropdownOptions: Option[] = [
+		{ label: "AI", value: "ai" },
+		{ label: "문서 작성&편집", value: "document" },
+		{ label: "프레젠테이션", value: "presentation" },
+		{ label: "협업&커뮤니케이션", value: "communication" },
+		{ label: "데이터", value: "data" },
+		{ label: "그래픽&디자인", value: "design" },
+	];
+
+	const [selectedValue, setSelectedValue] = useState<string | undefined>(undefined);
+
+	const handleDropdownChange = (option: Option) => {
+		setSelectedValue(option.value);
+	};
+
 	return (
 		<div className={themeClass}>
+			<Dropdown
+				options={dropdownOptions}
+				value={selectedValue}
+				onChange={handleDropdownChange}
+				maxHeight={3}
+				placeholder="내용을 입력하세요"
+			/>
 			<TextField
 				type="text"
 				placeholder="내용을 입력하세요"
