@@ -50,15 +50,4 @@ jobs:
                 "content": "**❌ 히융.. Pull Request 영업종료 ((close))**\n🔗 **PR 링크**: '"$PR_URL"'\n📄 **제목**: '"$PR_TITLE"'\n👤 **작성자**: '"$PR_AUTHOR"'"
               }' $DISCORD_WEBHOOK_PR
 
-          # PR 리뷰
-          elif [[ "$EVENT_NAME" == "pull_request_review" ]]; then
-            SAFE_REVIEW_BODY=$(echo "$REVIEW_BODY" | jq -Rs .)
-            SAFE_PR_TITLE=$(echo "$PR_TITLE" | jq -Rs .)
-            SAFE_REVIEWER=$(echo "$REVIEWER" | jq -Rs .)
-
-            curl -X POST -H "Content-Type: application/json" \
-              -d "{
-                \"content\": \"**📝 띵동 새로운 리뷰 작성**\n🔗 **PR 링크**: $PR_URL\n📄 **제목**: $SAFE_PR_TITLE\n👤 **리뷰어**: $SAFE_REVIEWER\n✍️ **리뷰 내용**: $SAFE_REVIEW_BODY\"
-              }" \
-              $DISCORD_WEBHOOK_PR
           fi
