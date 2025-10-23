@@ -1,13 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const MAX_PAGE_VISIBLE = 5;
 
-const usePagenation = (totalPages: number, onPageChange: (page: number) => void) => {
-	const [pageGroup, setPageGroup] = useState(0);
+const usePagenation = (totalPages: number, page: number, onPageChange: (page: number) => void) => {
+	const initialGroup = Math.max(0, Math.floor((Math.max(1, page) - 1) / MAX_PAGE_VISIBLE));
+	const [pageGroup, setPageGroup] = useState(initialGroup);
 
 	const totalGroups = Math.ceil(totalPages / MAX_PAGE_VISIBLE);
 	const startPage = pageGroup * MAX_PAGE_VISIBLE + 1;
 	const endPage = Math.min(startPage + MAX_PAGE_VISIBLE - 1, totalPages);
+
+	useEffect(() => {
+		const nextGroup = Math.max(0, Math.floor((Math.max(1, page) - 1) / MAX_PAGE_VISIBLE));
+		if (nextGroup !== pageGroup) setPageGroup(nextGroup);
+	}, [page, pageGroup]);
 
 	const handlePageChange = (newPage: number) => {
 		if (newPage >= 1 && newPage <= totalPages) {

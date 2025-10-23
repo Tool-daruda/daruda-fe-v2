@@ -17,7 +17,7 @@ const PageNation = ({ page, totalPages, onPageChange }: PageNationProps) => {
 		pagesToShow,
 		pageGroup,
 		totalGroups,
-	} = usePagenation(totalPages, onPageChange);
+	} = usePagenation(totalPages, page, onPageChange);
 
 	return (
 		<nav className={styles.paginationContainer}>
