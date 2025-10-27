@@ -70,4 +70,7 @@ export const inputStyle = style({
 export const buttonStyle = style({
 	all: "unset",
 	cursor: "pointer",
+	display: "flex",
+	alignItems: "center",
+	justifyContent: "center",
 });

@@ -30,8 +30,8 @@ export default meta;
 
 type Story = StoryObj<typeof Dropdown>;
 
-export const Defualt: Story = {
-	name: "Defualt",
+export const Default: Story = {
+	name: "Default",
 	render: (args) => {
 		const [value, setValue] = useState<string | undefined>(undefined);
 		return (

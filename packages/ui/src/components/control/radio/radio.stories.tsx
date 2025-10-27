@@ -27,8 +27,8 @@ export default meta;
 
 type Story = StoryObj<typeof Radio>;
 
-export const Defualt: Story = {
-	name: "Defualt",
+export const Default: Story = {
+	name: "Default",
 	render: () => {
 		const OPTIONS = [
 			{ value: "ai", label: "AI" },

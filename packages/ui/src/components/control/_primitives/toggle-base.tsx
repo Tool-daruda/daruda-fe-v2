@@ -1,5 +1,5 @@
 import type React from "react";
-import { useEffect, useId, useRef } from "react";
+import { useId, useRef } from "react";
 
 type CommonBase = {
 	id?: string;
@@ -16,7 +16,6 @@ type CheckboxBase = CommonBase & {
 	type: "checkbox";
 	checked?: boolean;
 	defaultChecked?: boolean;
-	indeterminate?: boolean; // 일부 체크 상태
 	onChange?: (checked: boolean) => void;
 	value?: string;
 };
@@ -38,16 +37,6 @@ export function ToggleBase(props: ToggleBaseProps) {
 	const id = idProp ?? `ctrl-${reactId}`;
 	const inputRef = useRef<HTMLInputElement>(null);
 
-	const isCheckbox = type === "checkbox";
-
-	const indeterminate = isCheckbox ? props.indeterminate : undefined;
-
-	useEffect(() => {
-		if (isCheckbox && inputRef.current) {
-			inputRef.current.indeterminate = !!indeterminate;
-		}
-	}, [isCheckbox, indeterminate]);
-
 	const checked = props.checked;
 	const defaultChecked = props.defaultChecked;
 	const onChange = props.onChange;
@@ -63,17 +52,7 @@ export function ToggleBase(props: ToggleBaseProps) {
 			style={style}
 			data-disabled={disabled ? "" : undefined}
 			data-invalid={invalid ? "" : undefined}
-			data-state={
-				isCheckbox
-					? checked
-						? "checked"
-						: indeterminate
-							? "mixed"
-							: "unchecked"
-					: checked
-						? "checked"
-						: "unchecked"
-			}
+			data-state={checked ? "checked" : "unchecked"}
 		>
 			{/* 실제 input */}
 			<input

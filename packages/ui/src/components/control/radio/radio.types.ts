@@ -1,9 +1,9 @@
 import { createContext } from "react";
 
-export type RadioContext = {
+export type RadioContextValue = {
 	name: string;
 	value?: string;
 	setValue: (v: string) => void;
 	disabled?: boolean;
 };
-export const RadioContext = createContext<RadioContext | null>(null);
+export const RadioContext = createContext<RadioContextValue | null>(null);

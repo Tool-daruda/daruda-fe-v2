@@ -96,13 +96,56 @@ export const Disabled: Story = {
 };
 
 export const SizeXL: Story = {
+	args: {
+		type: "text",
+		size: "xl",
+	},
+
 	name: "Size XL",
-	render: () => <TextField size="xl" placeholder="size=xl (width: 424px)" />,
+	render: (args) => {
+		const [val, setVal] = useState("");
+		return (
+			<TextField
+				placeholder="size=xl (width: 424px)"
+				{...args}
+				value={val}
+				onChange={(e) => {
+					setVal(e.currentTarget.value);
+					args.onChange?.(e);
+				}}
+				onClear={() => {
+					setVal("");
+					args.onClear?.();
+				}}
+			/>
+		);
+	},
 };
 
 export const SizeS: Story = {
 	name: "Size S",
-	render: () => <TextField size="s" placeholder="size=s (width: 194px)" />,
+	args: {
+		type: "text",
+		size: "s",
+	},
+	render: (args) => {
+		const [val, setVal] = useState("");
+		return (
+			<TextField
+				placeholder="size=s (width: 194px)"
+				{...args}
+				value={val}
+				onChange={(e) => {
+					setVal(e.currentTarget.value);
+					args.onChange?.(e);
+				}}
+				onClear={() => {
+					setVal("");
+					args.onClear?.();
+				}}
+			/>
+		);
+	},
 };
 
 export const ClearButton: Story = {

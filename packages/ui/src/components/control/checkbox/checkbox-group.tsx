@@ -9,7 +9,6 @@ interface CheckboxGroupProps {
 	onValueChange?: (v: string[]) => void;
 	name?: string;
 	disabled?: boolean;
-	required?: boolean;
 	describedById?: string;
 	children: React.ReactNode;
 	className?: string;

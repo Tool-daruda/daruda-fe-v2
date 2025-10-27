@@ -12,7 +12,6 @@ interface CheckboxProps {
 	checked?: boolean;
 	defaultChecked?: boolean;
 	onChange?: (checked: boolean) => void;
-	indeterminate?: boolean;
 	disabled?: boolean;
 	className?: string;
 	children?: React.ReactNode;
@@ -55,7 +54,6 @@ export const Checkbox = (props: CheckboxProps) => {
 			disabled={(inGroup && ctx ? ctx.disabled : false) || props.disabled}
 			onChange={handleChange}
 			className={`${S.checkboxItem} ${props.className ?? ""}`}
-			indeterminate={props.indeterminate}
 		>
 			<span className="box">
 				<span className={S.iconUnchecked}>

@@ -1,6 +1,6 @@
 import { assignInlineVars } from "@vanilla-extract/dynamic";
 import type React from "react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import IcArrowBottom from "../../assets/icons/ic_arrow_bottom.svg?react";
 import * as S from "./dropdown.css";
 import type { DropdownProps, Option } from "./dropdown.types";
@@ -34,7 +34,8 @@ export const Dropdown = ({
 	const [isOpen, setIsOpen] = useState(false);
 	const dropdownRef = useRef<HTMLDivElement | null>(null);
 
-	useOutsideClick(dropdownRef, () => setIsOpen(false));
+	const handleClose = useCallback(() => setIsOpen(false), []);
+	useOutsideClick(dropdownRef, handleClose);
 
 	const selectedOption = options.find((opt) => opt.value === value);
 

@@ -71,7 +71,7 @@ export const InputImage = ({
 		<div className={`${S.containerStyle} ${className ?? ""}`}>
 			<div className={S.previewContainerStyle}>
 				{canUpload && (
-					<label className={S.uploadButtonRecipe({ disabled })} aria-label={uploadAriaLabel}>
+					<label className={S.uploadButtonRecipe({ disabled })}>
 						<IcAddImg />
 						<input
 							ref={inputRef}
@@ -79,6 +79,7 @@ export const InputImage = ({
 							multiple
 							accept={accept}
 							className={S.inputStyle}
+							aria-label={uploadAriaLabel}
 							onChange={handleFileChange}
 							disabled={!canUpload}
 						/>

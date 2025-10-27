@@ -39,7 +39,17 @@ export const TextField = ({
 		type === "search" ? (
 			<IcSearch />
 		) : (
-			value && String(value).length > 0 && <IcClear onClick={onClear} className={buttonStyle} />
+			value &&
+			String(value).length > 0 && (
+				<button
+					type="button"
+					onClick={onClear}
+					className={buttonStyle}
+					aria-label="입력 내용 지우기"
+				>
+					<IcClear />
+				</button>
+			)
 		);
 
 	return (
@@ -51,6 +61,7 @@ export const TextField = ({
 				onBlur={handleBlur}
 				value={value}
 				onChange={onChange}
+				type={type}
 				{...rest}
 			/>
 			{Icon}

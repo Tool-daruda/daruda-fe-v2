@@ -24,7 +24,6 @@ const meta: Meta<typeof Checkbox> = {
 		name: { control: "text", description: "단독 모드에서 폼 제출 name" },
 		checked: { control: "boolean", description: "제어형 (단독)" },
 		defaultChecked: { control: "boolean", description: "비제어형 초기값 (단독)" },
-		indeterminate: { control: "boolean", description: "부분 선택 상태 (단독/상위 토글용)" },
 		disabled: { control: "boolean" },
 	},
 };
@@ -63,23 +62,6 @@ export const SingleControlled: Story = {
 			description: {
 				story:
 					"`checked`와 `onChange`로 외부에서 상태를 완전히 제어합니다. 폼 라이브러리(RHF 등)와 결합 시 권장.",
-			},
-		},
-	},
-};
-
-export const SingleIndeterminate: Story = {
-	name: "Single / Indeterminate",
-	args: {
-		name: "selectAll",
-		indeterminate: true,
-		children: "일부 선택됨",
-	},
-	parameters: {
-		docs: {
-			description: {
-				story:
-					"`indeterminate`는 읽기 전용 시각 상태입니다. 상위/하위 항목의 선택 비율로 계산해 주입하세요.",
 			},
 		},
 	},
@@ -126,16 +108,10 @@ export const GroupWithSelectAll: Story = {
 		const [skills, setSkills] = useState<string[]>(["ai"]);
 
 		const allChecked = skills.length === ALL.length;
-		const someChecked = skills.length > 0 && skills.length < ALL.length;
 
 		return (
 			<>
-				<Checkbox
-					name="selectAll"
-					checked={allChecked}
-					indeterminate={someChecked}
-					onChange={(c) => setSkills(c ? ALL : [])}
-				>
+				<Checkbox name="selectAll" checked={allChecked} onChange={(c) => setSkills(c ? ALL : [])}>
 					전체 선택
 				</Checkbox>
 
@@ -150,14 +126,6 @@ export const GroupWithSelectAll: Story = {
 				</CheckboxGroup>
 			</>
 		);
-	},
-	parameters: {
-		docs: {
-			description: {
-				story:
-					"상위 체크박스는 `checked/indeterminate`를 하위 배열 길이로 계산해 표현합니다. 클릭 시 일괄 선택/해제를 수행합니다.",
-			},
-		},
 	},
 };
 
