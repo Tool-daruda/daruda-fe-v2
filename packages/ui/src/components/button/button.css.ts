@@ -8,6 +8,9 @@ export const buttonRecipe = recipe({
 		cursor: "pointer",
 		border: "1px solid transparent",
 		boxSizing: "border-box",
+		display: "flex",
+		alignItems: "center",
+		justifyContent: "center",
 	},
 
 	variants: {
@@ -27,6 +30,11 @@ export const buttonRecipe = recipe({
 				...buttonSizes.lg.fonts,
 			},
 			sm: { ...buttonSizes.sm.fonts },
+			icon: {
+				width: "44px",
+				height: "44px",
+				padding: "0",
+			},
 		},
 		rounded: {
 			rounded: {},
