@@ -1,6 +1,6 @@
 import CircleLeft from "../../assets/icons/ic_circle_left.svg?react";
 import CircleRight from "../../assets/icons/ic_circle_right.svg?react";
-import usePagenation from "../../hooks/use-pagenation";
+import usePagination from "../../hooks/use-pagenation";
 import * as styles from "./pagenation.css";
 
 interface PageNationProps {
@@ -9,15 +9,15 @@ interface PageNationProps {
 	onPageChange: (page: number) => void;
 }
 
-const PageNation = ({ page, totalPages, onPageChange }: PageNationProps) => {
+const Pagination = ({ page, totalPages, onPageChange }: PageNationProps) => {
 	const {
 		handlePageChange,
 		handlePrevGroup,
 		handleNextGroup,
 		pagesToShow,
-		pageGroup,
-		totalGroups,
-	} = usePagenation(totalPages, page, onPageChange);
+		hasPrevGroup,
+		hasNextGroup,
+	} = usePagination(totalPages, page, onPageChange);
 
 	return (
 		<nav className={styles.paginationContainer}>
@@ -26,7 +26,7 @@ const PageNation = ({ page, totalPages, onPageChange }: PageNationProps) => {
 				type="button"
 				className={styles.pageButton}
 				onClick={handlePrevGroup}
-				disabled={pageGroup === 0}
+				disabled={!hasPrevGroup}
 			>
 				<CircleLeft className={styles.arrowIconClass} />
 			</button>
@@ -48,7 +48,7 @@ const PageNation = ({ page, totalPages, onPageChange }: PageNationProps) => {
 				type="button"
 				className={styles.pageButton}
 				onClick={handleNextGroup}
-				disabled={pageGroup === totalGroups - 1}
+				disabled={!hasNextGroup}
 			>
 				<CircleRight className={styles.arrowIconClass} />
 			</button>
@@ -56,4 +56,4 @@ const PageNation = ({ page, totalPages, onPageChange }: PageNationProps) => {
 	);
 };
 
-export default PageNation;
+export default Pagination;

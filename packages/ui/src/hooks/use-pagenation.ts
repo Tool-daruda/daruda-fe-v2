@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 
 const MAX_PAGE_VISIBLE = 5;
 
-const usePagenation = (totalPages: number, page: number, onPageChange: (page: number) => void) => {
+const usePagination = (totalPages: number, page: number, onPageChange: (page: number) => void) => {
 	const initialGroup = Math.max(0, Math.floor((Math.max(1, page) - 1) / MAX_PAGE_VISIBLE));
 	const [pageGroup, setPageGroup] = useState(initialGroup);
 
@@ -10,26 +10,39 @@ const usePagenation = (totalPages: number, page: number, onPageChange: (page: nu
 	const startPage = pageGroup * MAX_PAGE_VISIBLE + 1;
 	const endPage = Math.min(startPage + MAX_PAGE_VISIBLE - 1, totalPages);
 
-	useEffect(() => {
-		const nextGroup = Math.max(0, Math.floor((Math.max(1, page) - 1) / MAX_PAGE_VISIBLE));
-		if (nextGroup !== pageGroup) setPageGroup(nextGroup);
-	}, [page, pageGroup]);
+	const hasPrevGroup = pageGroup > 0;
+	const hasNextGroup = pageGroup < totalGroups - 1;
 
 	const handlePageChange = (newPage: number) => {
 		if (newPage >= 1 && newPage <= totalPages) {
 			onPageChange(newPage);
+
+			const nextGroup = Math.floor((newPage - 1) / MAX_PAGE_VISIBLE);
+			if (nextGroup !== pageGroup) {
+				setPageGroup(nextGroup);
+			}
 		}
 	};
 
 	const handlePrevGroup = () => {
-		if (pageGroup > 0) setPageGroup(pageGroup - 1);
+		if (hasPrevGroup) {
+			const prevGroup = pageGroup - 1;
+			setPageGroup(prevGroup);
+			onPageChange(prevGroup * MAX_PAGE_VISIBLE + 1);
+		}
 	};
 
 	const handleNextGroup = () => {
-		if (pageGroup < totalGroups - 1) setPageGroup(pageGroup + 1);
+		if (hasNextGroup) {
+			const nextGroup = pageGroup + 1;
+			setPageGroup(nextGroup);
+			onPageChange(nextGroup * MAX_PAGE_VISIBLE + 1);
+		}
 	};
 
-	const pagesToShow = Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
+	const pagesToShow = useMemo(() => {
+		return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
+	}, [startPage, endPage]);
 
 	return {
 		handlePageChange,
@@ -38,7 +51,9 @@ const usePagenation = (totalPages: number, page: number, onPageChange: (page: nu
 		pagesToShow,
 		pageGroup,
 		totalGroups,
+		hasPrevGroup,
+		hasNextGroup,
 	};
 };
 
-export default usePagenation;
+export default usePagination;

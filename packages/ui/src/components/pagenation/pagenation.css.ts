@@ -29,7 +29,7 @@ export const pageButton = style({
 	},
 
 	":disabled": {
-		cursor: "default",
+		cursor: "not-allowed",
 	},
 });
 

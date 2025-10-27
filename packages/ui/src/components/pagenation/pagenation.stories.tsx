@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { useState } from "react";
-import PageNation from ".";
+import { useEffect, useState } from "react";
+import Pagination from ".";
 
-const meta: Meta<typeof PageNation> = {
-	title: "Components/PageNation",
-	component: PageNation,
+const meta: Meta<typeof Pagination> = {
+	title: "Components/Pagination",
+	component: Pagination,
 	tags: ["autodocs"],
 	argTypes: {
 		page: { control: "number" },
@@ -14,7 +14,7 @@ const meta: Meta<typeof PageNation> = {
 };
 
 export default meta;
-type Story = StoryObj<typeof PageNation>;
+type Story = StoryObj<typeof Pagination>;
 
 export const Default: Story = {
 	args: {
@@ -24,9 +24,13 @@ export const Default: Story = {
 	render: (args) => {
 		const [page, setPage] = useState(args.page);
 
+		useEffect(() => {
+			setPage(args.page);
+		}, [args.page]);
+
 		return (
 			<div style={{ padding: "20px", display: "flex", justifyContent: "center" }}>
-				<PageNation
+				<Pagination
 					{...args}
 					page={page}
 					onPageChange={(newPage) => {
