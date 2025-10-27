@@ -2,8 +2,8 @@ import { assignInlineVars } from "@vanilla-extract/dynamic";
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
 import IcArrowBottom from "../../assets/icons/ic_arrow_bottom.svg?react";
-import * as S from "./Dropdown.css";
-import type { DropdownProps, Option } from "./Dropdown.types";
+import * as S from "./dropdown.css";
+import type { DropdownProps, Option } from "./dropdown.types";
 
 const useOutsideClick = (ref: React.RefObject<HTMLDivElement | null>, handler: () => void) => {
 	useEffect(() => {

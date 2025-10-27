@@ -1,7 +1,7 @@
 import type React from "react";
 import { useState } from "react";
-import { inputStyle, textAreaRecipe } from "./TextArea.css";
-import type { TextAreaProps } from "./TextArea.types";
+import { inputStyle, textAreaRecipe } from "./text-area.css";
+import type { TextAreaProps } from "./text-area.types";
 
 export const TextArea = ({
 	size,

@@ -1,5 +1,5 @@
 import type { RecipeVariants } from "@vanilla-extract/recipes";
-import type { dropdownTriggerRecipe } from "./Dropdown.css";
+import type { dropdownTriggerRecipe } from "./dropdown.css";
 
 type Variants = RecipeVariants<typeof dropdownTriggerRecipe>;
 

@@ -1,7 +1,7 @@
 import type React from "react";
 import { useContext, useId, useState } from "react";
-import * as S from "./Radio.css";
-import { RadioContext } from "./Radio.types";
+import * as S from "./radio.css";
+import { RadioContext } from "./radio.types";
 
 interface RadioGroupProps {
 	value?: string;

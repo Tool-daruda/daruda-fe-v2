@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { useState } from "react";
-import { InputImage } from "./InputImage";
+import { InputImage } from "./input-image";
 
 const svgSquare = (text: string, color = "#8AB4F8") =>
 	`<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120">

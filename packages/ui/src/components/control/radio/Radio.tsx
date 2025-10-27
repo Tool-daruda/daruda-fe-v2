@@ -1,9 +1,9 @@
 import type React from "react";
 import IcRadioChecked from "../../../assets/icons/btn_radio_active.svg?react";
 import IcRadioUnchecked from "../../../assets/icons/btn_radio_normal.svg?react";
-import { ToggleBase } from "../_primitives/ToggleBase";
-import * as S from "./Radio.css";
-import { useRadioContext } from "./RadioGroup";
+import { ToggleBase } from "../_primitives/toggle-base";
+import * as S from "./radio.css";
+import { useRadioContext } from "./radio-group";
 
 interface RadioProps {
 	value: string;

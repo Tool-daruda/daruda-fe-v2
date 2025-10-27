@@ -1,2 +1,2 @@
-export { InputImage } from "./InputImage";
-export type { InputImageProps } from "./InputImage.types";
+export { InputImage } from "./input-image";
+export type { InputImageProps } from "./input-image.types";

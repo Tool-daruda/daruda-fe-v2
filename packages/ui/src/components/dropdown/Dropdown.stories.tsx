@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { useState } from "react";
-import { Dropdown } from "./Dropdown";
-import type { Option } from "./Dropdown.types";
+import { Dropdown } from "./dropdown";
+import type { Option } from "./dropdown.types";
 
 const OPTIONS: Option[] = [
 	{ label: "AI", value: "ai" },

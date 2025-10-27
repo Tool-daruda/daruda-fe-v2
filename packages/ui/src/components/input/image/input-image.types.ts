@@ -1,5 +1,5 @@
 import type { RecipeVariants } from "@vanilla-extract/recipes";
-import type { uploadButtonRecipe } from "./InputImage.css";
+import type { uploadButtonRecipe } from "./input-image.css";
 
 type ButtonVariants = RecipeVariants<typeof uploadButtonRecipe>;
 

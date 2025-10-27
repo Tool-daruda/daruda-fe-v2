@@ -2,8 +2,8 @@ import type React from "react";
 import { useEffect, useMemo, useRef } from "react";
 import IcAddImg from "../../../assets/icons/ic_add_img.svg?react";
 import IcRemoveImg from "../../../assets/icons/ic_cross.svg?react";
-import * as S from "./InputImage.css";
-import type { InputImageProps } from "./InputImage.types";
+import * as S from "./input-image.css";
+import type { InputImageProps } from "./input-image.types";
 
 export const InputImage = ({
 	existingImages = [],

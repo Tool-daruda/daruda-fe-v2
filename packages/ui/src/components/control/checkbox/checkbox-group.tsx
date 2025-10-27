@@ -1,7 +1,7 @@
 import type React from "react";
 import { useContext, useId, useState } from "react";
-import * as S from "./Checkbox.css";
-import { CheckboxContext } from "./Checkbox.types";
+import * as S from "./checkbox.css";
+import { CheckboxContext } from "./checkbox.types";
 
 interface CheckboxGroupProps {
 	value?: string[];

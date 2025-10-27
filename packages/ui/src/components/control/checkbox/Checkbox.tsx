@@ -2,9 +2,9 @@ import type React from "react";
 import { useState } from "react";
 import IcCheckboxChecked from "../../../assets/icons/btn_check_active.svg?react";
 import IcCheckboxUnchecked from "../../../assets/icons/btn_check_normal.svg?react";
-import { ToggleBase } from "../_primitives/ToggleBase";
-import * as S from "./Checkbox.css";
-import { useCheckboxContext } from "./CheckboxGroup";
+import { ToggleBase } from "../_primitives/toggle-base";
+import * as S from "./checkbox.css";
+import { useCheckboxContext } from "./checkbox-group";
 
 interface CheckboxProps {
 	value?: string; // 그룹
