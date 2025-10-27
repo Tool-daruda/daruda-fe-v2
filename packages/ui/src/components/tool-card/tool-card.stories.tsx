@@ -72,6 +72,7 @@ export const MultipleCards: Story = {
 					description={tool.description}
 					category={tool.category}
 					updatedAt={tool.updatedAt}
+					onClick={() => {}}
 				/>
 			))}
 		</div>
