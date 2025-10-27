@@ -6,6 +6,5 @@ export type ButtonProps = {
 	appearance?: "filled" | "outlined";
 	rounded?: "rounded" | "pill";
 	children: ReactNode;
-	onClick: () => void;
 	loading?: boolean;
 } & ButtonHTMLAttributes<HTMLButtonElement>;

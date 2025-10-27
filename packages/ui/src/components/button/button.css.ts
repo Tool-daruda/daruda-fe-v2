@@ -57,7 +57,7 @@ export const buttonRecipe = recipe({
 		{
 			variants: { intent: "primary", appearance: "outlined" },
 			style: {
-				background: buttonColors.primary.outlined.backgroundColor,
+				backgroundColor: buttonColors.primary.outlined.backgroundColor,
 				color: buttonColors.primary.outlined.color,
 				borderColor: buttonColors.primary.outlined.color,
 			},

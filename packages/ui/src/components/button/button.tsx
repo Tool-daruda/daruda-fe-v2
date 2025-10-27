@@ -19,7 +19,11 @@ export const Button = ({
 	});
 
 	return (
-		<button className={`${buttonClassName} ${className || ""}`} {...props}>
+		<button
+			{...props}
+			className={`${buttonClassName}${className || ""}`}
+			disabled={loading || props.disabled}
+		>
 			{/* todo: 스피너 생기면 스피너로 변경 */}
 			{loading ? "로딩중..." : children}
 		</button>
