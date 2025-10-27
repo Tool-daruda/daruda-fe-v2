@@ -1,3 +1,4 @@
+import { Button } from "../button";
 import * as styles from "./tool-card.css";
 
 interface ToolCardProps {
@@ -7,6 +8,7 @@ interface ToolCardProps {
 	description: string;
 	category: string;
 	updatedAt: string;
+	onClick: () => void;
 }
 
 const ToolCard = ({
@@ -16,6 +18,7 @@ const ToolCard = ({
 	description,
 	category,
 	updatedAt,
+	onClick,
 }: ToolCardProps) => {
 	return (
 		<section className={styles.card}>
@@ -28,10 +31,9 @@ const ToolCard = ({
 			<span className={styles.cardCategory}>{category}</span>
 			<time className={styles.cardUpdatedAt}>{updatedAt}</time>
 			<div>
-				{/* TODO: 공통 컴포넌트 제작후 <Button>로 변경 */}
-				<button type="button" className={styles.editButton}>
+				<Button type="button" intent="tonal" size="sm" onClick={onClick}>
 					편집
-				</button>
+				</Button>
 			</div>
 		</section>
 	);

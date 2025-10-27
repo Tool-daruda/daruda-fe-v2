@@ -63,17 +63,3 @@ export const cardUpdatedAt = style({
 	width: "150px",
 	...textClampSingleLine,
 });
-
-export const editButton = style({
-	display: "flex",
-	padding: "8px 14px",
-	justifyContent: "center",
-	alignItems: "center",
-	borderRadius: "12px",
-	background: themeVars.colors.grayscale[50],
-	color: themeVars.colors.grayscale[700],
-	whiteSpace: "nowrap",
-	...themeVars.fonts.t4_1,
-	cursor: "pointer",
-	border: "none",
-});
