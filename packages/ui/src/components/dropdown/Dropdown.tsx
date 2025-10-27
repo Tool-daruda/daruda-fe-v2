@@ -1,6 +1,7 @@
 import { assignInlineVars } from "@vanilla-extract/dynamic";
 import type React from "react";
 import { useEffect, useRef, useState } from "react";
+import IcArrowBottom from "../../assets/icons/ic_arrow_bottom.svg?react";
 import * as S from "./Dropdown.css";
 import type { DropdownProps, Option } from "./Dropdown.types";
 
@@ -20,8 +21,6 @@ const useOutsideClick = (ref: React.RefObject<HTMLDivElement | null>, handler: (
 		};
 	}, [ref, handler]);
 };
-
-const ArrowIcon = () => <>🔻</>;
 
 export const Dropdown = ({
 	options,
@@ -63,7 +62,7 @@ export const Dropdown = ({
 			>
 				<span>{selectedOption?.label || placeholder}</span>
 				<span className={S.arrowIconStyle}>
-					<ArrowIcon />
+					<IcArrowBottom />
 				</span>
 			</button>
 

@@ -1,10 +1,9 @@
 import type React from "react";
 import { useEffect, useMemo, useRef } from "react";
+import IcAddImg from "../../../assets/icons/ic_add_img.svg?react";
+import IcRemoveImg from "../../../assets/icons/ic_cross.svg?react";
 import * as S from "./InputImage.css";
 import type { InputImageProps } from "./InputImage.types";
-
-const AddIcon = () => <span>+</span>;
-const RemoveIcon = () => <span>x</span>;
 
 export const InputImage = ({
 	existingImages = [],
@@ -73,7 +72,7 @@ export const InputImage = ({
 			<div className={S.previewContainerStyle}>
 				{canUpload && (
 					<label className={S.uploadButtonRecipe({ disabled })} aria-label={uploadAriaLabel}>
-						<AddIcon />
+						<IcAddImg />
 						<input
 							ref={inputRef}
 							type="file"
@@ -95,7 +94,7 @@ export const InputImage = ({
 							type="button"
 							disabled={disabled}
 						>
-							<RemoveIcon />
+							<IcRemoveImg width={16} height={16} />
 						</button>
 					</div>
 				))}
@@ -109,7 +108,7 @@ export const InputImage = ({
 							type="button"
 							disabled={disabled}
 						>
-							<RemoveIcon />
+							<IcRemoveImg width={16} height={16} />
 						</button>
 					</div>
 				))}

@@ -1,5 +1,7 @@
 import type React from "react";
 import { useState } from "react";
+import IcCheckboxChecked from "../../../assets/icons/btn_check_active.svg?react";
+import IcCheckboxUnchecked from "../../../assets/icons/btn_check_normal.svg?react";
 import { ToggleBase } from "../_primitives/ToggleBase";
 import * as S from "./Checkbox.css";
 import { useCheckboxContext } from "./CheckboxGroup";
@@ -15,9 +17,6 @@ interface CheckboxProps {
 	className?: string;
 	children?: React.ReactNode;
 }
-
-const IconCheckboxChecked = () => <>✅</>;
-const IconCheckboxUnchecked = () => <>☑</>;
 
 export const Checkbox = (props: CheckboxProps) => {
 	const ctx = useCheckboxContext();
@@ -60,10 +59,10 @@ export const Checkbox = (props: CheckboxProps) => {
 		>
 			<span className="box">
 				<span className={S.iconUnchecked}>
-					<IconCheckboxUnchecked />
+					<IcCheckboxUnchecked />
 				</span>
 				<span className={S.iconChecked}>
-					<IconCheckboxChecked />
+					<IcCheckboxChecked />
 				</span>
 			</span>
 			<span className="label">{props.children}</span>

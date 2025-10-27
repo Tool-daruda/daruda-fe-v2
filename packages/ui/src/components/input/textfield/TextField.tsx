@@ -1,14 +1,9 @@
 import type React from "react";
 import { useState } from "react";
+import IcClear from "../../../assets/icons/ic_cross.svg?react";
+import IcSearch from "../../../assets/icons/ic_search.svg?react";
 import { buttonStyle, inputStyle, textFieldRecipe } from "./TextField.css";
 import type { TextFieldProps } from "./TextField.types";
-
-const SearchIcon = () => <p>🔍</p>;
-const ClearIcon = ({ onClick }: { onClick?: () => void }) => (
-	<button type="button" onClick={onClick} className={buttonStyle}>
-		X
-	</button>
-);
 
 export const TextField = ({
 	type = "text",
@@ -42,9 +37,9 @@ export const TextField = ({
 
 	const Icon =
 		type === "search" ? (
-			<SearchIcon />
+			<IcSearch />
 		) : (
-			value && String(value).length > 0 && <ClearIcon onClick={onClear} />
+			value && String(value).length > 0 && <IcClear onClick={onClear} className={buttonStyle} />
 		);
 
 	return (

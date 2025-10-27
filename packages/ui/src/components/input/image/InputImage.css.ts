@@ -38,19 +38,17 @@ export const uploadButtonRecipe = recipe({
 	base: {
 		display: "flex",
 		alignItems: "center",
-		justifyContent: "center",
 		width: "120px",
 		height: "120px",
+		padding: "36px 30px 31.2px 37.2px",
 		backgroundColor: themeVars.colors.grayscale[25],
 		borderRadius: "12px",
 		cursor: "pointer",
 		transition: "background-color 0.2s, transform 0.2s",
+		boxSizing: "border-box",
 
 		":hover": {
 			backgroundColor: themeVars.colors.grayscale[50],
-		},
-		":active": {
-			transform: "scale(0.95)",
 		},
 	},
 	variants: {
@@ -82,10 +80,6 @@ export const removeButtonRecipe = recipe({
 		":hover": {
 			backgroundColor: themeVars.colors.grayscale[0],
 		},
-
-		":active": {
-			backgroundColor: themeVars.colors.grayscale[0],
-		},
 	},
 
 	variants: {
@@ -96,4 +90,8 @@ export const removeButtonRecipe = recipe({
 			},
 		},
 	},
+});
+
+globalStyle(`${removeButtonRecipe} svg`, {
+	flexShrink: 0,
 });
