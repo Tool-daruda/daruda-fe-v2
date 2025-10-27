@@ -2,9 +2,10 @@ import path from "node:path";
 import { vanillaExtractPlugin } from "@vanilla-extract/vite-plugin";
 import { defineConfig } from "vite";
 import dts from "vite-plugin-dts";
+import svgr from "vite-plugin-svgr";
 
 export default defineConfig({
-	plugins: [vanillaExtractPlugin(), dts({ insertTypesEntry: true })],
+	plugins: [vanillaExtractPlugin(), svgr(), dts({ insertTypesEntry: true })],
 	build: {
 		lib: {
 			entry: {
