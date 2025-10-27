@@ -11,6 +11,7 @@ export const buttonRecipe = recipe({
 		display: "flex",
 		alignItems: "center",
 		justifyContent: "center",
+		whiteSpace: "nowrap",
 	},
 
 	variants: {
