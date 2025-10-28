@@ -8,6 +8,7 @@ export const containerStyle = style({
 	gap: "10px",
 	alignItems: "flex-start",
 	width: "100%",
+	flexBasis: 0,
 });
 
 export const previewContainerStyle = style({
@@ -76,6 +77,7 @@ export const removeButtonRecipe = recipe({
 		borderRadius: "9999px",
 		cursor: "pointer",
 		transition: "transform 0.2s, background-color 0.2s",
+		background: "rgba(255, 255, 255, 0.50)",
 
 		":hover": {
 			backgroundColor: themeVars.colors.grayscale[0],

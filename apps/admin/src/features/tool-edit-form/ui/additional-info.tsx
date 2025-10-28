@@ -1,40 +1,74 @@
 import { Checkbox, CheckboxGroup, Radio, RadioGroup } from "@repo/ui";
-import { useState } from "react";
+import { Controller, useFormContext } from "react-hook-form";
+import { LICENSE_OPTIONS, PLATFORM_OPTIONS, type Platform, type Tool } from "@/entities/tool";
 import { ToolEditField, ToolEditSection } from "@/shared/ui/tool-edit-section";
 
 const AdditionalInfo = () => {
-	const [selected, setSelected] = useState("ai");
-	const [korean, setKorean] = useState("ai");
-	const PLATFORM = [
-		{ value: "ai", label: "Web" },
-		{ value: "doc", label: "Windows" },
-		{ value: "df", label: "Mac" },
-	];
-	const [platform, setPlatform] = useState<string[]>([]);
+	const { control } = useFormContext<Tool>();
 
 	return (
 		<ToolEditSection title="2. 부수 정보">
 			<ToolEditField label="플랜">
-				<RadioGroup name="category" value={selected} onValueChange={setSelected}>
-					<Radio value="ai">무료</Radio>
-					<Radio value="doc">부분 유료</Radio>
-					<Radio value="design">유료</Radio>
-				</RadioGroup>
+				<Controller
+					name="category"
+					control={control}
+					render={({ field }) => (
+						<RadioGroup name={field.name} value={field.value} onValueChange={field.onChange}>
+							{LICENSE_OPTIONS.map((opt) => (
+								<Radio key={opt.value} value={opt.value}>
+									{opt.label}
+								</Radio>
+							))}
+						</RadioGroup>
+					)}
+				/>
 			</ToolEditField>
 			<ToolEditField label="한국어 지원">
-				<RadioGroup name="category" value={korean} onValueChange={setKorean}>
-					<Radio value="ai">지원</Radio>
-					<Radio value="doc">미지원</Radio>
-				</RadioGroup>
+				<Controller
+					name="supportKorea"
+					control={control}
+					render={({ field }) => (
+						<RadioGroup
+							name={field.name}
+							value={String(field.value)}
+							onValueChange={(stringValue) => field.onChange(stringValue === "true")}
+						>
+							<Radio value="true">지원</Radio>
+							<Radio value="false">미지원</Radio>
+						</RadioGroup>
+					)}
+				/>
 			</ToolEditField>
 			<ToolEditField label="플랫폼">
-				<CheckboxGroup name="skills" value={platform} onValueChange={setPlatform}>
-					{PLATFORM.map((o) => (
-						<Checkbox key={o.value} value={o.value}>
-							{o.label}
-						</Checkbox>
-					))}
-				</CheckboxGroup>
+				<Controller
+					name="platform"
+					control={control}
+					defaultValue={{ web: false, windows: false, mac: false }}
+					render={({ field }) => {
+						const checkedValues = PLATFORM_OPTIONS.filter(
+							(opt) => field.value?.[opt.name] === true
+						).map((opt) => opt.name);
+
+						const handleChange = (newValues: string[]) => {
+							const newPlatformState: Platform = {
+								web: newValues.includes("web"),
+								windows: newValues.includes("windows"),
+								mac: newValues.includes("mac"),
+							};
+							field.onChange(newPlatformState);
+						};
+
+						return (
+							<CheckboxGroup name={field.name} value={checkedValues} onValueChange={handleChange}>
+								{PLATFORM_OPTIONS.map((opt) => (
+									<Checkbox key={opt.name} value={opt.name}>
+										{opt.label}
+									</Checkbox>
+								))}
+							</CheckboxGroup>
+						);
+					}}
+				/>
 			</ToolEditField>
 		</ToolEditSection>
 	);

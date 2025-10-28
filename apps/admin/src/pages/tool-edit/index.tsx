@@ -15,16 +15,21 @@ export async function loader({ params }: LoaderFunctionArgs) {
 
 export async function action({ request, params }: ActionFunctionArgs) {
 	const { toolId } = params;
-	const _formData = await request.formData();
-	// const data = Object.fromEntries(formData);
+	const jsonData = await request.json();
+	const { intent, ...formData } = jsonData;
 
-	if (toolId) {
-		// await updateTool(toolId, data);
-	} else {
-		// await createTool(data);
+	if (intent === "draft") {
+		console.log("임시저장 로직 실행:", formData);
+	} else if (intent === "publish") {
+		console.log("발행 로직 실행:", formData);
+		if (toolId) {
+			// 수정
+		} else {
+			// 생성
+		}
 	}
 
-	return redirect("/daruda-admin/tool");
+	return redirect("/");
 }
 
 export default function ToolEditPage() {

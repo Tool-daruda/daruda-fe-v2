@@ -5,7 +5,7 @@ import { ToolEditPage, ToolListPage } from "./lazy";
 
 const router = createBrowserRouter([
 	{
-		path: "/daruda-admin/",
+		path: "/",
 		element: <AdminLayout />,
 		errorElement: <>앗! 에러가 발생했습니다.</>,
 		children: [
