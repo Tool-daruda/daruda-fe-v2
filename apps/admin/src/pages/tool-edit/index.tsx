@@ -1,5 +1,5 @@
 import { type ActionFunctionArgs, type LoaderFunctionArgs, redirect } from "react-router-dom";
-import { ToolEditForm } from "@/features/tool-edit-form/tool-edit-form";
+import { ToolEditForm } from "@/features/tool-edit-form";
 
 export async function loader({ params }: LoaderFunctionArgs) {
 	const { toolId } = params;

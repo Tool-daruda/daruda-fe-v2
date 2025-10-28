@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
-import { AdminLayout } from "@/layouts/admin-layout";
 import { action as toolEditAction, loader as toolEditLoader } from "@/pages/tool-edit";
+import { AdminLayout } from "@/widgets/layout";
 import { ToolEditPage, ToolListPage } from "./lazy";
 
 const router = createBrowserRouter([

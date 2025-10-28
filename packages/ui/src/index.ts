@@ -1,3 +1,4 @@
+export * from "./components/button";
 export * from "./components/control/checkbox";
 export * from "./components/control/radio";
 export * from "./components/dropdown";

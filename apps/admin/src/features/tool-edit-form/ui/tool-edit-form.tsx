@@ -1,19 +1,19 @@
+import { Button } from "@repo/ui";
 import { FormProvider, useForm } from "react-hook-form";
 import { Form, useLoaderData, useNavigate } from "react-router-dom";
-import Abstract from "./components/absract";
-import AdditionalInfo from "./components/additional-info";
-import Blog from "./components/blog";
-import CoreFeature from "./components/core-feature";
-import Plan from "./components/plan";
-import SimilarTool from "./components/similar-tool";
-import ToolInfo from "./components/tool-info";
-import VideoLink from "./components/video-link";
+import type { Tool } from "@/entities/tool";
+import Abstract from "./absract";
+import AdditionalInfo from "./additional-info";
+import Blog from "./blog";
+import CoreFeature from "./core-feature";
+import Plan from "./plan";
+import SimilarTool from "./similar-tool";
 import * as S from "./tool-edit-form.css";
+import ToolInfo from "./tool-info";
+import VideoLink from "./video-link";
 
 // import { SectionCoreFeatures } from "./components/section-core-feature";
 // import { type Tool } from "@/entities/tool/model";
-
-type Tool = { id: string; name: string };
 
 export const ToolEditForm = () => {
 	const loaderData = useLoaderData() as { toolData?: Tool } | null;
@@ -42,15 +42,20 @@ export const ToolEditForm = () => {
 					<SimilarTool />
 				</article>
 				<div className={S.buttonGroupStyle}>
-					<button type="button" onClick={() => navigate("/daruda-admin/tool")}>
+					<Button
+						size="lg"
+						intent="dangerous"
+						appearance="outlined"
+						onClick={() => navigate("/daruda-admin/tool")}
+					>
 						취소하기
-					</button>
-					<button type="submit" name="intent" value="draft">
+					</Button>
+					<Button size="lg" intent="primary" appearance="outlined" value="draft">
 						임시저장하기
-					</button>
-					<button type="submit" name="intent" value="publish">
+					</Button>
+					<Button type="submit" size="lg" intent="primary" appearance="filled" value="publish">
 						저장하기
-					</button>
+					</Button>
 				</div>
 			</Form>
 		</FormProvider>

@@ -1,4 +1,4 @@
-import { themeVars } from "@repo/ui/foundations";
+import { themeVars } from "@repo/ui";
 import { style } from "@vanilla-extract/css";
 
 export const container = style({
@@ -6,7 +6,8 @@ export const container = style({
 });
 
 export const title = style({
-	...themeVars.fonts.t4_1,
+	color: themeVars.colors.grayscale[800],
+	...themeVars.fonts.t2_1,
 	marginBottom: "2.8rem",
 });
 
@@ -19,12 +20,14 @@ export const content = style({
 export const fieldStyle = style({
 	width: "100%",
 	display: "flex",
+	alignItems: "center",
 	gap: "2.8rem",
 });
 
 export const label = style({
 	width: "9.5rem",
 	textAlign: "right",
+	color: themeVars.colors.grayscale[800],
 	...themeVars.fonts.t4_1,
 	whiteSpace: "pre",
 });
