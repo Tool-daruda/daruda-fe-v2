@@ -1,5 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import { action as toolEditAction, loader as toolEditLoader } from "@/pages/tool-edit";
+// import { loader as toolListLoader } from "@/pages/tool-list";
 import { AdminLayout } from "@/widgets/layout";
 import { ToolEditPage, ToolListPage } from "./lazy";
 
@@ -13,6 +14,7 @@ const router = createBrowserRouter([
 				index: true,
 				path: "tool",
 				element: <ToolListPage />,
+				// loader: toolListLoader,
 			},
 			{
 				path: "tool/new",

@@ -48,3 +48,13 @@ export type Plan = {
 	description: string;
 	isDollar: boolean;
 };
+
+// 툴 카드
+export type ToolCardType = {
+	toolId: number;
+	toolLogo: string;
+	toolName: string;
+	description: string;
+	category: string;
+	createdAt: string;
+};

@@ -5,4 +5,6 @@ export * from "./components/dropdown";
 export * from "./components/input/image";
 export * from "./components/input/textarea";
 export * from "./components/input/textfield";
+export { default as Pagination } from "./components/pagenation";
+export { default as ToolCard } from "./components/tool-card";
 export * from "./foundations";
