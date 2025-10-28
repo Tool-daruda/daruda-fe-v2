@@ -15,6 +15,7 @@ export const buttonGroupStyle = style({
 	display: "flex",
 	justifyContent: "center",
 	gap: "1.6rem",
+	marginBottom: "30.4rem",
 });
 
 export const sectionPStyle = style({
