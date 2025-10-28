@@ -1,6 +1,8 @@
 import { Pagination, ToolCard } from "@repo/ui";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { getKoreanCategoryName } from "@/entities/tool";
 import { useAdminTools } from "@/entities/tool/api/queries";
+import * as S from "./index.css";
 
 const ITEMS_PER_PAGE = 10;
 
@@ -19,7 +21,7 @@ const ToolListPage = () => {
 		page: currentPage - 1,
 		size: ITEMS_PER_PAGE,
 	});
-	console.log(toolData);
+
 	const handlePageChange = (page: number) => {
 		setSearchParams({ page: String(page) });
 		window.scrollTo(0, 0);
@@ -42,7 +44,19 @@ const ToolListPage = () => {
 
 	return (
 		<div>
-			<h1>툴 목록</h1>
+			<div className={S.listHeader}>
+				<h1 className={S.title}>
+					툴 개수 <span className={S.toolCount}>{toolData?.totalElements}</span>개
+				</h1>
+				<div className={S.tableHeader}>
+					<div style={{ gridColumn: "span 2" }}>로고</div>
+					<div>툴 이름</div>
+					<div>한줄 소개</div>
+					<div>카테고리</div>
+					<div>추가된 날짜</div>
+					<div>설정</div>
+				</div>
+			</div>
 
 			<div>
 				{tools.length > 0 ? (
@@ -53,7 +67,7 @@ const ToolListPage = () => {
 							toolLogo={tool.toolLogo}
 							toolName={tool.toolName}
 							description={tool.description}
-							category={tool.category}
+							category={getKoreanCategoryName(tool.category)}
 							updatedAt={tool.createdAt}
 							onClick={() => handleEditClick(tool.toolId)}
 						/>
@@ -64,7 +78,7 @@ const ToolListPage = () => {
 			</div>
 
 			{totalPages > 1 && (
-				<div>
+				<div className={S.paginationStyle}>
 					<Pagination page={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
 				</div>
 			)}

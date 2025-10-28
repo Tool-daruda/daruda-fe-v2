@@ -15,6 +15,11 @@ export const TOOL_CATEGORY_LIST = [
 	{ name: "CAREER_DEVELOPMENT", koreanName: "커리어&자기개발" },
 ];
 
+const categoryMap = new Map(TOOL_CATEGORY_LIST.map((item) => [item.name, item.koreanName]));
+export const getKoreanCategoryName = (categoryName: string): string => {
+	return categoryMap.get(categoryName) || categoryName;
+};
+
 export const TOOL_CATEGORY_OPTIONS = TOOL_CATEGORY_LIST.filter(
 	(category) => category.name !== "ALL"
 ).map((category) => ({
