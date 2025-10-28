@@ -2,6 +2,8 @@ import { Button, Radio, RadioGroup, TextArea, TextField } from "@repo/ui";
 import { useEffect, useMemo } from "react";
 import { Controller, useFieldArray, useFormContext, useWatch } from "react-hook-form";
 import { PLAN_TYPE_OPTIONS, type Tool } from "@/entities/tool";
+import IcAdd from "@/shared/assets/icons/ic_add.svg?react";
+import IcCross from "@/shared/assets/icons/ic_cross.svg?react";
 import { ToolEditField, ToolEditSection } from "@/shared/ui/tool-edit-section";
 import * as S from "./tool-edit-form.css";
 
@@ -97,19 +99,23 @@ const Plan = () => {
 									<Button
 										type="button"
 										intent="primary"
+										size="icon"
+										rounded="pill"
 										appearance="filled"
 										onClick={() => append(emptyPlan)}
 									>
-										+
+										<IcAdd width={20} color="white" />
 									</Button>
 								) : (
 									<Button
 										type="button"
 										intent="dangerous"
+										size="icon"
+										rounded="pill"
 										appearance="filled"
 										onClick={() => remove(index)}
 									>
-										x
+										<IcCross width={20} color="white" />
 									</Button>
 								)}
 							</div>

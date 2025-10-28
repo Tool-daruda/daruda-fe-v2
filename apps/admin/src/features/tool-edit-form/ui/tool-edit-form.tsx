@@ -1,6 +1,6 @@
 import { Button } from "@repo/ui";
 import { FormProvider, useForm } from "react-hook-form";
-import { Form, useLoaderData, useNavigate, useSubmit } from "react-router-dom";
+import { Form, useLoaderData, useNavigate } from "react-router-dom";
 import type { Tool } from "@/entities/tool";
 import Abstract from "./absract";
 import AdditionalInfo from "./additional-info";
@@ -23,20 +23,20 @@ export const ToolEditForm = () => {
 	});
 
 	const navigate = useNavigate();
-	const submit = useSubmit();
-	const { handleSubmit } = methods;
+	// const submit = useSubmit();
+	// const { handleSubmit } = methods;
 
-	const onFormSubmit = (intent: "draft" | "publish") => {
-		handleSubmit((data: Tool) => {
-			submit(
-				{ ...data, intent },
-				{
-					method: isEditMode ? "put" : "post",
-					encType: "application/json",
-				}
-			);
-		})();
-	};
+	// const onFormSubmit = (intent: "draft" | "publish") => {
+	// 	handleSubmit((data: Tool) => {
+	// 		submit(
+	// 			// { ...data, intent },
+	// 			{
+	// 				method: isEditMode ? "put" : "post",
+	// 				encType: "application/json",
+	// 			}
+	// 		);
+	// 	})();
+	// };
 
 	return (
 		<FormProvider {...methods}>
@@ -67,7 +67,7 @@ export const ToolEditForm = () => {
 						size="lg"
 						intent="primary"
 						appearance="outlined"
-						onClick={() => onFormSubmit("draft")}
+						// onClick={() => onFormSubmit("draft")}
 					>
 						임시저장하기
 					</Button>
@@ -76,7 +76,7 @@ export const ToolEditForm = () => {
 						size="lg"
 						intent="primary"
 						appearance="filled"
-						onClick={() => onFormSubmit("publish")}
+						// onClick={() => onFormSubmit("publish")}
 					>
 						저장하기
 					</Button>

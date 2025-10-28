@@ -2,6 +2,7 @@ import { Button, Dropdown, InputImage, TextArea, TextField } from "@repo/ui";
 import { useEffect, useMemo } from "react";
 import { Controller, useFieldArray, useFormContext, useWatch } from "react-hook-form";
 import { TOOL_CATEGORY_OPTIONS, type Tool } from "@/entities/tool";
+import IcAdd from "@/shared/assets/icons/ic_add.svg?react";
 import { formatDateToYYYYMMDD } from "@/shared/lib/date";
 import { ToolEditField, ToolEditSection } from "@/shared/ui/tool-edit-section";
 import * as S from "./tool-edit-form.css";
@@ -145,12 +146,13 @@ const Abstract = () => {
 						<Button
 							type="button"
 							size="icon"
+							rounded="pill"
 							intent="primary"
 							appearance="filled"
 							onClick={() => append(emptyKeyword)}
 							disabled={fields.length >= 3}
 						>
-							추가
+							<IcAdd width={20} color="white" />
 						</Button>
 					)}
 				</div>
