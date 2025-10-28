@@ -87,6 +87,7 @@ export const Dropdown = ({
 						>
 							<button
 								type="button"
+								className={S.optionButtonStyle}
 								onClick={() => handleSelect(option)}
 								onKeyDown={(e) => {
 									if (e.key === "Enter" || e.key === " ") {
