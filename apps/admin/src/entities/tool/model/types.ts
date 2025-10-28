@@ -49,7 +49,7 @@ export type Plan = {
 	isDollar: boolean;
 };
 
-// 툴 카드
+// 툴 리스트 조회
 export type ToolCardType = {
 	toolId: number;
 	toolLogo: string;
@@ -58,3 +58,14 @@ export type ToolCardType = {
 	category: string;
 	createdAt: string;
 };
+
+export interface GetAdminToolsParams {
+	page: number;
+	size: number;
+}
+
+export interface GetAdminToolsRes {
+	tools: ToolCardType[];
+	totalPages: number;
+	totalElements: number;
+}
