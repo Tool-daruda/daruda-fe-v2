@@ -1,5 +1,9 @@
+import { isAxiosError } from "axios";
 import { type ActionFunctionArgs, type LoaderFunctionArgs, redirect } from "react-router-dom";
+import { postTool, type Tool } from "@/entities/tool";
+import { transformToCreateRequest } from "@/entities/tool/model/transform";
 import { ToolEditForm } from "@/features/tool-edit-form";
+import { uploadFileAndGetUrl } from "@/shared/lib/file-uploader";
 
 export async function loader({ params }: LoaderFunctionArgs) {
 	const { toolId } = params;
@@ -13,23 +17,114 @@ export async function loader({ params }: LoaderFunctionArgs) {
 	return { toolData };
 }
 
-export async function action({ request, params }: ActionFunctionArgs) {
+async function handleFileUploads(toolData: Tool): Promise<Tool> {
+	const toolLogoUrl =
+		toolData.toolLogo instanceof File
+			? await uploadFileAndGetUrl(toolData.toolLogo)
+			: toolData.toolLogo;
+
+	const imageUrls = await Promise.all(
+		(toolData.images || []).map(async (img) => {
+			if (img instanceof File) {
+				return uploadFileAndGetUrl(img);
+			}
+			return img;
+		})
+	);
+
+	return {
+		...toolData,
+		toolLogo: toolLogoUrl,
+		images: imageUrls,
+	};
+}
+
+function formDataToToolObject(formData: FormData): Tool {
+	const safeParse = (key: string, defaultValue: any) => {
+		const value = formData.get(key) as string;
+		try {
+			return value ? JSON.parse(value) : defaultValue;
+		} catch (_e) {
+			console.error(`Failed to parse JSON for key: ${key}`, value);
+			return defaultValue;
+		}
+	};
+
+	// File 객체 가져오기
+	const toolLogo = formData.get("toolLogo");
+	const images = formData.getAll("images");
+
+	return {
+		toolLogo: toolLogo instanceof File ? toolLogo : undefined,
+		images: images.filter((img) => img instanceof File) as File[],
+
+		platform: safeParse("platform", {}),
+		keywords: safeParse("keywords", []),
+		cores: safeParse("cores", []),
+		plans: safeParse("plans", []),
+		videos: safeParse("videos", []),
+
+		toolMainName: formData.get("toolMainName") as string,
+		toolSubName: formData.get("toolSubName") as string,
+		category: formData.get("category") as string,
+		toolLink: formData.get("toolLink") as string,
+		description: formData.get("description") as string,
+		license: formData.get("license") as string,
+		supportKorea: formData.get("supportKorea") === "true",
+		detailDescription: formData.get("detailDescription") as string,
+	} as Tool;
+}
+
+export async function submitTool({ request, params }: ActionFunctionArgs) {
 	const { toolId } = params;
-	const jsonData = await request.json();
-	const { intent, ...formData } = jsonData;
+
+	const requestFormData = await request.formData();
+
+	const intent = requestFormData.get("intent") as "draft" | "publish";
+
+	const formDataObject = formDataToToolObject(requestFormData);
 
 	if (intent === "draft") {
-		console.log("임시저장 로직 실행:", formData);
+		console.log("임시저장 로직 실행:", formDataObject);
+		return { ok: true };
 	} else if (intent === "publish") {
-		console.log("발행 로직 실행:", formData);
-		if (toolId) {
-			// 수정
-		} else {
-			// 생성
+		try {
+			const toolDataWithUrls = await handleFileUploads(formDataObject);
+			const createRequest = await transformToCreateRequest(toolDataWithUrls);
+
+			if (toolId) {
+				// patch
+			} else {
+				await postTool(createRequest);
+			}
+
+			return { ok: true };
+		} catch (error: unknown) {
+			let message = "알 수 없는 오류가 발생했습니다.";
+
+			if (isAxiosError(error)) {
+				message = error.response?.data?.message || error.message;
+			} else if (error instanceof Error) {
+				message = error.message;
+			}
+
+			return {
+				ok: false,
+				message: message,
+			};
 		}
 	}
+	return { ok: false, message: "알 수 없는 작업 요청입니다." };
+}
 
-	return redirect("/");
+export async function action(args: ActionFunctionArgs) {
+	const result = await submitTool(args);
+
+	if (result.ok) {
+		return redirect("/");
+	}
+
+	return result;
 }
 
 export default function ToolEditPage() {

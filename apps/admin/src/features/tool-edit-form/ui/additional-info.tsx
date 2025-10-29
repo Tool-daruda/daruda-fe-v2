@@ -10,7 +10,7 @@ const AdditionalInfo = () => {
 		<ToolEditSection title="2. 부수 정보">
 			<ToolEditField label="플랜">
 				<Controller
-					name="category"
+					name="license"
 					control={control}
 					render={({ field }) => (
 						<RadioGroup name={field.name} value={field.value} onValueChange={field.onChange}>

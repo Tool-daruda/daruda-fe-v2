@@ -69,3 +69,42 @@ export interface GetAdminToolsRes {
 	totalPages: number;
 	totalElements: number;
 }
+
+export type PostToolRequest = {
+	toolMainName: string;
+	toolSubName: string;
+	category: string;
+	toolLink: string;
+	description: string;
+	license: string;
+	supportKorea: boolean;
+	detailDescription: string;
+	planLink: string;
+	bgColor: string;
+	fontColor: boolean; // true: 검정, false: 흰색
+
+	toolLogo: string;
+	platform: {
+		web: boolean;
+		windows: boolean;
+		mac: boolean;
+	};
+
+	keywords: string[];
+	cores: Array<{
+		coreTitle: string;
+		coreContent: string;
+	}>;
+
+	plans: Array<{
+		planName: string;
+		priceMonthly: number | null;
+		priceAnnual: number | null;
+		description: string;
+		isDollar: boolean;
+	}>;
+
+	images: string[];
+	videos: string[];
+	relatedToolIds: number[];
+};
