@@ -7,9 +7,9 @@ import {
 	getPlan,
 	LICENSE_OPTIONS,
 	type Plan,
-	postTool,
 	type Tool,
 } from "@/entities/tool";
+import { useToolPostMutation, useToolUpdateMutation } from "@/entities/tool/api/queries";
 import { transformToCreateRequest } from "@/entities/tool/model/transform";
 import { ToolEditForm } from "@/features/tool-edit-form";
 import { uploadFileAndGetUrl } from "@/shared/lib/file-uploader";
@@ -151,6 +151,9 @@ export async function submitTool({ request, params }: ActionFunctionArgs) {
 
 	const formDataObject = formDataToToolObject(requestFormData);
 
+	const { mutate: patchMutate } = useToolUpdateMutation();
+	const { mutate: postMutate } = useToolPostMutation();
+
 	if (intent === "draft") {
 		console.log("임시저장 로직 실행:", formDataObject);
 		return { ok: true };
@@ -160,9 +163,9 @@ export async function submitTool({ request, params }: ActionFunctionArgs) {
 			const createRequest = await transformToCreateRequest(toolDataWithUrls);
 
 			if (toolId) {
-				// patch
+				patchMutate({ id: Number(toolId), data: createRequest });
 			} else {
-				await postTool(createRequest);
+				postMutate(createRequest);
 			}
 
 			return { ok: true };

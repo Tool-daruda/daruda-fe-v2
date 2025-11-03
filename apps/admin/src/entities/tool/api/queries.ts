@@ -1,5 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
-import type { GetAdminToolsParams, SearchTool } from "../model/types";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
+import type { GetAdminToolsParams, PostToolRequest, SearchTool } from "../model/types";
 import {
 	getAdminTools,
 	getAlternativeTool,
@@ -7,6 +8,8 @@ import {
 	getDetail,
 	getPlan,
 	getSearchTool,
+	patchTool,
+	postTool,
 } from "./api";
 
 export const TOOL_QUERY_KEY = {
@@ -39,6 +42,28 @@ export const useSearchToolQuery = (keyword: string) => {
 		enabled: !!keyword,
 		staleTime: 1000 * 60 * 5,
 		gcTime: 1000 * 60 * 10,
+	});
+};
+
+export const useToolPostMutation = () => {
+	const navigate = useNavigate();
+
+	return useMutation({
+		mutationFn: (data: PostToolRequest) => postTool(data),
+		onSuccess: () => {
+			navigate("/tool");
+		},
+	});
+};
+
+export const useToolUpdateMutation = () => {
+	const navigate = useNavigate();
+
+	return useMutation({
+		mutationFn: (req: { id: number | null; data: PostToolRequest }) => patchTool(req.data, req.id),
+		onSuccess: () => {
+			navigate("/tool");
+		},
 	});
 };
 

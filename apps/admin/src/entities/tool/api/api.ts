@@ -1,5 +1,5 @@
 import type { AxiosResponse } from "axios";
-import { get, post } from "@/shared/api";
+import { get, patch, post } from "@/shared/api";
 import type {
 	AlternativeToolResponse,
 	CoreFeatureResponse,
@@ -19,6 +19,13 @@ export const getAdminTools = async (params: GetAdminToolsParams): Promise<GetAdm
 export const postTool = async (data: PostToolRequest) => {
 	const res: AxiosResponse<PostToolRequest> = await post("/admin", data);
 	return res.data;
+};
+
+export const patchTool = async (data: PostToolRequest, toolId: number | null) => {
+	if (toolId) {
+		const res: AxiosResponse<PostToolRequest> = await patch(`/admin/${toolId}`, data);
+		return res.data;
+	}
 };
 
 export const getSearchTool = async (keyword: string): Promise<SearchTool[]> => {
