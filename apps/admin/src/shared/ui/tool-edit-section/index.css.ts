@@ -1,4 +1,4 @@
-import { themeVars } from "@repo/ui";
+import { themeVars } from "@repo/ui/foundations";
 import { style } from "@vanilla-extract/css";
 
 export const container = style({

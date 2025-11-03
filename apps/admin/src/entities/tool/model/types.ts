@@ -9,7 +9,7 @@ export type Tool = {
 	detailDescription: string;
 	planLink: string;
 	bgColor: string;
-	fontColor: boolean;
+	fontColor?: boolean;
 	toolLogo: string | File;
 	platform: Platform;
 	keywords: Keyword[];
@@ -20,6 +20,7 @@ export type Tool = {
 	relatedToolIds: number[];
 	plantype: string; // todo: 백엔드 맞게 수정
 	updatedAt?: string;
+	relatedTools: SearchTool[];
 };
 
 export type Platform = {
@@ -81,7 +82,7 @@ export type PostToolRequest = {
 	detailDescription: string;
 	planLink: string;
 	bgColor: string;
-	fontColor: boolean; // true: 검정, false: 흰색
+	fontColor?: boolean; // true: 검정, false: 흰색
 
 	toolLogo: string;
 	platform: {
@@ -108,3 +109,73 @@ export type PostToolRequest = {
 	videos: string[];
 	relatedToolIds: number[];
 };
+
+// 툴 검색
+export type SearchTool = {
+	toolId: number;
+	toolName: string;
+	toolLogo: string;
+	description: string;
+	license: string;
+	keywords: string[];
+	isScraped?: boolean;
+	bgColor?: string;
+	fontColor?: boolean;
+};
+
+// 상세 페이지용 Tool 타입
+export interface DetailToolResponse extends Tool {
+	toolMainName: string;
+	toolSubName: string;
+	category: string;
+	toolLink: string;
+	supportKorea: boolean;
+	detailDescription: string;
+	images: string[];
+	fontColor: boolean;
+	updatedAt: string;
+	isScrapped: boolean;
+	keywords: string[];
+	videos: string[];
+	license: string;
+	platform: Platform[];
+}
+
+// 툴 핵심 기능 타입
+export interface CoreFeatureResponse {
+	toolCoreResList: ToolCoreFeature[];
+}
+
+interface ToolCoreFeature {
+	coreId: number;
+	coreTitle: string;
+	coreContent: string;
+}
+
+// 툴 요금제 타입
+export interface ToolPlanResponse {
+	toolPlans: ToolPlan[];
+}
+
+type ToolPlan = {
+	price: string | number;
+	planId: number;
+	planName: string;
+	monthlyPrice: number | null;
+	annualPrice: number | null;
+	description: string;
+	isDollar: boolean;
+};
+
+// 대안 툴 타입
+export interface AlternativeToolResponse {
+	relatedToolResList: AlternativeTool[];
+}
+
+export interface AlternativeTool {
+	toolId: number;
+	toolName: string;
+	toolLogo: string;
+	license: "무료" | "부분 무료" | "유료";
+	keywords: string[];
+}

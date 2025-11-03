@@ -4,11 +4,8 @@ import { themeVars } from "src/foundations";
 
 export const containerStyle = style({
 	position: "relative",
-	display: "flex",
 	gap: "10px",
-	alignItems: "flex-start",
 	width: "100%",
-	flexBasis: 0,
 });
 
 export const previewContainerStyle = style({

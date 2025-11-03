@@ -1,20 +1,87 @@
 import { isAxiosError } from "axios";
 import { type ActionFunctionArgs, type LoaderFunctionArgs, redirect } from "react-router-dom";
-import { postTool, type Tool } from "@/entities/tool";
+import {
+	getAlternativeTool,
+	getCoreFeature,
+	getDetail,
+	getPlan,
+	LICENSE_OPTIONS,
+	type Plan,
+	postTool,
+	type Tool,
+} from "@/entities/tool";
 import { transformToCreateRequest } from "@/entities/tool/model/transform";
 import { ToolEditForm } from "@/features/tool-edit-form";
 import { uploadFileAndGetUrl } from "@/shared/lib/file-uploader";
 
 export async function loader({ params }: LoaderFunctionArgs) {
 	const { toolId } = params;
-	// const toolData = await getTool(toolId!);
-
-	const toolData = { id: toolId, name: "기존 툴 이름" };
-
-	if (!toolData) {
-		throw new Response("Not Found", { status: 404 });
+	if (!toolId || toolId === "new") {
+		return { toolData: {} };
 	}
-	return { toolData };
+
+	try {
+		const numericToolId = Number(toolId);
+
+		const [detailData, coreFeatureData, planData, alternativeToolData] = await Promise.all([
+			getDetail(numericToolId),
+			getCoreFeature(numericToolId),
+			getPlan(numericToolId),
+			getAlternativeTool(numericToolId),
+		]);
+
+		let mappedPlans = [] as Plan[];
+
+		if (detailData?.license && detailData?.license !== LICENSE_OPTIONS[0].label) {
+			mappedPlans = (planData?.toolPlans || []).map((apiPlan) => ({
+				planName: apiPlan.planName,
+				description: apiPlan.description,
+				priceMonthly: apiPlan.monthlyPrice,
+				priceAnnual: apiPlan.annualPrice,
+				isDollar: apiPlan.isDollar,
+			}));
+		}
+
+		let calculatedPlanType: string;
+
+		const hasMonthly = planData?.toolPlans.some((plan) => plan.monthlyPrice !== null);
+		const hasAnnual = planData?.toolPlans.some((plan) => plan.annualPrice !== null);
+
+		if (hasMonthly && hasAnnual) {
+			calculatedPlanType = "subscription";
+		} else if (hasMonthly) {
+			calculatedPlanType = "monthly";
+		} else if (hasAnnual) {
+			calculatedPlanType = "subscription";
+		} else {
+			calculatedPlanType = "free";
+		}
+
+		const combinedToolData: Partial<Tool> = {
+			...detailData,
+			cores: coreFeatureData?.toolCoreResList || [],
+			plantype: calculatedPlanType,
+			plans: mappedPlans,
+			relatedTools: alternativeToolData?.relatedToolResList || [],
+			keywords: (detailData?.keywords || []).map((val: string) => ({
+				value: val,
+			})),
+			videos: (detailData?.videos || []).map((val: string) => ({
+				videoUrl: val,
+			})),
+			license: LICENSE_OPTIONS.find((option) => option.label === detailData?.license)?.value,
+			platform: {
+				web: detailData?.platform[0].Web ?? false,
+				windows: detailData?.platform[0].Windows ?? false,
+				mac: detailData?.platform[0].Mac ?? false,
+			},
+		};
+
+		return { toolData: combinedToolData };
+	} catch (error) {
+		console.error("툴 데이터 로딩 실패:", error);
+		throw new Response("Tool Not Found", { status: 404 });
+	}
 }
 
 async function handleFileUploads(toolData: Tool): Promise<Tool> {

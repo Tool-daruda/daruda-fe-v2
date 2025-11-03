@@ -1,7 +1,7 @@
 import { Pagination, ToolCard } from "@repo/ui";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { getKoreanCategoryName } from "@/entities/tool";
-import { useAdminTools } from "@/entities/tool/api/queries";
+import { useAdminToolsQuery } from "@/entities/tool/api/queries";
 import * as S from "./index.css";
 
 const ITEMS_PER_PAGE = 10;
@@ -17,7 +17,7 @@ const ToolListPage = () => {
 		isLoading,
 		isError,
 		error,
-	} = useAdminTools({
+	} = useAdminToolsQuery({
 		page: currentPage - 1,
 		size: ITEMS_PER_PAGE,
 	});

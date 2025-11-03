@@ -29,7 +29,7 @@ export const TOOL_CATEGORY_OPTIONS = TOOL_CATEGORY_LIST.filter(
 
 export const LICENSE_OPTIONS = [
 	{ value: "FREE", label: "무료" },
-	{ value: "PARTIAL", label: "부분 유료" },
+	{ value: "PARTIAL", label: "부분 무료" },
 	{ value: "PAID", label: "유료" },
 ];
 

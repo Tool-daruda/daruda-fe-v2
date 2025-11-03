@@ -21,6 +21,6 @@ export const transformToCreateRequest = async (formData: Tool): Promise<PostTool
 		cores: formData.cores || [],
 		plans: formData.plans || [],
 		videos: (formData.videos || []).map((v) => v.videoUrl),
-		relatedToolIds: formData.relatedToolIds || [],
+		relatedToolIds: (formData.relatedTools || []).map((tool) => tool.toolId),
 	};
 };

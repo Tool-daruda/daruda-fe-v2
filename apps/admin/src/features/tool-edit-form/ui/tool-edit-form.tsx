@@ -21,7 +21,6 @@ type ToolActionData = {
 export const ToolEditForm = () => {
 	const loaderData = useLoaderData() as { toolData?: Tool } | null;
 	const toolData = loaderData?.toolData;
-
 	const isEditMode = !!toolData;
 
 	const methods = useForm<Tool>({
@@ -92,15 +91,27 @@ export const ToolEditForm = () => {
 					<SimilarTool />
 				</article>
 				<div className={S.buttonGroupStyle}>
-					<Button
-						type="button"
-						size="lg"
-						intent="dangerous"
-						appearance="outlined"
-						onClick={() => navigate("/daruda-admin/tool")}
-					>
-						취소하기
-					</Button>
+					{isEditMode ? (
+						<Button
+							type="button"
+							size="lg"
+							intent="dangerous"
+							appearance="outlined"
+							// onClick={() => navigate("/daruda-admin/tool")}
+						>
+							삭제하기
+						</Button>
+					) : (
+						<Button
+							type="button"
+							size="lg"
+							intent="dangerous"
+							appearance="outlined"
+							onClick={() => navigate("/daruda-admin/tool")}
+						>
+							취소하기
+						</Button>
+					)}
 					<Button
 						type="button"
 						size="lg"

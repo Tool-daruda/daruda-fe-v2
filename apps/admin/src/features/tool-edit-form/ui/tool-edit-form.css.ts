@@ -1,4 +1,4 @@
-import { themeVars } from "@repo/ui";
+import { themeVars } from "@repo/ui/foundations";
 import { style } from "@vanilla-extract/css";
 
 export const sectionStyle = style({
@@ -40,4 +40,61 @@ export const hrStyle = style({
 	width: "75.6rem",
 	height: "0.2rem",
 	background: themeVars.colors.grayscale[50],
+});
+
+export const loadingStyle = style({
+	padding: "8px 12px",
+	color: "#555",
+});
+
+// 검색 결과 리스트
+export const searchResultsListStyle = style({
+	listStyle: "none",
+	padding: 0,
+	margin: "8px 0 0 0",
+	border: "1px solid #ccc",
+	borderRadius: "4px",
+	maxHeight: "150px",
+	overflowY: "auto",
+	backgroundColor: "#fff",
+	// li: {
+	// 	padding: "8px 12px",
+	// 	cursor: "pointer",
+	// 	":hover": {
+	// 		backgroundColor: "#f0f0f0",
+	// 	},
+	// },
+});
+
+// 선택된 툴 리스트
+export const selectedToolsUlStyle = style({
+	listStyle: "none",
+	padding: 0,
+	margin: 0,
+	display: "flex",
+	flexWrap: "wrap",
+	gap: "2.8rem",
+});
+
+export const selectedToolsLiStyle = style({
+	borderRadius: "14px",
+	border: `1px solid ${themeVars.colors.grayscale[50]}`,
+	background: themeVars.colors.grayscale[0],
+	display: "flex",
+	alignItems: "center",
+	padding: "12px 12px 12px 20px",
+	gap: "1.2rem",
+	color: themeVars.colors.grayscale[900],
+	...themeVars.fonts.caption1_1,
+});
+
+export const selectedToolsBtnStyle = style({
+	border: "none",
+	fill: "none",
+});
+
+export const errorStyle = style({
+	color: "red",
+	fontSize: "14px",
+	marginTop: "8px",
 });
