@@ -21,9 +21,8 @@ export const listHeader = style({
 });
 
 export const tableHeader = style({
-	display: "grid",
-	gridTemplateColumns: "5rem 8rem 1.5fr 2fr 1fr 15rem 10rem",
-	alignItems: "center",
+	display: "flex",
+	gap: "1.6rem",
 	...themeVars.fonts.caption1_1,
 	color: themeVars.colors.grayscale[500],
 });

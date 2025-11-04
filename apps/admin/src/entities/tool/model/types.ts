@@ -85,11 +85,7 @@ export type PostToolRequest = {
 	fontColor?: boolean; // true: 검정, false: 흰색
 
 	toolLogo: string;
-	platform: {
-		web: boolean;
-		windows: boolean;
-		mac: boolean;
-	};
+	platform: Platform;
 
 	keywords: string[];
 	cores: Array<{
@@ -115,7 +111,7 @@ export type SearchTool = {
 	toolId: number;
 	toolName: string;
 	toolLogo: string;
-	description: string;
+	description?: string;
 	license: string;
 	keywords: string[];
 	isScraped?: boolean;
@@ -124,7 +120,7 @@ export type SearchTool = {
 };
 
 // 상세 페이지용 Tool 타입
-export interface DetailToolResponse extends Tool {
+export interface DetailToolResponse {
 	toolMainName: string;
 	toolSubName: string;
 	category: string;
@@ -138,7 +134,11 @@ export interface DetailToolResponse extends Tool {
 	keywords: string[];
 	videos: string[];
 	license: string;
-	platform: Platform[];
+	platform: {
+		Web: boolean;
+		Windows: boolean;
+		Mac: boolean;
+	}[];
 }
 
 // 툴 핵심 기능 타입
