@@ -1,5 +1,5 @@
 import type { AxiosResponse } from "axios";
-import { get, patch, post } from "@/shared/api";
+import { del, get, patch, post } from "@/shared/api";
 import type {
 	AlternativeToolResponse,
 	BlogResponse,
@@ -24,7 +24,14 @@ export const postTool = async (data: PostToolRequest) => {
 
 export const patchTool = async (data: PostToolRequest, toolId: number | null) => {
 	if (toolId) {
-		const res: AxiosResponse<PostToolRequest> = await patch(`/admin/${toolId}`, data);
+		const res: AxiosResponse<PostToolRequest> = await patch(`/admin/tools/${toolId}`, data);
+		return res.data;
+	}
+};
+
+export const deleteTool = async (toolId: number) => {
+	if (toolId) {
+		const res: AxiosResponse = await del(`/admin/tools/${toolId}`);
 		return res.data;
 	}
 };

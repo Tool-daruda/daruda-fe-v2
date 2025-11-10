@@ -2,6 +2,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import type { GetAdminToolsParams, PostToolRequest, SearchTool } from "../model/types";
 import {
+	deleteTool,
 	getAdminTools,
 	getAlternativeTool,
 	getCoreFeature,
@@ -61,6 +62,17 @@ export const useToolUpdateMutation = () => {
 
 	return useMutation({
 		mutationFn: (req: { id: number | null; data: PostToolRequest }) => patchTool(req.data, req.id),
+		onSuccess: () => {
+			navigate("/tool");
+		},
+	});
+};
+
+export const useToolDeleteMutation = () => {
+	const navigate = useNavigate();
+
+	return useMutation({
+		mutationFn: (toolId: number) => deleteTool(toolId),
 		onSuccess: () => {
 			navigate("/tool");
 		},

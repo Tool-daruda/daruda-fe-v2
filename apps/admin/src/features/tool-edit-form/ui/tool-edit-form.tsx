@@ -10,6 +10,7 @@ import {
 	useSubmit,
 } from "react-router-dom";
 import type { Tool } from "@/entities/tool";
+import { useToolDeleteMutation } from "@/entities/tool/api/queries";
 import { DraftStorage } from "@/shared/lib/draft-storage";
 import Abstract from "./absract";
 import AdditionalInfo from "./additional-info";
@@ -46,6 +47,7 @@ const FormContent = () => {
 	const submit = useSubmit();
 	const { handleSubmit, reset, getValues } = useFormContext<Tool>();
 	const actionData = useActionData() as ToolActionData | undefined;
+	const { mutate: deleteMutate } = useToolDeleteMutation();
 
 	useEffect(() => {
 		if (hasDraft && draftTimestamp) {
@@ -124,7 +126,6 @@ const FormContent = () => {
 			formData.append("blogLinks", JSON.stringify(data.blogLinks || []));
 			formData.append("relatedToolIds", JSON.stringify(relatedToolIds));
 
-			console.log(data.planLink);
 			submit(formData, {
 				method: isEditMode ? "put" : "post",
 				encType: "multipart/form-data",
@@ -156,7 +157,13 @@ const FormContent = () => {
 			</article>
 			<div className={S.buttonGroupStyle}>
 				{isEditMode ? (
-					<Button type="button" size="lg" intent="dangerous" appearance="outlined">
+					<Button
+						type="button"
+						size="lg"
+						intent="dangerous"
+						appearance="outlined"
+						onClick={() => deleteMutate(Number(toolId))}
+					>
 						삭제하기
 					</Button>
 				) : (
