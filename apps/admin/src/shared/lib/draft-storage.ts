@@ -14,7 +14,13 @@ const generateTimestampKey = (toolId?: string | number): string => {
 const fileToBase64 = (file: File): Promise<string> => {
 	return new Promise((resolve, reject) => {
 		const reader = new FileReader();
-		reader.onload = () => resolve(reader.result as string);
+		reader.onload = () => {
+			if (typeof reader.result === "string") {
+				resolve(reader.result);
+			} else {
+				reject(new Error("Failed to read file as string"));
+			}
+		};
 		reader.onerror = reject;
 		reader.readAsDataURL(file);
 	});
@@ -84,8 +90,12 @@ export const DraftStorage = {
 	},
 
 	hasDraft(toolId?: string | number): boolean {
-		const key = generateKey(toolId);
-		return localStorage.getItem(key) !== null;
+		try {
+			const key = generateKey(toolId);
+			return localStorage.getItem(key) !== null;
+		} catch (_e) {
+			return false;
+		}
 	},
 
 	getDraftTimestamp(toolId?: string | number): number | null {

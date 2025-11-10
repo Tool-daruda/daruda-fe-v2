@@ -56,6 +56,7 @@ const CoreFeature = () => {
 									rounded="pill"
 									appearance="filled"
 									onClick={() => append(emptyCore)}
+									aria-label="핵심 기능 추가"
 								>
 									<IcAdd width={20} color="white" />
 								</Button>
@@ -67,6 +68,7 @@ const CoreFeature = () => {
 									rounded="pill"
 									appearance="filled"
 									onClick={() => remove(index)}
+									aria-label="핵심 기능 삭제"
 								>
 									<IcCross width={20} color="white" />
 								</Button>
@@ -74,7 +76,11 @@ const CoreFeature = () => {
 						</div>
 					</ToolEditField>
 					<ToolEditField label={`상세 설명\n(500자)`}>
-						<TextArea placeholder="내용을 입력하세요" {...register(`cores.${index}.coreContent`)} />
+						<TextArea
+							placeholder="내용을 입력하세요"
+							maxLength={500}
+							{...register(`cores.${index}.coreContent`)}
+						/>
 					</ToolEditField>
 				</div>
 			))}

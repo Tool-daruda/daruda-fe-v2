@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import type { GetAdminToolsParams, PostToolRequest, SearchTool } from "../model/types";
 import {
@@ -13,15 +13,14 @@ import {
 	postTool,
 } from "./api";
 
-export const TOOL_QUERY_KEY = {
-	all: ["tools"] as const,
-	ADMIN_LIST: (params: GetAdminToolsParams) =>
-		[...TOOL_QUERY_KEY.all, "adminList", params] as const,
+export const TOOL_QUERY_KEY = Object.freeze({
+	all: ["tools"],
+	ADMIN_LIST: (params: GetAdminToolsParams) => [...TOOL_QUERY_KEY.all, "adminList", params],
 	CORE_FEATURES: (coreID: number) => [...TOOL_QUERY_KEY.all, "corefeature", coreID],
 	TOOL_PLAN: (planID: number) => [...TOOL_QUERY_KEY.all, "toolplan", planID],
 	RELATED_TOOLS: (toolID: number) => [...TOOL_QUERY_KEY.all, "relatedtool", toolID],
 	DETAIL: (toolId: number) => [...TOOL_QUERY_KEY.all, "tooldetail", toolId],
-};
+});
 
 export const useAdminToolsQuery = (params: GetAdminToolsParams) => {
 	return useQuery({
@@ -32,9 +31,10 @@ export const useAdminToolsQuery = (params: GetAdminToolsParams) => {
 	});
 };
 
-export const SEARCH_QUERY_KEY = {
+export const SEARCH_QUERY_KEY = Object.freeze({
+	all: ["search"],
 	SEARCH: (keyword: string, type: string) => ["search", type, keyword],
-};
+});
 
 export const useSearchToolQuery = (keyword: string) => {
 	return useQuery<SearchTool[]>({
@@ -48,10 +48,12 @@ export const useSearchToolQuery = (keyword: string) => {
 
 export const useToolPostMutation = () => {
 	const navigate = useNavigate();
+	const queryClient = useQueryClient();
 
 	return useMutation({
 		mutationFn: (data: PostToolRequest) => postTool(data),
 		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: TOOL_QUERY_KEY.all });
 			navigate("/tool");
 		},
 	});
@@ -70,10 +72,12 @@ export const useToolUpdateMutation = () => {
 
 export const useToolDeleteMutation = () => {
 	const navigate = useNavigate();
+	const queryClient = useQueryClient();
 
 	return useMutation({
 		mutationFn: (toolId: number) => deleteTool(toolId),
 		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: TOOL_QUERY_KEY.all });
 			navigate("/tool");
 		},
 	});

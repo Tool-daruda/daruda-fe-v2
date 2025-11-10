@@ -1,5 +1,6 @@
 import { themeVars } from "@repo/ui";
 import { style } from "@vanilla-extract/css";
+import { zIndex } from "@/shared/constants/z-index";
 
 export const title = style({
 	...themeVars.fonts.t2_1,
@@ -14,7 +15,7 @@ export const toolCount = style({
 export const listHeader = style({
 	position: "sticky",
 	top: 0,
-	zIndex: 10,
+	zIndex: zIndex.HEADER,
 	padding: "1.4rem 0",
 	backgroundColor: themeVars.colors.grayscale[0],
 	borderBottom: `1px solid ${themeVars.colors.grayscale[100]}`,

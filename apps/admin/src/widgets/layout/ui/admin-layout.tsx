@@ -4,7 +4,7 @@ import * as S from "./admin-layout.css";
 
 export const AdminLayout = () => {
 	return (
-		<div className="admin-container">
+		<div>
 			<Header />
 			<main className={S.content}>
 				<Outlet />

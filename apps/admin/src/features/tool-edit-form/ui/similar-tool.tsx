@@ -109,6 +109,7 @@ const SimilarTool = () => {
 									type="button"
 									className={S.selectedToolsBtnStyle}
 									onClick={() => handleRemoveTool(tool.toolId)}
+									aria-label={`${tool.toolName} 제거`}
 								>
 									<IcCross width={20} />
 								</button>

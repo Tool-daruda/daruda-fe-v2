@@ -43,7 +43,6 @@ const AdditionalInfo = () => {
 				<Controller
 					name="platform"
 					control={control}
-					defaultValue={{ supportWeb: false, supportWindows: false, supportMac: false }}
 					render={({ field }) => {
 						const checkedValues = PLATFORM_OPTIONS.filter(
 							(opt) => field.value?.[opt.name] === true

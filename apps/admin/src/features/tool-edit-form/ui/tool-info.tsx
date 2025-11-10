@@ -35,7 +35,7 @@ const ToolInfo = () => {
 								onDeleteNew={(fileToDelete: File) => {
 									field.onChange([
 										...existingImages,
-										...newImages.filter((file) => file.name !== fileToDelete.name),
+										...newImages.filter((file) => file !== fileToDelete),
 									]);
 								}}
 							/>
@@ -44,7 +44,11 @@ const ToolInfo = () => {
 				/>
 			</ToolEditField>
 			<ToolEditField label={`소개글\n(500자)`}>
-				<TextArea placeholder="내용을 입력하세요" {...register("detailDescription")} />
+				<TextArea
+					placeholder="내용을 입력하세요"
+					maxLength={500}
+					{...register("detailDescription")}
+				/>
 			</ToolEditField>
 		</ToolEditSection>
 	);

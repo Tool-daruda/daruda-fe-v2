@@ -12,10 +12,15 @@ export const getPresignedUrls = async (fileName: string) => {
 };
 
 export const putFileToS3 = async ({ file, signedUrl }: { file: File; signedUrl: string }) => {
-	await axios.put(decodeURIComponent(signedUrl), file, {
-		headers: {
-			"Content-Type": file.type,
-		},
-		withCredentials: false,
-	});
+	try {
+		await axios.put(signedUrl, file, {
+			headers: {
+				"Content-Type": file.type,
+			},
+			withCredentials: false,
+		});
+	} catch (error) {
+		console.error("S3 파일 업로드 실패:", error);
+		throw error;
+	}
 };

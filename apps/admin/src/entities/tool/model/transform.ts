@@ -15,11 +15,11 @@ export const transformToCreateRequest = async (formData: Tool): Promise<PostTool
 		images: formData.images as string[],
 		platform: formData.platform,
 
-		keywords: (formData.keywords || []).map((k) => k.value),
+		keywords: (formData.keywords || []).map((k) => k.value).filter(Boolean),
 		cores: formData.cores || [],
 		plans: formData.plans || [],
-		videos: (formData.videos || []).map((v) => v.videoUrl),
-		relatedToolIds: (formData.relatedTools || []).map((tool) => tool.toolId),
+		videos: (formData.videos || []).map((v) => v.videoUrl).filter(Boolean),
+		relatedToolIds: (formData.relatedTools || []).map((tool) => tool.toolId).filter(Boolean),
 		blogLinks: formData.blogLinks.filter((link) => link !== ""),
 	};
 };

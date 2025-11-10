@@ -29,24 +29,22 @@ export const patchTool = async (data: PostToolRequest, toolId: number | null) =>
 	}
 };
 
-export const deleteTool = async (toolId: number) => {
-	if (toolId) {
-		const res: AxiosResponse = await del(`/admin/tools/${toolId}`);
-		return res.data;
-	}
+export const deleteTool = async (toolId: number): Promise<void> => {
+	const res: AxiosResponse = await del(`/admin/tools/${toolId}`);
+	return res.data;
 };
 
 export const getSearchTool = async (keyword: string): Promise<SearchTool[]> => {
-	const res: AxiosResponse<SearchTool[]> = await get(
-		`/search/tool?keyword=${encodeURIComponent(keyword)}`
-	);
+	const res: AxiosResponse<SearchTool[]> = await get("/search/tool", {
+		params: { keyword },
+	});
 	return res.data;
 };
 
 // 툴 세부정보 조회 get
 export const getDetail = async (toolId: number): Promise<DetailToolResponse | null> => {
 	try {
-		const response: AxiosResponse<DetailToolResponse> = await get(`tool/${toolId}`);
+		const response: AxiosResponse<DetailToolResponse> = await get(`/tool/${toolId}`);
 		return response.data;
 	} catch (error) {
 		console.error("툴 상세 정보 조회 오류:", error);
@@ -57,7 +55,7 @@ export const getDetail = async (toolId: number): Promise<DetailToolResponse | nu
 //  툴 핵심 기능 조회 get
 export const getCoreFeature = async (toolId: number): Promise<CoreFeatureResponse | null> => {
 	try {
-		const response: AxiosResponse<CoreFeatureResponse> = await get(`tool/${toolId}/core-features`);
+		const response: AxiosResponse<CoreFeatureResponse> = await get(`/tool/${toolId}/core-features`);
 		return response.data;
 	} catch (error) {
 		console.error("핵심 기능 조회 오류:", error);
@@ -68,7 +66,7 @@ export const getCoreFeature = async (toolId: number): Promise<CoreFeatureRespons
 //  툴 플랜 조회 get
 export const getPlan = async (toolId: number): Promise<ToolPlanResponse | null> => {
 	try {
-		const response: AxiosResponse<ToolPlanResponse> = await get(`tool/${toolId}/plans`);
+		const response: AxiosResponse<ToolPlanResponse> = await get(`/tool/${toolId}/plans`);
 		return response.data;
 	} catch (error) {
 		console.error("툴 플랜 조회 오류:", error);
@@ -82,7 +80,7 @@ export const getAlternativeTool = async (
 ): Promise<AlternativeToolResponse | null> => {
 	try {
 		const response: AxiosResponse<AlternativeToolResponse> = await get(
-			`tool/${toolId}/alternatives`
+			`/tool/${toolId}/alternatives`
 		);
 		return response.data;
 	} catch (error) {
@@ -94,7 +92,7 @@ export const getAlternativeTool = async (
 // 블로그 조회 get
 export const getBlog = async (toolId: number): Promise<BlogResponse | null> => {
 	try {
-		const response: AxiosResponse<BlogResponse> = await get(`tool/${toolId}/blogs`);
+		const response: AxiosResponse<BlogResponse> = await get(`/tool/${toolId}/blogs`);
 		return response.data;
 	} catch (error) {
 		console.error("블로그 조회 오류:", error);

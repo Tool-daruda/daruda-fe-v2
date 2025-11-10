@@ -23,7 +23,9 @@ const ToolListPage = () => {
 	});
 
 	const handlePageChange = (page: number) => {
-		setSearchParams({ page: String(page) });
+		const newParams = new URLSearchParams(searchParams);
+		newParams.set("page", String(page));
+		setSearchParams(newParams);
 		window.scrollTo(0, 0);
 	};
 

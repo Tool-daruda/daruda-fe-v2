@@ -75,11 +75,13 @@ const FormContent = () => {
 	};
 
 	const handleDiscardDraft = () => {
+		if (!draftId) return;
 		DraftStorage.clearDraft(draftId);
 		setShowDraftNotification(false);
 	};
 
 	const handleSaveDraft = async () => {
+		if (!draftId) return;
 		try {
 			const currentFormData = getValues();
 			await DraftStorage.saveDraft(currentFormData, draftId);
@@ -98,9 +100,12 @@ const FormContent = () => {
 			if (data.toolLogo instanceof File) {
 				formData.append("toolLogo", data.toolLogo);
 			}
-			(data.images || []).forEach((img) => {
+			(data.images || []).forEach((img, index) => {
 				if (img instanceof File) {
 					formData.append("images", img);
+				} else if (img && typeof img === "string") {
+					// 기존 이미지 URL 유지
+					formData.append(`existingImages[${index}]`, img);
 				}
 			});
 
@@ -162,7 +167,11 @@ const FormContent = () => {
 						size="lg"
 						intent="dangerous"
 						appearance="outlined"
-						onClick={() => deleteMutate(Number(toolId))}
+						onClick={() => {
+							if (confirm("정말 이 툴을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.")) {
+								deleteMutate(Number(toolId));
+							}
+						}}
 					>
 						삭제하기
 					</Button>

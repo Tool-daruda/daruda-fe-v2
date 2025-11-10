@@ -8,51 +8,29 @@ const Blog = () => {
 
 	return (
 		<ToolEditSection title="7. 블로그">
-			<ToolEditField label="링크 1">
-				<Controller
-					name="blogLinks.0"
-					control={control}
-					render={({ field }) => (
-						<TextField
-							size="xl"
-							placeholder="내용을 입력하세요"
-							value={field.value}
-							onChange={field.onChange}
-							onClear={() => field.onChange("")}
-						/>
-					)}
-				/>
-			</ToolEditField>
-			<ToolEditField label="링크 2">
-				<Controller
-					name="blogLinks.1"
-					control={control}
-					render={({ field }) => (
-						<TextField
-							size="xl"
-							placeholder="내용을 입력하세요"
-							value={field.value}
-							onChange={field.onChange}
-							onClear={() => field.onChange("")}
-						/>
-					)}
-				/>{" "}
-			</ToolEditField>
-			<ToolEditField label="링크 3">
-				<Controller
-					name="blogLinks.2"
-					control={control}
-					render={({ field }) => (
-						<TextField
-							size="xl"
-							placeholder="내용을 입력하세요"
-							value={field.value}
-							onChange={field.onChange}
-							onClear={() => field.onChange("")}
-						/>
-					)}
-				/>{" "}
-			</ToolEditField>
+			{[0, 1, 2].map((index) => (
+				<ToolEditField key={index} label={`링크 ${index + 1}`}>
+					<Controller
+						name={`blogLinks.${index}` as const}
+						control={control}
+						rules={{
+							pattern: {
+								value: /^https?:\/\/.+/,
+								message: "올바른 URL 형식을 입력하세요",
+							},
+						}}
+						render={({ field }) => (
+							<TextField
+								size="xl"
+								placeholder="내용을 입력하세요"
+								value={field.value ?? ""}
+								onChange={field.onChange}
+								onClear={() => field.onChange("")}
+							/>
+						)}
+					/>
+				</ToolEditField>
+			))}
 		</ToolEditSection>
 	);
 };

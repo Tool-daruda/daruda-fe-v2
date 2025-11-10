@@ -77,7 +77,7 @@ const Plan = () => {
 				/>
 			</ToolEditField>
 
-			{plantype !== "free" &&
+			{plantype !== "무료" &&
 				fields.map((item, index) => (
 					<div key={item.id} className={S.sectionGroupStyle}>
 						<div className={S.hrStyle} />
@@ -138,15 +138,23 @@ const Plan = () => {
 										value={field.value ?? ""}
 										onChange={(e) => {
 											const rawValue = e.target.value;
-											const monthlyPrice = rawValue === "" ? null : Number(rawValue);
+											if (rawValue === "") {
+												field.onChange(null);
+												setValue(`plans.${index}.priceAnnual`, null);
+												setValue(`plans.${index}.isDollar`, false);
+												return;
+											}
+											const monthlyPrice = Number(rawValue);
+											if (Number.isNaN(monthlyPrice)) return;
 											field.onChange(monthlyPrice);
-											setValue(
-												`plans.${index}.priceAnnual`,
-												monthlyPrice === null ? null : monthlyPrice * 12
-											);
+											setValue(`plans.${index}.priceAnnual`, monthlyPrice * 12);
 											setValue(`plans.${index}.isDollar`, false);
 										}}
-										onClear={() => field.onChange("")}
+										onClear={() => {
+											field.onChange(null);
+											setValue(`plans.${index}.priceAnnual`, null);
+											setValue(`plans.${index}.isDollar`, false);
+										}}
 									/>
 								)}
 							/>

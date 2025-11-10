@@ -37,7 +37,7 @@ export const DraftNotification = ({ timestamp, onRestore, onDiscard }: DraftNoti
 				<p>임시저장된 데이터가 있습니다</p>
 				<p>{formattedDate}에 저장된 데이터를 불러오시겠습니까?</p>
 			</div>
-			<div style={{ display: "flex", justifyContent: "end", gap: "8px" }}>
+			<div className={S.buttonContainer}>
 				<Button
 					type="button"
 					size="lg"

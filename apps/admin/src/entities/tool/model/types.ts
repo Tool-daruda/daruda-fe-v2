@@ -18,7 +18,7 @@ export type Tool = {
 	images: (string | File)[];
 	videos: Video[];
 	relatedToolIds: number[];
-	plantype: string; // todo: 백엔드 맞게 수정
+	plantype: "무료" | "월간" | "구매" | "월간 & 연간" | "";
 	updatedAt?: string;
 	relatedTools?: SearchTool[];
 	blogLinks: string[];

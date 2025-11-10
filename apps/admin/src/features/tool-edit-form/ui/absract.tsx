@@ -3,7 +3,7 @@ import { useEffect, useMemo } from "react";
 import { Controller, useFieldArray, useFormContext, useWatch } from "react-hook-form";
 import { TOOL_CATEGORY_OPTIONS, type Tool } from "@/entities/tool";
 import IcAdd from "@/shared/assets/icons/ic_add.svg?react";
-import { formatDateToYYYYMMDD } from "@/shared/lib/date";
+import { formatDateWithDots } from "@/shared/lib/date";
 import { ToolEditField, ToolEditSection } from "@/shared/ui/tool-edit-section";
 import * as S from "./tool-edit-form.css";
 
@@ -15,8 +15,11 @@ const Abstract = () => {
 		name: "updatedAt",
 	});
 
-	const today = useMemo(() => formatDateToYYYYMMDD(new Date()), []);
-	const displayDate = updatedAt ? formatDateToYYYYMMDD(updatedAt) : today;
+	const today = useMemo(() => formatDateWithDots(new Date()), []);
+	const displayDate = useMemo(
+		() => (updatedAt ? formatDateWithDots(updatedAt) : today),
+		[updatedAt, today]
+	);
 
 	const { fields, append, remove, replace } = useFieldArray({
 		control,
@@ -150,7 +153,6 @@ const Abstract = () => {
 							intent="primary"
 							appearance="filled"
 							onClick={() => append(emptyKeyword)}
-							disabled={fields.length >= 3}
 						>
 							<IcAdd width={20} color="white" />
 						</Button>

@@ -34,6 +34,10 @@ export async function loader({ params }: LoaderFunctionArgs) {
 	try {
 		const numericToolId = Number(toolId);
 
+		if (Number.isNaN(numericToolId)) {
+			throw new Response("유효하지 않은 toolId", { status: 400 });
+		}
+
 		const [detailData, coreFeatureData, planData, alternativeToolData, blogData] =
 			await Promise.all([
 				getDetail(numericToolId),
@@ -55,18 +59,18 @@ export async function loader({ params }: LoaderFunctionArgs) {
 			}));
 		}
 
-		let calculatedPlanType: string;
+		let calculatedPlanType: "무료" | "월간" | "구매" | "월간 & 연간";
 		const hasMonthly = planData?.toolPlans.some((plan) => plan.monthlyPrice !== null);
 		const hasAnnual = planData?.toolPlans.some((plan) => plan.annualPrice !== null);
 
 		if (hasMonthly && hasAnnual) {
-			calculatedPlanType = "subscription";
+			calculatedPlanType = "월간 & 연간";
 		} else if (hasMonthly) {
-			calculatedPlanType = "monthly";
+			calculatedPlanType = "월간";
 		} else if (hasAnnual) {
-			calculatedPlanType = "subscription";
+			calculatedPlanType = "월간 & 연간";
 		} else {
-			calculatedPlanType = "free";
+			calculatedPlanType = "무료";
 		}
 
 		const apiBlogs = (blogData?.toolBlogs || []).map((blog: { blogUrl: string }) => blog.blogUrl);
@@ -78,7 +82,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 			plantype: calculatedPlanType,
 			plans: mappedPlans,
 			relatedTools: alternativeToolData?.relatedToolResList || [],
-			relatedToolIds: alternativeToolData?.relatedToolResList.map((tool) => tool.toolId),
+			relatedToolIds: alternativeToolData?.relatedToolResList?.map((tool) => tool.toolId) || [],
 			keywords: (detailData?.keywords || []).map((val: string) => ({
 				value: val,
 			})),
@@ -87,9 +91,9 @@ export async function loader({ params }: LoaderFunctionArgs) {
 			})),
 			license: LICENSE_OPTIONS.find((option) => option.label === detailData?.license)?.value,
 			platform: {
-				supportWeb: detailData?.platform[0].Web ?? false,
-				supportWindows: detailData?.platform[0].Windows ?? false,
-				supportMac: detailData?.platform[0].Mac ?? false,
+				supportWeb: detailData?.platform?.[0]?.Web ?? false,
+				supportWindows: detailData?.platform?.[0]?.Windows ?? false,
+				supportMac: detailData?.platform?.[0]?.Mac ?? false,
 			},
 			blogLinks: formBlogs,
 		};
@@ -166,6 +170,7 @@ function formDataToToolObject(formData: FormData): Tool {
 		license: formData.get("license") as string,
 		supportKorea: formData.get("supportKorea") === "true",
 		detailDescription: formData.get("detailDescription") as string,
+		plantype: formData.get("plantype") as string,
 	} as Tool;
 }
 
@@ -186,7 +191,7 @@ export async function submitTool({ request, params }: ActionFunctionArgs) {
 			const createRequest = await transformToCreateRequest(toolDataWithUrls);
 
 			if (toolId) {
-				patchTool(createRequest, Number(toolId));
+				await patchTool(createRequest, Number(toolId));
 			} else {
 				console.log(createRequest);
 				// postTool(createRequest);

@@ -1,4 +1,4 @@
-export const formatDateToYYYYMMDD = (date: Date | string | undefined): string => {
+export const formatDateWithDots = (date: Date | string | undefined): string => {
 	if (!date) return "";
 
 	const d = new Date(date);

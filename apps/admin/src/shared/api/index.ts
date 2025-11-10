@@ -1,16 +1,16 @@
-import axios, { type InternalAxiosRequestConfig } from "axios";
+import axios from "axios";
 
 export const instance = axios.create({
 	baseURL: import.meta.env.VITE_API_BASE_URL,
 	withCredentials: true,
 });
 
-instance.interceptors.request.use(
-	(config: InternalAxiosRequestConfig) => {
-		return config;
-	},
-	(error) => Promise.reject(error)
-);
+// instance.interceptors.request.use(
+// 	(config: InternalAxiosRequestConfig) => {
+// 		return config;
+// 	},
+// 	(error) => Promise.reject(error)
+// );
 
 export function get<T>(...args: Parameters<typeof instance.get>) {
 	return instance.get<T>(...args).then((res) => res.data);

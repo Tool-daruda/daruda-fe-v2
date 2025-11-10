@@ -43,8 +43,8 @@ export const hrStyle = style({
 });
 
 export const loadingStyle = style({
-	padding: "8px 12px",
-	color: "#555",
+	padding: "0.8rem 1.2rem",
+	color: themeVars.colors.grayscale[400],
 });
 
 // 검색 결과 리스트
@@ -87,9 +87,9 @@ export const selectedToolsBtnStyle = style({
 });
 
 export const errorStyle = style({
-	color: "red",
-	fontSize: "14px",
-	marginTop: "8px",
+	color: themeVars.colors.system.red.lt,
+	fontSize: "1.4rem",
+	marginTop: "0.8rem",
 });
 
 // 임시저장
@@ -99,10 +99,16 @@ export const notiStyle = style({
 	gap: "8px",
 
 	width: "100%",
-	margin: "4px 0",
-	padding: "12px",
+	margin: "0.4rem 0",
+	padding: "1.2rem",
 
 	borderRadius: "12px",
 	background: themeVars.colors.brand.orange[100],
 	...themeVars.fonts.h5_1,
+});
+
+export const buttonContainer = style({
+	display: "flex",
+	justifyContent: "end",
+	gap: "0.8rem",
 });

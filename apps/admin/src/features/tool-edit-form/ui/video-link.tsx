@@ -12,6 +12,12 @@ const VideoLink = () => {
 				<Controller
 					name="videos.0.videoUrl"
 					control={control}
+					rules={{
+						pattern: {
+							value: /^https?:\/\/.+/,
+							message: "올바른 URL 형식을 입력하세요",
+						},
+					}}
 					render={({ field }) => (
 						<TextField
 							size="xl"

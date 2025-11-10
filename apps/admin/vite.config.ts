@@ -6,13 +6,5 @@ import tsconfigPaths from "vite-tsconfig-paths";
 
 // https://vite.dev/config/
 export default defineConfig({
-	plugins: [react(), vanillaExtractPlugin(), tsconfigPaths(), svgr()],
-	server: {
-		proxy: {
-			"/api": {
-				target: "https://api.daruda.shop",
-				changeOrigin: true,
-			},
-		},
-	},
+	plugins: [tsconfigPaths(), react(), vanillaExtractPlugin(), svgr()],
 });
