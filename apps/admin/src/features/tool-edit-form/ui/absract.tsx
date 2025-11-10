@@ -100,7 +100,7 @@ const Abstract = () => {
 							<Dropdown
 								options={TOOL_CATEGORY_OPTIONS}
 								value={field.value}
-								onChange={(option) => field.onChange(option.value)}
+								onChange={(option) => field.onChange(option.label)}
 								placeholder="카테고리 선택하기"
 							/>
 						</div>

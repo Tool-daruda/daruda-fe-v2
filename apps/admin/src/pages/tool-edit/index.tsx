@@ -1,34 +1,47 @@
 import { isAxiosError } from "axios";
-import { type ActionFunctionArgs, type LoaderFunctionArgs, redirect } from "react-router-dom";
+import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router-dom";
 import {
 	getAlternativeTool,
+	getBlog,
 	getCoreFeature,
 	getDetail,
 	getPlan,
 	LICENSE_OPTIONS,
 	type Plan,
+	patchTool,
 	type Tool,
 } from "@/entities/tool";
-import { useToolPostMutation, useToolUpdateMutation } from "@/entities/tool/api/queries";
 import { transformToCreateRequest } from "@/entities/tool/model/transform";
 import { ToolEditForm } from "@/features/tool-edit-form";
+import { DraftStorage } from "@/shared/lib/draft-storage";
 import { uploadFileAndGetUrl } from "@/shared/lib/file-uploader";
 
 export async function loader({ params }: LoaderFunctionArgs) {
 	const { toolId } = params;
+
 	if (!toolId || toolId === "new") {
-		return { toolData: {} };
+		const hasDraft = DraftStorage.hasDraft("new");
+		const draftTimestamp = DraftStorage.getDraftTimestamp("new");
+
+		return {
+			toolData: {},
+			hasDraft,
+			draftTimestamp,
+			draftId: "new",
+		};
 	}
 
 	try {
 		const numericToolId = Number(toolId);
 
-		const [detailData, coreFeatureData, planData, alternativeToolData] = await Promise.all([
-			getDetail(numericToolId),
-			getCoreFeature(numericToolId),
-			getPlan(numericToolId),
-			getAlternativeTool(numericToolId),
-		]);
+		const [detailData, coreFeatureData, planData, alternativeToolData, blogData] =
+			await Promise.all([
+				getDetail(numericToolId),
+				getCoreFeature(numericToolId),
+				getPlan(numericToolId),
+				getAlternativeTool(numericToolId),
+				getBlog(numericToolId),
+			]);
 
 		let mappedPlans = [] as Plan[];
 
@@ -43,7 +56,6 @@ export async function loader({ params }: LoaderFunctionArgs) {
 		}
 
 		let calculatedPlanType: string;
-
 		const hasMonthly = planData?.toolPlans.some((plan) => plan.monthlyPrice !== null);
 		const hasAnnual = planData?.toolPlans.some((plan) => plan.annualPrice !== null);
 
@@ -57,12 +69,16 @@ export async function loader({ params }: LoaderFunctionArgs) {
 			calculatedPlanType = "free";
 		}
 
+		const apiBlogs = (blogData?.toolBlogs || []).map((blog: { blogUrl: string }) => blog.blogUrl);
+		const formBlogs = [apiBlogs[0] || "", apiBlogs[1] || "", apiBlogs[2] || ""];
+
 		const combinedToolData: Partial<Tool> = {
 			...detailData,
 			cores: coreFeatureData?.toolCoreResList || [],
 			plantype: calculatedPlanType,
 			plans: mappedPlans,
 			relatedTools: alternativeToolData?.relatedToolResList || [],
+			relatedToolIds: alternativeToolData?.relatedToolResList.map((tool) => tool.toolId),
 			keywords: (detailData?.keywords || []).map((val: string) => ({
 				value: val,
 			})),
@@ -71,13 +87,22 @@ export async function loader({ params }: LoaderFunctionArgs) {
 			})),
 			license: LICENSE_OPTIONS.find((option) => option.label === detailData?.license)?.value,
 			platform: {
-				web: detailData?.platform[0].Web ?? false,
-				windows: detailData?.platform[0].Windows ?? false,
-				mac: detailData?.platform[0].Mac ?? false,
+				supportWeb: detailData?.platform[0].Web ?? false,
+				supportWindows: detailData?.platform[0].Windows ?? false,
+				supportMac: detailData?.platform[0].Mac ?? false,
 			},
+			blogLinks: formBlogs,
 		};
 
-		return { toolData: combinedToolData };
+		const hasDraft = DraftStorage.hasDraft(toolId);
+		const draftTimestamp = DraftStorage.getDraftTimestamp(toolId);
+
+		return {
+			toolData: combinedToolData,
+			hasDraft,
+			draftTimestamp,
+			draftId: toolId,
+		};
 	} catch (error) {
 		console.error("툴 데이터 로딩 실패:", error);
 		throw new Response("Tool Not Found", { status: 404 });
@@ -107,7 +132,7 @@ async function handleFileUploads(toolData: Tool): Promise<Tool> {
 }
 
 function formDataToToolObject(formData: FormData): Tool {
-	const safeParse = (key: string, defaultValue: any) => {
+	const safeParse = (key: string, defaultValue: unknown) => {
 		const value = formData.get(key) as string;
 		try {
 			return value ? JSON.parse(value) : defaultValue;
@@ -117,7 +142,6 @@ function formDataToToolObject(formData: FormData): Tool {
 		}
 	};
 
-	// File 객체 가져오기
 	const toolLogo = formData.get("toolLogo");
 	const images = formData.getAll("images");
 
@@ -130,11 +154,14 @@ function formDataToToolObject(formData: FormData): Tool {
 		cores: safeParse("cores", []),
 		plans: safeParse("plans", []),
 		videos: safeParse("videos", []),
+		blogLinks: safeParse("blogLinks", []),
+		relatedToolIds: safeParse("relatedToolIds", []),
 
 		toolMainName: formData.get("toolMainName") as string,
 		toolSubName: formData.get("toolSubName") as string,
 		category: formData.get("category") as string,
 		toolLink: formData.get("toolLink") as string,
+		planLink: formData.get("planLink") as string,
 		description: formData.get("description") as string,
 		license: formData.get("license") as string,
 		supportKorea: formData.get("supportKorea") === "true",
@@ -151,11 +178,7 @@ export async function submitTool({ request, params }: ActionFunctionArgs) {
 
 	const formDataObject = formDataToToolObject(requestFormData);
 
-	const { mutate: patchMutate } = useToolUpdateMutation();
-	const { mutate: postMutate } = useToolPostMutation();
-
 	if (intent === "draft") {
-		console.log("임시저장 로직 실행:", formDataObject);
 		return { ok: true };
 	} else if (intent === "publish") {
 		try {
@@ -163,9 +186,10 @@ export async function submitTool({ request, params }: ActionFunctionArgs) {
 			const createRequest = await transformToCreateRequest(toolDataWithUrls);
 
 			if (toolId) {
-				patchMutate({ id: Number(toolId), data: createRequest });
+				patchTool(createRequest, Number(toolId));
 			} else {
-				postMutate(createRequest);
+				console.log(createRequest);
+				// postTool(createRequest);
 			}
 
 			return { ok: true };
@@ -190,9 +214,9 @@ export async function submitTool({ request, params }: ActionFunctionArgs) {
 export async function action(args: ActionFunctionArgs) {
 	const result = await submitTool(args);
 
-	if (result.ok) {
-		return redirect("/");
-	}
+	// if (result.ok) {
+	// 	return redirect("/tool");
+	// }
 
 	return result;
 }

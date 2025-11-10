@@ -12,7 +12,7 @@ const SimilarTool = () => {
 	const [keyword, setKeyword] = useState("");
 	const [searchQuery, setSearchQuery] = useState("");
 
-	const { control } = useFormContext<Tool>();
+	const { control, setValue } = useFormContext<Tool>();
 
 	const {
 		field,
@@ -21,7 +21,8 @@ const SimilarTool = () => {
 		name: "relatedTools",
 		control,
 		rules: {
-			validate: (value: SearchTool[]) => value.length === 2 || "유사한 툴은 2개를 선택해야 합니다.",
+			validate: (value: SearchTool[] | undefined) =>
+				value?.length === 2 || "유사한 툴은 2개를 선택해야 합니다.",
 		},
 	});
 
@@ -35,13 +36,25 @@ const SimilarTool = () => {
 			alert("유사한 툴은 2개까지만 선택할 수 있습니다.");
 			return;
 		}
-		field.onChange([...selectedTools, tool]);
+
+		const newTools = [...selectedTools, tool];
+		field.onChange(newTools);
+		setValue(
+			"relatedToolIds",
+			newTools.map((t) => Number(t.toolId))
+		);
+
 		setKeyword("");
 		setSearchQuery("");
 	};
 
 	const handleRemoveTool = (toolId: number) => {
-		field.onChange(selectedTools.filter((t) => t.toolId !== toolId));
+		const newTools = selectedTools.filter((t) => t.toolId !== toolId);
+		field.onChange(newTools);
+		setValue(
+			"relatedToolIds",
+			newTools.map((t) => Number(t.toolId))
+		);
 	};
 
 	const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {

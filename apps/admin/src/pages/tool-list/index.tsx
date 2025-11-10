@@ -49,13 +49,13 @@ const ToolListPage = () => {
 					툴 개수 <span className={S.toolCount}>{toolData?.totalElements}</span>개
 				</h1>
 				<div className={S.tableHeader}>
-					<span className={S.tableTitle}>No.</span>
-					<span className={S.tableTitle}>로고</span>
-					<span className={S.tableTitle}>툴 이름</span>
-					<span className={S.tableTitle}>한줄 소개</span>
-					<span className={S.tableTitle}>카테고리</span>
-					<span className={S.tableTitle}>추가된 날짜</span>
-					<span className={S.tableTitle}>설정</span>
+					<span>No.</span>
+					<span>로고</span>
+					<span>툴 이름</span>
+					<span>한줄 소개</span>
+					<span>카테고리</span>
+					<span>추가된 날짜</span>
+					<span>설정</span>
 				</div>
 			</div>
 

@@ -5,12 +5,12 @@ export type Tool = {
 	toolLink: string;
 	description: string;
 	license: string;
-	supportKorea: boolean;
+	supportKorea: boolean | null;
 	detailDescription: string;
 	planLink: string;
-	bgColor: string;
+	bgColor?: string;
 	fontColor?: boolean;
-	toolLogo: string | File;
+	toolLogo: string | File | null;
 	platform: Platform;
 	keywords: Keyword[];
 	cores: Core[];
@@ -20,13 +20,14 @@ export type Tool = {
 	relatedToolIds: number[];
 	plantype: string; // todo: 백엔드 맞게 수정
 	updatedAt?: string;
-	relatedTools: SearchTool[];
+	relatedTools?: SearchTool[];
+	blogLinks: string[];
 };
 
 export type Platform = {
-	web: boolean;
-	windows: boolean;
-	mac: boolean;
+	supportWeb: boolean;
+	supportWindows: boolean;
+	supportMac: boolean;
 };
 
 export type Core = {
@@ -81,7 +82,7 @@ export type PostToolRequest = {
 	supportKorea: boolean;
 	detailDescription: string;
 	planLink: string;
-	bgColor: string;
+	bgColor?: string;
 	fontColor?: boolean; // true: 검정, false: 흰색
 
 	toolLogo: string;
@@ -104,6 +105,7 @@ export type PostToolRequest = {
 	images: string[];
 	videos: string[];
 	relatedToolIds: number[];
+	blogLinks: string[];
 };
 
 // 툴 검색
@@ -176,6 +178,10 @@ export interface AlternativeTool {
 	toolId: number;
 	toolName: string;
 	toolLogo: string;
-	license: "무료" | "부분 무료" | "유료";
+	license: "무료" | "부분 유료" | "유료";
 	keywords: string[];
+}
+
+export interface BlogResponse {
+	toolBlogs: { blogId: number; blogUrl: string }[];
 }

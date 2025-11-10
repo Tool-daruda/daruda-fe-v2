@@ -19,6 +19,7 @@ const router = createBrowserRouter([
 			{
 				path: "tool/new",
 				element: <ToolEditPage />,
+				loader: toolEditLoader,
 				action: toolEditAction,
 			},
 			{

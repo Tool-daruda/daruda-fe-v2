@@ -57,13 +57,6 @@ export const searchResultsListStyle = style({
 	maxHeight: "150px",
 	overflowY: "auto",
 	backgroundColor: "#fff",
-	// li: {
-	// 	padding: "8px 12px",
-	// 	cursor: "pointer",
-	// 	":hover": {
-	// 		backgroundColor: "#f0f0f0",
-	// 	},
-	// },
 });
 
 // 선택된 툴 리스트
@@ -97,4 +90,19 @@ export const errorStyle = style({
 	color: "red",
 	fontSize: "14px",
 	marginTop: "8px",
+});
+
+// 임시저장
+export const notiStyle = style({
+	display: "flex",
+	flexDirection: "column",
+	gap: "8px",
+
+	width: "100%",
+	margin: "4px 0",
+	padding: "12px",
+
+	borderRadius: "12px",
+	background: themeVars.colors.brand.orange[100],
+	...themeVars.fonts.h5_1,
 });

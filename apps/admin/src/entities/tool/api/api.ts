@@ -2,6 +2,7 @@ import type { AxiosResponse } from "axios";
 import { get, patch, post } from "@/shared/api";
 import type {
 	AlternativeToolResponse,
+	BlogResponse,
 	CoreFeatureResponse,
 	DetailToolResponse,
 	GetAdminToolsParams,
@@ -79,6 +80,17 @@ export const getAlternativeTool = async (
 		return response.data;
 	} catch (error) {
 		console.error("대안 툴 조회 오류:", error);
+		return null;
+	}
+};
+
+// 블로그 조회 get
+export const getBlog = async (toolId: number): Promise<BlogResponse | null> => {
+	try {
+		const response: AxiosResponse<BlogResponse> = await get(`tool/${toolId}/blogs`);
+		return response.data;
+	} catch (error) {
+		console.error("블로그 조회 오류:", error);
 		return null;
 	}
 };

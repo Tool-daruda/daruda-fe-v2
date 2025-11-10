@@ -43,7 +43,7 @@ const AdditionalInfo = () => {
 				<Controller
 					name="platform"
 					control={control}
-					defaultValue={{ web: false, windows: false, mac: false }}
+					defaultValue={{ supportWeb: false, supportWindows: false, supportMac: false }}
 					render={({ field }) => {
 						const checkedValues = PLATFORM_OPTIONS.filter(
 							(opt) => field.value?.[opt.name] === true
@@ -51,9 +51,9 @@ const AdditionalInfo = () => {
 
 						const handleChange = (newValues: string[]) => {
 							const newPlatformState: Platform = {
-								web: newValues.includes("web"),
-								windows: newValues.includes("windows"),
-								mac: newValues.includes("mac"),
+								supportWeb: newValues.includes("supportWeb"),
+								supportWindows: newValues.includes("supportWindows"),
+								supportMac: newValues.includes("supportMac"),
 							};
 							field.onChange(newPlatformState);
 						};

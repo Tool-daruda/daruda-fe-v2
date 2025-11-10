@@ -29,7 +29,7 @@ const Plan = () => {
 	);
 
 	useEffect(() => {
-		if (plantype === "free") {
+		if (plantype === "무료") {
 			if (fields.length > 0) replace([]);
 			return;
 		}
@@ -68,7 +68,7 @@ const Plan = () => {
 							onValueChange={(newValue) => field.onChange(newValue)}
 						>
 							{PLAN_TYPE_OPTIONS.map((opt) => (
-								<Radio key={opt.value} value={opt.value}>
+								<Radio key={opt.value} value={opt.label}>
 									{opt.label}
 								</Radio>
 							))}

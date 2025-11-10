@@ -29,14 +29,14 @@ export const TOOL_CATEGORY_OPTIONS = TOOL_CATEGORY_LIST.filter(
 
 export const LICENSE_OPTIONS = [
 	{ value: "FREE", label: "무료" },
-	{ value: "PARTIAL", label: "부분 무료" },
+	{ value: "PARTIAL_FREE", label: "부분 유료" },
 	{ value: "PAID", label: "유료" },
 ];
 
 export const PLATFORM_OPTIONS: { name: keyof Platform; label: string }[] = [
-	{ name: "web", label: "Web" },
-	{ name: "windows", label: "Windows" },
-	{ name: "mac", label: "Mac" },
+	{ name: "supportWeb", label: "Web" },
+	{ name: "supportWindows", label: "Windows" },
+	{ name: "supportMac", label: "Mac" },
 ];
 
 export const PLAN_TYPE_OPTIONS = [
