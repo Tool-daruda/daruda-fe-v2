@@ -67,34 +67,35 @@ const SimilarTool = () => {
 	return (
 		<ToolEditSection title="8. 유사한 툴">
 			<ToolEditField label="검색">
-				<TextField
-					type="search"
-					placeholder="툴 이름 입력 후 Enter"
-					value={keyword}
-					onChange={(e) => setKeyword(e.target.value)}
-					onClear={() => {
-						setKeyword("");
-						setSearchQuery("");
-					}}
-					onKeyDown={handleKeyDown}
-				/>
-
-				{isLoading && <div className={S.loadingStyle}>검색 중...</div>}
-				{searchResults && searchResults.length > 0 && (
-					<ul className={S.searchResultsListStyle}>
-						{searchResults.map((tool) => (
-							<li
-								key={tool.toolId}
-								onClick={() => handleSelectTool(tool)}
-								onKeyDown={(e) => {
-									if (e.key === "Enter" || e.key === " ") handleSelectTool(tool);
-								}}
-							>
-								{tool.toolName}
-							</li>
-						))}
-					</ul>
-				)}
+				<div>
+					<TextField
+						type="search"
+						placeholder="툴 이름 입력 후 Enter"
+						value={keyword}
+						onChange={(e) => setKeyword(e.target.value)}
+						onClear={() => {
+							setKeyword("");
+							setSearchQuery("");
+						}}
+						onKeyDown={handleKeyDown}
+					/>
+					{isLoading && <div className={S.loadingStyle}>검색 중...</div>}
+					{searchResults && searchResults.length > 0 && (
+						<ul className={S.searchResultsListStyle}>
+							{searchResults.map((tool) => (
+								<li
+									key={tool.toolId}
+									onClick={() => handleSelectTool(tool)}
+									onKeyDown={(e) => {
+										if (e.key === "Enter" || e.key === " ") handleSelectTool(tool);
+									}}
+								>
+									{tool.toolName}
+								</li>
+							))}
+						</ul>
+					)}
+				</div>
 			</ToolEditField>
 
 			<ToolEditField label="유사한 툴">

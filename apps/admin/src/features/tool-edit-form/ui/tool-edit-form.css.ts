@@ -19,6 +19,7 @@ export const buttonGroupStyle = style({
 });
 
 export const sectionPStyle = style({
+	marginTop: "1.3rem",
 	...themeVars.fonts.t4_1,
 	color: themeVars.colors.grayscale[400],
 });
@@ -49,14 +50,19 @@ export const loadingStyle = style({
 
 // 검색 결과 리스트
 export const searchResultsListStyle = style({
-	listStyle: "none",
-	padding: 0,
-	margin: "8px 0 0 0",
-	border: "1px solid #ccc",
-	borderRadius: "4px",
-	maxHeight: "150px",
+	display: "flex",
+	flexDirection: "column",
+	gap: "1.2rem",
+	maxHeight: "15rem",
+	padding: "1rem",
+	margin: "0.8rem 0 0 0",
+	border: `1px solid ${themeVars.colors.grayscale[50]}`,
+	borderRadius: "12px",
 	overflowY: "auto",
-	backgroundColor: "#fff",
+	backgroundColor: themeVars.colors.grayscale[0],
+	...themeVars.fonts.t4_1,
+	color: themeVars.colors.grayscale[400],
+	listStyle: "none",
 });
 
 // 선택된 툴 리스트
@@ -75,7 +81,7 @@ export const selectedToolsLiStyle = style({
 	background: themeVars.colors.grayscale[0],
 	display: "flex",
 	alignItems: "center",
-	padding: "12px 12px 12px 20px",
+	padding: "1.2rem 1.2rem 1.2rem 2rem",
 	gap: "1.2rem",
 	color: themeVars.colors.grayscale[900],
 	...themeVars.fonts.caption1_1,
@@ -96,7 +102,7 @@ export const errorStyle = style({
 export const notiStyle = style({
 	display: "flex",
 	flexDirection: "column",
-	gap: "8px",
+	gap: "0.8rem",
 
 	width: "100%",
 	margin: "0.4rem 0",

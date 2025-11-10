@@ -20,12 +20,13 @@ export const content = style({
 export const fieldStyle = style({
 	width: "100%",
 	display: "flex",
-	alignItems: "center",
+	alignItems: "start",
 	gap: "2.8rem",
 });
 
 export const label = style({
 	width: "9.5rem",
+	marginTop: "1.3rem",
 	textAlign: "right",
 	color: themeVars.colors.grayscale[800],
 	...themeVars.fonts.t4_1,
