@@ -4,9 +4,7 @@ import { themeVars } from "src/foundations";
 
 export const containerStyle = style({
 	position: "relative",
-	display: "flex",
 	gap: "10px",
-	alignItems: "flex-start",
 	width: "100%",
 });
 
@@ -76,6 +74,7 @@ export const removeButtonRecipe = recipe({
 		borderRadius: "9999px",
 		cursor: "pointer",
 		transition: "transform 0.2s, background-color 0.2s",
+		background: "rgba(255, 255, 255, 0.50)",
 
 		":hover": {
 			backgroundColor: themeVars.colors.grayscale[0],

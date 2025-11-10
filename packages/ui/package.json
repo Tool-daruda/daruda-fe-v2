@@ -8,7 +8,7 @@
 			"import": "./dist/index.js"
 		},
 		"./foundations": {
-			"types": "./dist/foundations/index.d.ts",
+			"types": "./dist/foundations.d.ts",
 			"import": "./dist/foundations.js"
 		},
 		"./style.css": "./dist/ui.css"

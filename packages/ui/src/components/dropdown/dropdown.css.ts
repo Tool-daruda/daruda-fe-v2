@@ -1,4 +1,4 @@
-import { createVar, globalStyle, style } from "@vanilla-extract/css";
+import { createVar, style } from "@vanilla-extract/css";
 import { recipe } from "@vanilla-extract/recipes";
 import { themeVars } from "src/foundations/theme.css";
 
@@ -96,7 +96,7 @@ export const optionItemRecipe = recipe({
 	},
 });
 
-globalStyle(`${optionItemRecipe} button`, {
+export const optionButtonStyle = style({
 	width: "100%",
 	height: "100%",
 	textAlign: "left",
