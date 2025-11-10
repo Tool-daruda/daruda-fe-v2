@@ -18,7 +18,7 @@ export type Tool = {
 	images: (string | File)[];
 	videos: Video[];
 	relatedToolIds: number[];
-	plantype: "무료" | "월간" | "구매" | "월간 & 연간" | "";
+	plantype?: "무료" | "월간" | "구매" | "월간 & 연간" | "";
 	updatedAt?: string;
 	relatedTools?: SearchTool[];
 	blogLinks: string[];
@@ -86,11 +86,11 @@ export type PostToolRequest = {
 	fontColor?: boolean; // true: 검정, false: 흰색
 
 	toolLogo: string;
-	platform: Platform;
+	toolPlatForm: Platform;
 
 	keywords: string[];
 	cores: Array<{
-		coreTitle: string;
+		coreName: string;
 		coreContent: string;
 	}>;
 
@@ -106,6 +106,7 @@ export type PostToolRequest = {
 	videos: string[];
 	relatedToolIds: number[];
 	blogLinks: string[];
+	planType: "무료" | "월간" | "구매" | "월간 & 연간";
 };
 
 // 툴 검색

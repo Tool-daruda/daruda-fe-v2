@@ -15,7 +15,7 @@ const AdditionalInfo = () => {
 					render={({ field }) => (
 						<RadioGroup name={field.name} value={field.value} onValueChange={field.onChange}>
 							{LICENSE_OPTIONS.map((opt) => (
-								<Radio key={opt.value} value={opt.value}>
+								<Radio key={opt.value} value={opt.label}>
 									{opt.label}
 								</Radio>
 							))}

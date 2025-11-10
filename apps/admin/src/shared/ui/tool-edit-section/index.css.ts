@@ -26,7 +26,6 @@ export const fieldStyle = style({
 
 export const label = style({
 	width: "9.5rem",
-	marginTop: "1.3rem",
 	textAlign: "right",
 	color: themeVars.colors.grayscale[800],
 	...themeVars.fonts.t4_1,

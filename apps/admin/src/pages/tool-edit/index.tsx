@@ -1,5 +1,5 @@
 import { isAxiosError } from "axios";
-import type { ActionFunctionArgs, LoaderFunctionArgs } from "react-router-dom";
+import { type ActionFunctionArgs, type LoaderFunctionArgs, redirect } from "react-router-dom";
 import {
 	getAlternativeTool,
 	getBlog,
@@ -9,12 +9,15 @@ import {
 	LICENSE_OPTIONS,
 	type Plan,
 	patchTool,
+	postTool,
 	type Tool,
 } from "@/entities/tool";
 import { transformToCreateRequest } from "@/entities/tool/model/transform";
 import { ToolEditForm } from "@/features/tool-edit-form";
 import { DraftStorage } from "@/shared/lib/draft-storage";
 import { uploadFileAndGetUrl } from "@/shared/lib/file-uploader";
+
+type ToolSubmit = Omit<Tool, "plantype"> & { planType: Tool["plantype"] };
 
 export async function loader({ params }: LoaderFunctionArgs) {
 	const { toolId } = params;
@@ -113,7 +116,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 	}
 }
 
-async function handleFileUploads(toolData: Tool): Promise<Tool> {
+async function handleFileUploads(toolData: ToolSubmit): Promise<ToolSubmit> {
 	const toolLogoUrl =
 		toolData.toolLogo instanceof File
 			? await uploadFileAndGetUrl(toolData.toolLogo)
@@ -135,7 +138,7 @@ async function handleFileUploads(toolData: Tool): Promise<Tool> {
 	};
 }
 
-function formDataToToolObject(formData: FormData): Tool {
+function formDataToToolObject(formData: FormData) {
 	const safeParse = (key: string, defaultValue: unknown) => {
 		const value = formData.get(key) as string;
 		try {
@@ -170,8 +173,8 @@ function formDataToToolObject(formData: FormData): Tool {
 		license: formData.get("license") as string,
 		supportKorea: formData.get("supportKorea") === "true",
 		detailDescription: formData.get("detailDescription") as string,
-		plantype: formData.get("plantype") as string,
-	} as Tool;
+		planType: formData.get("plantype") as Tool["plantype"],
+	} as ToolSubmit;
 }
 
 export async function submitTool({ request, params }: ActionFunctionArgs) {
@@ -193,8 +196,8 @@ export async function submitTool({ request, params }: ActionFunctionArgs) {
 			if (toolId) {
 				await patchTool(createRequest, Number(toolId));
 			} else {
-				console.log(createRequest);
-				// postTool(createRequest);
+				// console.log(createRequest);
+				postTool(createRequest);
 			}
 
 			return { ok: true };
@@ -219,9 +222,9 @@ export async function submitTool({ request, params }: ActionFunctionArgs) {
 export async function action(args: ActionFunctionArgs) {
 	const result = await submitTool(args);
 
-	// if (result.ok) {
-	// 	return redirect("/tool");
-	// }
+	if (result.ok) {
+		return redirect("/tool");
+	}
 
 	return result;
 }

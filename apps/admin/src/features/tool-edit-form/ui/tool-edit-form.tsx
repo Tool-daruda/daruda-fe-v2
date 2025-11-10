@@ -126,6 +126,7 @@ const FormContent = () => {
 			formData.append("description", data.description || "");
 			formData.append("license", data.license || "");
 			formData.append("planLink", data.planLink || "");
+			formData.append("plantype", data.plantype || "");
 			formData.append("supportKorea", String(data.supportKorea || false));
 			formData.append("detailDescription", data.detailDescription || "");
 			formData.append("blogLinks", JSON.stringify(data.blogLinks || []));

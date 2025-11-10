@@ -19,7 +19,6 @@ export const buttonGroupStyle = style({
 });
 
 export const sectionPStyle = style({
-	marginTop: "1.3rem",
 	...themeVars.fonts.t4_1,
 	color: themeVars.colors.grayscale[400],
 });
