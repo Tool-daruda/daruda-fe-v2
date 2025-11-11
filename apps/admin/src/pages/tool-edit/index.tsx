@@ -63,8 +63,8 @@ export async function loader({ params }: LoaderFunctionArgs) {
 		}
 
 		let calculatedPlanType: "무료" | "월간" | "구매" | "월간 & 연간";
-		const hasMonthly = planData?.toolPlans.some((plan) => plan.monthlyPrice !== null);
-		const hasAnnual = planData?.toolPlans.some((plan) => plan.annualPrice !== null);
+		const hasMonthly = planData?.toolPlans?.some((plan) => plan.monthlyPrice !== null) ?? false;
+		const hasAnnual = planData?.toolPlans?.some((plan) => plan.annualPrice !== null) ?? false;
 
 		if (hasMonthly && hasAnnual) {
 			calculatedPlanType = "월간 & 연간";
@@ -153,8 +153,8 @@ function formDataToToolObject(formData: FormData) {
 	const images = formData.getAll("images");
 
 	return {
-		toolLogo: toolLogo instanceof File ? toolLogo : undefined,
-		images: images.filter((img) => img instanceof File) as File[],
+		toolLogo: toolLogo instanceof File ? toolLogo : (toolLogo as string | null),
+		images: images.map((img) => (img instanceof File ? img : (img as string))),
 
 		platform: safeParse("platform", {}),
 		keywords: safeParse("keywords", []),
@@ -193,11 +193,10 @@ export async function submitTool({ request, params }: ActionFunctionArgs) {
 			const toolDataWithUrls = await handleFileUploads(formDataObject);
 			const createRequest = await transformToCreateRequest(toolDataWithUrls);
 
-			if (toolId) {
+			if (toolId && toolId !== "new") {
 				await patchTool(createRequest, Number(toolId));
 			} else {
-				// console.log(createRequest);
-				postTool(createRequest);
+				await postTool(createRequest);
 			}
 
 			return { ok: true };

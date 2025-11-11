@@ -99,12 +99,13 @@ const FormContent = () => {
 
 			if (data.toolLogo instanceof File) {
 				formData.append("toolLogo", data.toolLogo);
+			} else if (data.toolLogo && typeof data.toolLogo === "string") {
+				formData.append("existingImages[0]", data.toolLogo);
 			}
 			(data.images || []).forEach((img, index) => {
 				if (img instanceof File) {
 					formData.append("images", img);
 				} else if (img && typeof img === "string") {
-					// 기존 이미지 URL 유지
 					formData.append(`existingImages[${index}]`, img);
 				}
 			});

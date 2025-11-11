@@ -43,7 +43,7 @@ export const PLATFORM_OPTIONS: { name: keyof Platform; label: string }[] = [
 
 export const PLAN_TYPE_OPTIONS: { value: string; label: string }[] = [
 	{ value: "FREE", label: "무료" },
-	{ value: "MONTHLY", label: "구매" },
-	{ value: "PURCHASE", label: "월간" },
+	{ value: "PURCHASE", label: "구매" },
+	{ value: "MONTHLY", label: "월간" },
 	{ value: "MONTHLY_ANNUAL", label: "월간 & 연간" },
 ] as const;

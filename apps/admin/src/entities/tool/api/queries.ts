@@ -61,10 +61,12 @@ export const useToolPostMutation = () => {
 
 export const useToolUpdateMutation = () => {
 	const navigate = useNavigate();
+	const queryClient = useQueryClient();
 
 	return useMutation({
 		mutationFn: (req: { id: number | null; data: PostToolRequest }) => patchTool(req.data, req.id),
 		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: TOOL_QUERY_KEY.all });
 			navigate("/tool");
 		},
 	});
