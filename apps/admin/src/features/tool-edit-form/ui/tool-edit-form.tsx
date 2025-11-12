@@ -1,3 +1,4 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@repo/ui";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm, useFormContext } from "react-hook-form";
@@ -9,7 +10,7 @@ import {
 	useParams,
 	useSubmit,
 } from "react-router-dom";
-import type { Tool } from "@/entities/tool";
+import { PostToolRequestSchema, type Tool, ToolSchema } from "@/entities/tool";
 import { useToolDeleteMutation } from "@/entities/tool/api/queries";
 import { DraftStorage } from "@/shared/lib/draft-storage";
 import Abstract from "./absract";
@@ -92,7 +93,15 @@ const FormContent = () => {
 		}
 	};
 
-	const onFormSubmit = () => {
+	const onFormSubmit = async () => {
+		const validation = await PostToolRequestSchema.safeParseAsync(getValues());
+
+		if (!validation.success) {
+			const errors = validation.error.flatten().fieldErrors;
+			alert(`입력 오류: ${Object.values(errors).flat().join(", ")}`);
+			return;
+		}
+
 		handleSubmit((data: Tool) => {
 			const formData = new FormData();
 			formData.append("intent", "publish");
@@ -235,6 +244,7 @@ export const ToolEditForm = () => {
 	const { toolData } = loaderData || {};
 
 	const methods = useForm<Tool>({
+		resolver: zodResolver(ToolSchema),
 		defaultValues: EMPTY_TOOL,
 	});
 	const { reset } = methods;
