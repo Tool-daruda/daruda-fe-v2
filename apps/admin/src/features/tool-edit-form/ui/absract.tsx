@@ -165,7 +165,7 @@ const Abstract = () => {
 					))}
 					<ErrorMessage>{errors?.keywords?.message}</ErrorMessage>
 
-					{fields.length < 2 && (
+					{fields.length < 3 && (
 						<Button
 							type="button"
 							size="icon"

@@ -12,7 +12,6 @@ const Plan = () => {
 	const {
 		register,
 		control,
-		setValue,
 		formState: { errors },
 	} = useFormContext<Tool>();
 
@@ -152,12 +151,12 @@ const Plan = () => {
 										onChange={(e) => {
 											const raw = e.target.value;
 											if (raw === "") {
-												field.onChange(null); // 폼에서는 null 허용
+												field.onChange(null);
 												return;
 											}
 											const n = Number(raw.replaceAll(",", ""));
 											if (Number.isNaN(n)) return;
-											field.onChange(n); // 숫자로 유지
+											field.onChange(n);
 										}}
 										onClear={() => field.onChange(null)}
 										isError={!!errors.plans?.[index]?.priceMonthly}

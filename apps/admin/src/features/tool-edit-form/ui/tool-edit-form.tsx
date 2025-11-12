@@ -12,6 +12,7 @@ import {
 import type { z } from "zod";
 import { PostToolRequestSchema, type Tool } from "@/entities/tool";
 import { useToolDeleteMutation } from "@/entities/tool/api/queries";
+import { normalizePlansForRequest } from "@/entities/tool/model/transform";
 import { base64ToFile, DraftStorage } from "@/shared/lib/draft-storage";
 import Abstract from "./absract";
 import AdditionalInfo from "./additional-info";
@@ -155,21 +156,6 @@ const FormContent = () => {
 	};
 
 	const transformFormDataForValidation = (data: Tool) => {
-		const transformedPlans = (data.plans || []).map((plan) => {
-			let finalPrice: number | undefined;
-			if (plan.priceMonthly !== null && plan.priceMonthly !== undefined) {
-				finalPrice = plan.priceMonthly;
-			} else if (plan.priceAnnual !== null && plan.priceAnnual !== undefined) {
-				finalPrice = plan.priceAnnual;
-			}
-
-			return {
-				planName: plan.planName,
-				planDescription: plan.description,
-				planPrice: finalPrice,
-			};
-		});
-
 		return {
 			toolMainName: data.toolMainName,
 			toolSubName: data.toolSubName,
@@ -189,7 +175,7 @@ const FormContent = () => {
 				coreName: c.coreTitle,
 				coreContent: c.coreContent,
 			})),
-			plans: transformedPlans,
+			plans: normalizePlansForRequest(data.plans),
 			images: (data.images || [])
 				.filter((img) => img !== null && img !== undefined)
 				.map((img) => (typeof img === "string" ? img : "temp-file")),
@@ -205,7 +191,6 @@ const FormContent = () => {
 		const formData = getValues();
 		const transformedData = transformFormDataForValidation(formData);
 		const validation = await PostToolRequestSchema.safeParseAsync(transformedData);
-		console.log(transformedData);
 		console.log("Validation result:", validation.error);
 		if (!validation.success) {
 			setFormErrors(validation.error.issues);
@@ -217,16 +202,13 @@ const FormContent = () => {
 			const formData = new FormData();
 			formData.append("intent", "publish");
 
-			if (data.toolLogo instanceof File) {
+			if (data.toolLogo) {
 				formData.append("toolLogo", data.toolLogo);
-			} else if (data.toolLogo && typeof data.toolLogo === "string") {
-				formData.append("existingImages[0]", data.toolLogo);
 			}
 			(data.images || []).forEach((img, index) => {
-				if (img instanceof File) {
+				if (img) {
+					formData.append(`images[${index}]`, img);
 					formData.append("images", img);
-				} else if (img && typeof img === "string") {
-					formData.append(`existingImages[${index}]`, img);
 				}
 			});
 

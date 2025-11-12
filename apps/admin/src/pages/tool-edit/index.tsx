@@ -19,6 +19,17 @@ import { uploadFileAndGetUrl } from "@/shared/lib/file-uploader";
 
 type ToolSubmit = Omit<Tool, "plantype"> & { planType: Tool["plantype"] };
 
+async function fetchOptionalData<T>(apiCall: () => Promise<T>): Promise<T | null> {
+	try {
+		return await apiCall();
+	} catch (error) {
+		if (isAxiosError(error) && error.response?.status === 404) {
+			return null;
+		}
+		throw error;
+	}
+}
+
 export async function loader({ params }: LoaderFunctionArgs) {
 	const { toolId } = params;
 
@@ -40,15 +51,13 @@ export async function loader({ params }: LoaderFunctionArgs) {
 		if (Number.isNaN(numericToolId)) {
 			throw new Response("유효하지 않은 toolId", { status: 400 });
 		}
-
-		const [detailData, coreFeatureData, planData, alternativeToolData, blogData] =
-			await Promise.all([
-				getDetail(numericToolId),
-				getCoreFeature(numericToolId),
-				getPlan(numericToolId),
-				getAlternativeTool(numericToolId),
-				getBlog(numericToolId),
-			]);
+		const detailData = await getDetail(numericToolId);
+		const [coreFeatureData, planData, alternativeToolData, blogData] = await Promise.all([
+			fetchOptionalData(() => getCoreFeature(numericToolId)),
+			fetchOptionalData(() => getPlan(numericToolId)),
+			fetchOptionalData(() => getAlternativeTool(numericToolId)),
+			fetchOptionalData(() => getBlog(numericToolId)),
+		]);
 
 		let mappedPlans = [] as Plan[];
 
@@ -222,6 +231,7 @@ export async function action(args: ActionFunctionArgs) {
 	const result = await submitTool(args);
 
 	if (result.ok) {
+		DraftStorage.clearDraft(args.params.toolId || "new");
 		return redirect("/tool");
 	}
 

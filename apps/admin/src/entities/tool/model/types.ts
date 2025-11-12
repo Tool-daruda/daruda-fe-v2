@@ -116,7 +116,7 @@ export const PostToolRequestSchema = z.object({
 		.array(z.string(), {
 			error: "필수 입력값입니다.",
 		})
-		.max(2, "최대 2개까지 입력 가능합니다."),
+		.max(3, "최대 3개까지 입력 가능합니다."),
 	cores: z
 		.array(
 			z.object({
