@@ -2,9 +2,13 @@ import { Checkbox, CheckboxGroup, Radio, RadioGroup } from "@repo/ui";
 import { Controller, useFormContext } from "react-hook-form";
 import { LICENSE_OPTIONS, PLATFORM_OPTIONS, type Platform, type Tool } from "@/entities/tool";
 import { ToolEditField, ToolEditSection } from "@/shared/ui/tool-edit-section";
+import ErrorMessage from "./error-message";
 
 const AdditionalInfo = () => {
-	const { control } = useFormContext<Tool>();
+	const {
+		control,
+		formState: { errors },
+	} = useFormContext<Tool>();
 
 	return (
 		<ToolEditSection title="2. 부수 정보">
@@ -15,13 +19,14 @@ const AdditionalInfo = () => {
 					render={({ field }) => (
 						<RadioGroup name={field.name} value={field.value} onValueChange={field.onChange}>
 							{LICENSE_OPTIONS.map((opt) => (
-								<Radio key={opt.value} value={opt.label}>
+								<Radio key={opt.value} value={opt.value}>
 									{opt.label}
 								</Radio>
 							))}
 						</RadioGroup>
 					)}
 				/>
+				<ErrorMessage>{errors?.license?.message}</ErrorMessage>
 			</ToolEditField>
 			<ToolEditField label="한국어 지원">
 				<Controller
@@ -38,6 +43,7 @@ const AdditionalInfo = () => {
 						</RadioGroup>
 					)}
 				/>
+				<ErrorMessage>{errors?.supportKorea?.message}</ErrorMessage>
 			</ToolEditField>
 			<ToolEditField label="플랫폼">
 				<Controller
@@ -68,6 +74,7 @@ const AdditionalInfo = () => {
 						);
 					}}
 				/>
+				<ErrorMessage>{errors?.platform?.message}</ErrorMessage>
 			</ToolEditField>
 		</ToolEditSection>
 	);

@@ -2,9 +2,13 @@ import { TextField } from "@repo/ui";
 import { Controller, useFormContext } from "react-hook-form";
 import type { Tool } from "@/entities/tool";
 import { ToolEditField, ToolEditSection } from "@/shared/ui/tool-edit-section";
+import ErrorMessage from "./error-message";
 
 const Blog = () => {
-	const { control } = useFormContext<Tool>();
+	const {
+		control,
+		formState: { errors },
+	} = useFormContext<Tool>();
 
 	return (
 		<ToolEditSection title="7. 블로그">
@@ -13,12 +17,6 @@ const Blog = () => {
 					<Controller
 						name={`blogLinks.${index}` as const}
 						control={control}
-						rules={{
-							pattern: {
-								value: /^https?:\/\/.+/,
-								message: "올바른 URL 형식을 입력하세요",
-							},
-						}}
 						render={({ field }) => (
 							<TextField
 								size="xl"
@@ -26,9 +24,11 @@ const Blog = () => {
 								value={field.value ?? ""}
 								onChange={field.onChange}
 								onClear={() => field.onChange("")}
+								isError={!!errors.blogLinks?.[index]}
 							/>
 						)}
 					/>
+					<ErrorMessage>{errors.blogLinks?.[index]?.message}</ErrorMessage>
 				</ToolEditField>
 			))}
 		</ToolEditSection>

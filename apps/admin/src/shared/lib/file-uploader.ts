@@ -15,6 +15,8 @@ export const uploadFileAndGetUrl = async (file: File): Promise<string> => {
 		return imageUrl;
 	} catch (error) {
 		console.error("파일 업로드 통합 프로세스 실패:", error);
-		throw new Error("이미지 업로드 중 오류가 발생했습니다.");
+		throw new Error(
+			`이미지 업로드 중 오류가 발생했습니다: ${error instanceof Error ? error.message : String(error)}`
+		);
 	}
 };

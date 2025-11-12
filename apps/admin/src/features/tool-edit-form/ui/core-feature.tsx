@@ -5,10 +5,15 @@ import type { Tool } from "@/entities/tool";
 import IcAdd from "@/shared/assets/icons/ic_add.svg?react";
 import IcCross from "@/shared/assets/icons/ic_cross.svg?react";
 import { ToolEditField, ToolEditSection } from "@/shared/ui/tool-edit-section";
+import ErrorMessage from "./error-message";
 import * as S from "./tool-edit-form.css";
 
 const CoreFeature = () => {
-	const { register, control } = useFormContext<Tool>();
+	const {
+		register,
+		control,
+		formState: { errors },
+	} = useFormContext<Tool>();
 
 	const { fields, append, remove, replace } = useFieldArray({
 		control,
@@ -45,9 +50,11 @@ const CoreFeature = () => {
 										value={field.value}
 										onChange={field.onChange}
 										onClear={() => field.onChange("")}
+										isError={!!errors.cores?.[index]?.coreTitle}
 									/>
 								)}
 							/>
+							<ErrorMessage>{errors.cores?.[index]?.coreTitle?.message}</ErrorMessage>
 							{index === 0 ? (
 								<Button
 									type="button"
@@ -80,7 +87,9 @@ const CoreFeature = () => {
 							placeholder="내용을 입력하세요"
 							maxLength={500}
 							{...register(`cores.${index}.coreContent`)}
+							isError={!!errors.cores?.[index]?.coreContent}
 						/>
+						<ErrorMessage>{errors.cores?.[index]?.coreContent?.message}</ErrorMessage>
 					</ToolEditField>
 				</div>
 			))}

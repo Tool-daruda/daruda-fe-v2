@@ -1,6 +1,6 @@
 import { Button } from "@repo/ui";
 import { useEffect, useState } from "react";
-import { FormProvider, useForm, useFormContext } from "react-hook-form";
+import { type FieldPath, FormProvider, useForm, useFormContext } from "react-hook-form";
 import {
 	Form,
 	useActionData,
@@ -9,9 +9,11 @@ import {
 	useParams,
 	useSubmit,
 } from "react-router-dom";
-import type { Tool } from "@/entities/tool";
+import type { z } from "zod";
+import { PostToolRequestSchema, type Tool } from "@/entities/tool";
 import { useToolDeleteMutation } from "@/entities/tool/api/queries";
-import { DraftStorage } from "@/shared/lib/draft-storage";
+import { normalizePlansForRequest } from "@/entities/tool/model/transform";
+import { base64ToFile, DraftStorage } from "@/shared/lib/draft-storage";
 import Abstract from "./absract";
 import AdditionalInfo from "./additional-info";
 import Blog from "./blog";
@@ -45,7 +47,7 @@ const FormContent = () => {
 
 	const navigate = useNavigate();
 	const submit = useSubmit();
-	const { handleSubmit, reset, getValues } = useFormContext<Tool>();
+	const { handleSubmit, reset, getValues, setError, clearErrors } = useFormContext<Tool>();
 	const actionData = useActionData() as ToolActionData | undefined;
 	const { mutate: deleteMutate } = useToolDeleteMutation();
 
@@ -63,9 +65,30 @@ const FormContent = () => {
 		}
 	}, [actionData]);
 
-	const handleRestoreDraft = () => {
+	const handleRestoreDraft = async () => {
 		const draftData = DraftStorage.loadDraft(draftId);
-		if (draftData && toolData) {
+		if (!draftData) return;
+
+		if (
+			draftData.toolLogo &&
+			typeof draftData.toolLogo === "string" &&
+			draftData.toolLogo.startsWith("data:")
+		) {
+			draftData.toolLogo = base64ToFile(draftData.toolLogo, "draft-logo.png") || null;
+		}
+
+		if (draftData.images && Array.isArray(draftData.images)) {
+			draftData.images = draftData.images
+				.map((img, index) => {
+					if (typeof img === "string" && img.startsWith("data:")) {
+						return base64ToFile(img, `draft-image-${index}.png`);
+					}
+					return img;
+				})
+				.filter((img): img is string | File => img !== null && img !== undefined);
+		}
+
+		if (toolData) {
 			const mergedData = DraftStorage.mergeDraftWithServerData(toolData, draftData);
 			reset(mergedData);
 		} else if (draftData) {
@@ -92,20 +115,100 @@ const FormContent = () => {
 		}
 	};
 
-	const onFormSubmit = () => {
+	const setFormErrors = (issues: z.ZodIssue[]) => {
+		issues.forEach((issue) => {
+			const path = issue.path;
+			let formPath = path.join(".");
+
+			if (formPath === "toolPlatForm" || formPath.startsWith("toolPlatForm.")) {
+				formPath = formPath.replace("toolPlatForm", "platform");
+			}
+
+			if (formPath.includes("cores.") && formPath.includes(".coreName")) {
+				formPath = formPath.replace(".coreName", ".coreTitle");
+			}
+
+			if (/^keywords\.\d+$/.test(formPath)) {
+				formPath = `${formPath}.value`;
+			}
+
+			if (/^videos\.\d+$/.test(formPath)) {
+				formPath = `${formPath}.videoUrl`;
+			}
+
+			if (formPath === "planType") {
+				formPath = "plantype";
+			}
+
+			if (formPath.includes("plans.") && formPath.includes("planDescription")) {
+				formPath = formPath.replace(".planDescription", ".description");
+			}
+
+			if (formPath.includes("plans.") && formPath.includes("planPrice")) {
+				formPath = formPath.replace(".planPrice", ".priceMonthly");
+			}
+
+			setError(formPath as FieldPath<Tool>, {
+				type: "submit",
+				message: issue.message,
+			});
+		});
+	};
+
+	const transformFormDataForValidation = (data: Tool) => {
+		return {
+			toolMainName: data.toolMainName,
+			toolSubName: data.toolSubName,
+			category: data.category,
+			toolLink: data.toolLink,
+			description: data.description,
+			license: data.license,
+			supportKorea: data.supportKorea,
+			detailDescription: data.detailDescription,
+			planLink: data.planLink,
+			bgColor: data.bgColor,
+			fontColor: data.fontColor,
+			toolLogo: data.toolLogo,
+			toolPlatForm: data.platform,
+			keywords: (data.keywords || []).map((k) => k.value).filter((v) => v && v.trim() !== ""),
+			cores: (data.cores || []).map((c) => ({
+				coreName: c.coreTitle,
+				coreContent: c.coreContent,
+			})),
+			plans: normalizePlansForRequest(data.plans),
+			images: (data.images || [])
+				.filter((img) => img !== null && img !== undefined)
+				.map((img) => (typeof img === "string" ? img : "temp-file")),
+			videos: (data.videos || []).map((v) => v.videoUrl).filter((url) => url && url.trim() !== ""),
+			relatedToolIds: data.relatedToolIds || [],
+			blogLinks: (data.blogLinks || []).filter((link) => link && link.trim() !== ""),
+			planType: data.plantype || "",
+		};
+	};
+
+	const onFormSubmit = async () => {
+		clearErrors();
+		const formData = getValues();
+		const transformedData = transformFormDataForValidation(formData);
+		const validation = await PostToolRequestSchema.safeParseAsync(transformedData);
+		console.log("Validation result:", validation.error);
+		if (!validation.success) {
+			setFormErrors(validation.error.issues);
+			alert("양식을 확인해주세요. 필수 항목이 누락되었거나 형식이 잘못되었습니다.");
+			return;
+		}
+
 		handleSubmit((data: Tool) => {
 			const formData = new FormData();
 			formData.append("intent", "publish");
 
-			if (data.toolLogo instanceof File) {
+			if (data.toolLogo) {
 				formData.append("toolLogo", data.toolLogo);
 			}
 			(data.images || []).forEach((img, index) => {
-				if (img instanceof File) {
+				if (img) {
+					formData.append(`images[${index}]`, img);
 					formData.append("images", img);
-				} else if (img && typeof img === "string") {
-					// 기존 이미지 URL 유지
-					formData.append(`existingImages[${index}]`, img);
 				}
 			});
 
@@ -235,6 +338,7 @@ export const ToolEditForm = () => {
 
 	const methods = useForm<Tool>({
 		defaultValues: EMPTY_TOOL,
+		mode: "onChange",
 	});
 	const { reset } = methods;
 

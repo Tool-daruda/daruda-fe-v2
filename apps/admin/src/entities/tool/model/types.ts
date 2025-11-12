@@ -1,188 +1,235 @@
-export type Tool = {
-	toolMainName: string;
-	toolSubName: string;
-	category: string;
-	toolLink: string;
-	description: string;
-	license: string;
-	supportKorea: boolean | null;
-	detailDescription: string;
-	planLink: string;
-	bgColor?: string;
-	fontColor?: boolean;
-	toolLogo: string | File | null;
-	platform: Platform;
-	keywords: Keyword[];
-	cores: Core[];
-	plans: Plan[];
-	images: (string | File)[];
-	videos: Video[];
-	relatedToolIds: number[];
-	plantype?: "무료" | "월간" | "구매" | "월간 & 연간" | "";
-	updatedAt?: string;
-	relatedTools?: SearchTool[];
-	blogLinks: string[];
-};
+import { z } from "zod";
 
-export type Platform = {
-	supportWeb: boolean;
-	supportWindows: boolean;
-	supportMac: boolean;
-};
+export const PlatformSchema = z
+	.object({
+		supportWeb: z.boolean(),
+		supportWindows: z.boolean(),
+		supportMac: z.boolean(),
+	})
+	.refine((data) => data.supportWeb || data.supportWindows || data.supportMac, {
+		message: "적어도 하나는 선택해야 합니다.",
+	});
 
-export type Core = {
-	coreTitle: string;
-	coreContent: string;
-};
+export const CoreSchema = z.object({
+	coreTitle: z.string(),
+	coreContent: z.string(),
+});
 
-export type Keyword = {
-	value: string;
-};
+export const KeywordSchema = z.object({
+	value: z.string(),
+});
 
-export type Video = {
-	videoUrl: string;
-};
+export const VideoSchema = z.object({
+	videoUrl: z.string(),
+});
 
-export type Plan = {
-	planName: string;
-	priceMonthly: number | null;
-	priceAnnual: number | null;
-	description: string;
-	isDollar: boolean;
-};
+export const PlanSchema = z.object({
+	planName: z.string(),
+	priceMonthly: z.number().nullable(),
+	priceAnnual: z.number().nullable(),
+	description: z.string(),
+	isDollar: z.boolean(),
+});
 
-// 툴 리스트 조회
-export type ToolCardType = {
-	toolId: number;
-	toolLogo: string;
-	toolName: string;
-	description: string;
-	category: string;
-	createdAt: string;
-};
+export const SearchToolSchema = z.object({
+	toolId: z.number(),
+	toolName: z.string(),
+	toolLogo: z.string(),
+	description: z.string().optional(),
+	license: z.string(),
+	keywords: z.array(z.string()),
+	isScraped: z.boolean().optional(),
+	bgColor: z.string().optional(),
+	fontColor: z.boolean().optional(),
+});
 
-export interface GetAdminToolsParams {
-	page: number;
-	size: number;
-}
+export const ToolSchema = z.object({
+	toolMainName: z.string(),
+	toolSubName: z.string(),
+	category: z.string(),
+	toolLink: z.string(),
+	description: z.string(),
+	license: z.string(),
+	supportKorea: z.boolean().nullable(),
+	detailDescription: z.string(),
+	planLink: z.string(),
+	bgColor: z.string().optional(),
+	fontColor: z.boolean().optional(),
+	toolLogo: z.union([z.string(), z.instanceof(File)]).nullable(),
+	platform: PlatformSchema,
+	keywords: z.array(KeywordSchema),
+	cores: z.array(CoreSchema),
+	plans: z.array(PlanSchema),
+	images: z.array(z.union([z.string(), z.instanceof(File)])),
+	videos: z.array(VideoSchema),
+	relatedToolIds: z.array(z.number()),
+	plantype: z.enum(["무료", "월간", "구매", "월간 & 연간", ""]).optional(),
+	updatedAt: z.string().optional(),
+	relatedTools: z.array(SearchToolSchema).optional(),
+	blogLinks: z.array(z.string()),
+});
 
-export interface GetAdminToolsRes {
-	tools: ToolCardType[];
-	totalPages: number;
-	totalElements: number;
-}
+export const ToolCardTypeSchema = z.object({
+	toolId: z.number(),
+	toolLogo: z.string(),
+	toolName: z.string(),
+	description: z.string(),
+	category: z.string(),
+	createdAt: z.string(),
+});
 
-export type PostToolRequest = {
-	toolMainName: string;
-	toolSubName: string;
-	category: string;
-	toolLink: string;
-	description: string;
-	license: string;
-	supportKorea: boolean;
-	detailDescription: string;
-	planLink: string;
-	bgColor?: string;
-	fontColor?: boolean; // true: 검정, false: 흰색
+export const GetAdminToolsParamsSchema = z.object({
+	page: z.number(),
+	size: z.number(),
+});
 
-	toolLogo: string;
-	toolPlatForm: Platform;
+export const GetAdminToolsResSchema = z.object({
+	tools: z.array(ToolCardTypeSchema),
+	totalPages: z.number(),
+	totalElements: z.number(),
+});
 
-	keywords: string[];
-	cores: Array<{
-		coreName: string;
-		coreContent: string;
-	}>;
+export const PostToolRequestSchema = z.object({
+	toolMainName: z.string().min(1, "필수 입력값입니다.").max(50, "최대 50자까지 입력 가능합니다."),
+	toolSubName: z.string().min(1, "필수 입력값입니다.").max(50, "최대 50자까지 입력 가능합니다."),
+	category: z.string().min(1, "필수 입력값입니다."),
+	toolLink: z.string().url("올바른 URL을 입력해주세요").min(1, "필수 입력값입니다."),
+	description: z.string().min(1, "필수 입력값입니다.").max(500, "최대 500자까지 입력 가능합니다."),
+	license: z.string().min(1, "필수 입력값입니다."),
+	supportKorea: z.boolean({ error: () => "필수 입력값입니다." }),
+	detailDescription: z.string().min(1, "필수 입력값입니다."),
+	planLink: z.string().url("올바른 URL을 입력해주세요").min(1, "필수 입력값입니다."),
+	bgColor: z.string().optional(),
+	fontColor: z.boolean().optional(),
+	toolLogo: z.any().refine(
+		(data) => {
+			if (data instanceof File) return true;
+			if (typeof data === "string" && data.length > 0) return true;
+			return false;
+		},
+		{
+			message: "필수 입력값입니다.",
+		}
+	),
+	toolPlatForm: PlatformSchema,
+	keywords: z
+		.array(z.string(), {
+			error: "필수 입력값입니다.",
+		})
+		.max(3, "최대 3개까지 입력 가능합니다."),
+	cores: z
+		.array(
+			z.object({
+				coreName: z.string().min(1, "필수 입력값입니다.").max(20, "최대 20자까지 입력 가능합니다."),
+				coreContent: z
+					.string()
+					.min(1, "필수 입력값입니다.")
+					.max(500, "최대 500자까지 입력 가능합니다."),
+			})
+		)
+		.min(1, "필수 입력값입니다.")
+		.max(10, "최대 10개까지 입력 가능합니다."),
+	plans: z.array(
+		z.object({
+			planName: z.string().min(1, "필수 입력값입니다.").max(20, "최대 50자까지 입력 가능합니다."),
+			planPrice: z.coerce.number({
+				error: "필수 입력값입니다.",
+			}),
+			planDescription: z
+				.string()
+				.min(1, "필수 입력값입니다.")
+				.max(500, "최대 500자까지 입력 가능합니다."),
+		})
+	),
+	images: z.array(z.string()).min(1, "필수 입력값입니다."),
+	videos: z.array(z.string().url("올바른 URL을 입력해주세요")).optional().default([]),
+	relatedToolIds: z.array(z.number()).length(2, "2개를 입력해주세요"),
+	blogLinks: z.array(z.string().url("올바른 URL을 입력해주세요")).optional().default([]),
+	planType: z.enum(["무료", "월간", "구매", "월간 & 연간"], { error: () => "필수 입력값입니다." }),
+});
 
-	plans: Array<{
-		planName: string;
-		priceMonthly: number | null;
-		priceAnnual: number | null;
-		description: string;
-		isDollar: boolean;
-	}>;
+export const DetailToolResponseSchema = z.object({
+	toolMainName: z.string(),
+	toolSubName: z.string(),
+	category: z.string(),
+	toolLink: z.string(),
+	supportKorea: z.boolean(),
+	detailDescription: z.string(),
+	images: z.array(z.string()),
+	fontColor: z.boolean(),
+	updatedAt: z.string(),
+	isScrapped: z.boolean(),
+	keywords: z.array(z.string()),
+	videos: z.array(z.string()),
+	license: z.string(),
+	platform: z.array(
+		z.object({
+			Web: z.boolean(),
+			Windows: z.boolean(),
+			Mac: z.boolean(),
+		})
+	),
+});
 
-	images: string[];
-	videos: string[];
-	relatedToolIds: number[];
-	blogLinks: string[];
-	planType: "무료" | "월간" | "구매" | "월간 & 연간";
-};
+export const ToolCoreFeatureSchema = z.object({
+	coreId: z.number(),
+	coreTitle: z.string(),
+	coreContent: z.string(),
+});
 
-// 툴 검색
-export type SearchTool = {
-	toolId: number;
-	toolName: string;
-	toolLogo: string;
-	description?: string;
-	license: string;
-	keywords: string[];
-	isScraped?: boolean;
-	bgColor?: string;
-	fontColor?: boolean;
-};
+export const CoreFeatureResponseSchema = z.object({
+	toolCoreResList: z.array(ToolCoreFeatureSchema),
+});
 
-// 상세 페이지용 Tool 타입
-export interface DetailToolResponse {
-	toolMainName: string;
-	toolSubName: string;
-	category: string;
-	toolLink: string;
-	supportKorea: boolean;
-	detailDescription: string;
-	images: string[];
-	fontColor: boolean;
-	updatedAt: string;
-	isScrapped: boolean;
-	keywords: string[];
-	videos: string[];
-	license: string;
-	platform: {
-		Web: boolean;
-		Windows: boolean;
-		Mac: boolean;
-	}[];
-}
+export const ToolPlanSchema = z.object({
+	price: z.union([z.string(), z.number()]),
+	planId: z.number(),
+	planName: z.string(),
+	monthlyPrice: z.number().nullable(),
+	annualPrice: z.number().nullable(),
+	description: z.string(),
+	isDollar: z.boolean(),
+});
 
-// 툴 핵심 기능 타입
-export interface CoreFeatureResponse {
-	toolCoreResList: ToolCoreFeature[];
-}
+export const ToolPlanResponseSchema = z.object({
+	toolPlans: z.array(ToolPlanSchema),
+});
 
-interface ToolCoreFeature {
-	coreId: number;
-	coreTitle: string;
-	coreContent: string;
-}
+export const AlternativeToolSchema = z.object({
+	toolId: z.number(),
+	toolName: z.string(),
+	toolLogo: z.string(),
+	license: z.enum(["무료", "부분 유료", "유료"]),
+	keywords: z.array(z.string()),
+});
 
-// 툴 요금제 타입
-export interface ToolPlanResponse {
-	toolPlans: ToolPlan[];
-}
+export const AlternativeToolResponseSchema = z.object({
+	relatedToolResList: z.array(AlternativeToolSchema),
+});
 
-type ToolPlan = {
-	price: string | number;
-	planId: number;
-	planName: string;
-	monthlyPrice: number | null;
-	annualPrice: number | null;
-	description: string;
-	isDollar: boolean;
-};
+export const BlogResponseSchema = z.object({
+	toolBlogs: z.array(
+		z.object({
+			blogId: z.number(),
+			blogUrl: z.string(),
+		})
+	),
+});
 
-// 대안 툴 타입
-export interface AlternativeToolResponse {
-	relatedToolResList: AlternativeTool[];
-}
-
-export interface AlternativeTool {
-	toolId: number;
-	toolName: string;
-	toolLogo: string;
-	license: "무료" | "부분 유료" | "유료";
-	keywords: string[];
-}
-
-export interface BlogResponse {
-	toolBlogs: { blogId: number; blogUrl: string }[];
-}
+export type Tool = z.infer<typeof ToolSchema>;
+export type Platform = z.infer<typeof PlatformSchema>;
+export type Core = z.infer<typeof CoreSchema>;
+export type Keyword = z.infer<typeof KeywordSchema>;
+export type Video = z.infer<typeof VideoSchema>;
+export type Plan = z.infer<typeof PlanSchema>;
+export type ToolCardType = z.infer<typeof ToolCardTypeSchema>;
+export type GetAdminToolsParams = z.infer<typeof GetAdminToolsParamsSchema>;
+export type GetAdminToolsRes = z.infer<typeof GetAdminToolsResSchema>;
+export type PostToolRequest = z.infer<typeof PostToolRequestSchema>;
+export type SearchTool = z.infer<typeof SearchToolSchema>;
+export type DetailToolResponse = z.infer<typeof DetailToolResponseSchema>;
+export type CoreFeatureResponse = z.infer<typeof CoreFeatureResponseSchema>;
+export type ToolPlanResponse = z.infer<typeof ToolPlanResponseSchema>;
+export type AlternativeTool = z.infer<typeof AlternativeToolSchema>;
+export type AlternativeToolResponse = z.infer<typeof AlternativeToolResponseSchema>;
+export type BlogResponse = z.infer<typeof BlogResponseSchema>;

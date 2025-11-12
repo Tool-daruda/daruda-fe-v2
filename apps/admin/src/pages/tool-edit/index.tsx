@@ -19,6 +19,17 @@ import { uploadFileAndGetUrl } from "@/shared/lib/file-uploader";
 
 type ToolSubmit = Omit<Tool, "plantype"> & { planType: Tool["plantype"] };
 
+async function fetchOptionalData<T>(apiCall: () => Promise<T>): Promise<T | null> {
+	try {
+		return await apiCall();
+	} catch (error) {
+		if (isAxiosError(error) && error.response?.status === 404) {
+			return null;
+		}
+		throw error;
+	}
+}
+
 export async function loader({ params }: LoaderFunctionArgs) {
 	const { toolId } = params;
 
@@ -40,15 +51,13 @@ export async function loader({ params }: LoaderFunctionArgs) {
 		if (Number.isNaN(numericToolId)) {
 			throw new Response("유효하지 않은 toolId", { status: 400 });
 		}
-
-		const [detailData, coreFeatureData, planData, alternativeToolData, blogData] =
-			await Promise.all([
-				getDetail(numericToolId),
-				getCoreFeature(numericToolId),
-				getPlan(numericToolId),
-				getAlternativeTool(numericToolId),
-				getBlog(numericToolId),
-			]);
+		const detailData = await getDetail(numericToolId);
+		const [coreFeatureData, planData, alternativeToolData, blogData] = await Promise.all([
+			fetchOptionalData(() => getCoreFeature(numericToolId)),
+			fetchOptionalData(() => getPlan(numericToolId)),
+			fetchOptionalData(() => getAlternativeTool(numericToolId)),
+			fetchOptionalData(() => getBlog(numericToolId)),
+		]);
 
 		let mappedPlans = [] as Plan[];
 
@@ -63,8 +72,8 @@ export async function loader({ params }: LoaderFunctionArgs) {
 		}
 
 		let calculatedPlanType: "무료" | "월간" | "구매" | "월간 & 연간";
-		const hasMonthly = planData?.toolPlans.some((plan) => plan.monthlyPrice !== null);
-		const hasAnnual = planData?.toolPlans.some((plan) => plan.annualPrice !== null);
+		const hasMonthly = planData?.toolPlans?.some((plan) => plan.monthlyPrice !== null) ?? false;
+		const hasAnnual = planData?.toolPlans?.some((plan) => plan.annualPrice !== null) ?? false;
 
 		if (hasMonthly && hasAnnual) {
 			calculatedPlanType = "월간 & 연간";
@@ -153,8 +162,8 @@ function formDataToToolObject(formData: FormData) {
 	const images = formData.getAll("images");
 
 	return {
-		toolLogo: toolLogo instanceof File ? toolLogo : undefined,
-		images: images.filter((img) => img instanceof File) as File[],
+		toolLogo: toolLogo instanceof File ? toolLogo : (toolLogo as string | null),
+		images: images.map((img) => (img instanceof File ? img : (img as string))),
 
 		platform: safeParse("platform", {}),
 		keywords: safeParse("keywords", []),
@@ -193,11 +202,10 @@ export async function submitTool({ request, params }: ActionFunctionArgs) {
 			const toolDataWithUrls = await handleFileUploads(formDataObject);
 			const createRequest = await transformToCreateRequest(toolDataWithUrls);
 
-			if (toolId) {
+			if (toolId && toolId !== "new") {
 				await patchTool(createRequest, Number(toolId));
 			} else {
-				// console.log(createRequest);
-				postTool(createRequest);
+				await postTool(createRequest);
 			}
 
 			return { ok: true };
@@ -223,6 +231,7 @@ export async function action(args: ActionFunctionArgs) {
 	const result = await submitTool(args);
 
 	if (result.ok) {
+		DraftStorage.clearDraft(args.params.toolId || "new");
 		return redirect("/tool");
 	}
 

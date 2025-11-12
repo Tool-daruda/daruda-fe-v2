@@ -5,10 +5,15 @@ import { PLAN_TYPE_OPTIONS, type Tool } from "@/entities/tool";
 import IcAdd from "@/shared/assets/icons/ic_add.svg?react";
 import IcCross from "@/shared/assets/icons/ic_cross.svg?react";
 import { ToolEditField, ToolEditSection } from "@/shared/ui/tool-edit-section";
+import ErrorMessage from "./error-message";
 import * as S from "./tool-edit-form.css";
 
 const Plan = () => {
-	const { register, control, setValue } = useFormContext<Tool>();
+	const {
+		register,
+		control,
+		formState: { errors },
+	} = useFormContext<Tool>();
 
 	const plantype = useWatch({ control, name: "plantype" });
 
@@ -52,9 +57,11 @@ const Plan = () => {
 							value={field.value}
 							onChange={field.onChange}
 							onClear={() => field.onChange("")}
+							isError={!!errors.planLink}
 						/>
 					)}
 				/>
+				<ErrorMessage>{errors?.planLink?.message}</ErrorMessage>
 			</ToolEditField>
 
 			<ToolEditField label="플랜 유형">
@@ -75,6 +82,7 @@ const Plan = () => {
 						</RadioGroup>
 					)}
 				/>
+				<ErrorMessage>{errors.plantype?.message}</ErrorMessage>
 			</ToolEditField>
 
 			{plantype !== "무료" &&
@@ -92,9 +100,11 @@ const Plan = () => {
 											value={field.value}
 											onChange={field.onChange}
 											onClear={() => field.onChange("")}
+											isError={!!errors.plans?.[index]?.planName}
 										/>
 									)}
 								/>
+								<ErrorMessage>{errors?.plans?.[index]?.planName?.message}</ErrorMessage>
 								{index === 0 ? (
 									<Button
 										type="button"
@@ -125,7 +135,9 @@ const Plan = () => {
 							<TextArea
 								placeholder="내용을 입력하세요"
 								{...register(`plans.${index}.description`)}
+								isError={!!errors.plans?.[index]?.description}
 							/>
+							<ErrorMessage>{errors?.plans?.[index]?.description?.message}</ErrorMessage>
 						</ToolEditField>
 
 						<ToolEditField label="가격(원화)">
@@ -137,27 +149,21 @@ const Plan = () => {
 										placeholder="내용을 입력하세요"
 										value={field.value ?? ""}
 										onChange={(e) => {
-											const rawValue = e.target.value;
-											if (rawValue === "") {
+											const raw = e.target.value;
+											if (raw === "") {
 												field.onChange(null);
-												setValue(`plans.${index}.priceAnnual`, null);
-												setValue(`plans.${index}.isDollar`, false);
 												return;
 											}
-											const monthlyPrice = Number(rawValue);
-											if (Number.isNaN(monthlyPrice)) return;
-											field.onChange(monthlyPrice);
-											setValue(`plans.${index}.priceAnnual`, monthlyPrice * 12);
-											setValue(`plans.${index}.isDollar`, false);
+											const n = Number(raw.replaceAll(",", ""));
+											if (Number.isNaN(n)) return;
+											field.onChange(n);
 										}}
-										onClear={() => {
-											field.onChange(null);
-											setValue(`plans.${index}.priceAnnual`, null);
-											setValue(`plans.${index}.isDollar`, false);
-										}}
+										onClear={() => field.onChange(null)}
+										isError={!!errors.plans?.[index]?.priceMonthly}
 									/>
 								)}
 							/>
+							<ErrorMessage>{errors?.plans?.[index]?.priceMonthly?.message}</ErrorMessage>
 						</ToolEditField>
 					</div>
 				))}

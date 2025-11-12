@@ -5,10 +5,15 @@ import { TOOL_CATEGORY_OPTIONS, type Tool } from "@/entities/tool";
 import IcAdd from "@/shared/assets/icons/ic_add.svg?react";
 import { formatDateWithDots } from "@/shared/lib/date";
 import { ToolEditField, ToolEditSection } from "@/shared/ui/tool-edit-section";
+import ErrorMessage from "./error-message";
 import * as S from "./tool-edit-form.css";
 
 const Abstract = () => {
-	const { register, control } = useFormContext<Tool>();
+	const {
+		register,
+		control,
+		formState: { errors },
+	} = useFormContext<Tool>();
 
 	const updatedAt = useWatch({
 		control,
@@ -60,6 +65,7 @@ const Abstract = () => {
 						);
 					}}
 				/>
+				<ErrorMessage>{errors.toolLogo?.message}</ErrorMessage>
 			</ToolEditField>
 			<ToolEditField label="툴 영문 이름">
 				<Controller
@@ -72,9 +78,11 @@ const Abstract = () => {
 							value={field.value}
 							onChange={field.onChange}
 							onClear={() => field.onChange("")}
+							isError={!!errors.toolMainName}
 						/>
 					)}
 				/>
+				<ErrorMessage>{errors?.toolMainName?.message}</ErrorMessage>
 			</ToolEditField>
 			<ToolEditField label="툴 한글 이름">
 				<Controller
@@ -87,12 +95,19 @@ const Abstract = () => {
 							value={field.value}
 							onChange={field.onChange}
 							onClear={() => field.onChange("")}
+							isError={!!errors.toolSubName}
 						/>
 					)}
 				/>
+				<ErrorMessage>{errors?.toolSubName?.message}</ErrorMessage>
 			</ToolEditField>
 			<ToolEditField label={`한 줄 소개\n(500자)`}>
-				<TextArea placeholder="내용을 입력하세요" {...register("description")} />
+				<TextArea
+					placeholder="내용을 입력하세요"
+					{...register("description")}
+					isError={!!errors.description}
+				/>
+				<ErrorMessage>{errors?.description?.message}</ErrorMessage>
 			</ToolEditField>
 			<ToolEditField label="카테고리">
 				<Controller
@@ -109,6 +124,7 @@ const Abstract = () => {
 						</div>
 					)}
 				/>
+				<ErrorMessage>{errors?.category?.message}</ErrorMessage>
 			</ToolEditField>
 			<ToolEditField label="바로가기 링크">
 				<Controller
@@ -121,9 +137,11 @@ const Abstract = () => {
 							value={field.value}
 							onChange={field.onChange}
 							onClear={() => field.onChange("")}
+							isError={!!errors.toolLink}
 						/>
 					)}
 				/>
+				<ErrorMessage>{errors?.toolLink?.message}</ErrorMessage>
 			</ToolEditField>
 			<ToolEditField label="키워드">
 				<div style={{ display: "flex", gap: "8px" }}>
@@ -139,11 +157,13 @@ const Abstract = () => {
 										value={field.value}
 										onChange={field.onChange}
 										onClear={() => (fields.length === 1 ? field.onChange("") : remove(index))}
+										isError={!!errors.keywords}
 									/>
 								)}
 							/>
 						</div>
 					))}
+					<ErrorMessage>{errors?.keywords?.message}</ErrorMessage>
 
 					{fields.length < 3 && (
 						<Button

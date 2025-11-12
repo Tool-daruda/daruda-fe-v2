@@ -92,8 +92,11 @@ export const selectedToolsBtnStyle = style({
 });
 
 export const errorStyle = style({
+	position: "absolute",
+	left: "12.3rem",
+	bottom: "-2rem",
 	color: themeVars.colors.system.red.lt,
-	fontSize: "1.4rem",
+	...themeVars.fonts.caption2_1,
 	marginTop: "0.8rem",
 });
 

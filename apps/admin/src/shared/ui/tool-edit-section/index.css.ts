@@ -18,6 +18,7 @@ export const content = style({
 });
 
 export const fieldStyle = style({
+	position: "relative",
 	width: "100%",
 	display: "flex",
 	alignItems: "start",

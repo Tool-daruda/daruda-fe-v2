@@ -2,9 +2,14 @@ import { InputImage, TextArea } from "@repo/ui";
 import { Controller, useFormContext } from "react-hook-form";
 import type { Tool } from "@/entities/tool";
 import { ToolEditField, ToolEditSection } from "@/shared/ui/tool-edit-section";
+import ErrorMessage from "./error-message";
 
 const ToolInfo = () => {
-	const { control, register } = useFormContext<Tool>();
+	const {
+		control,
+		register,
+		formState: { errors },
+	} = useFormContext<Tool>();
 
 	return (
 		<ToolEditSection title="3. 툴 소개">
@@ -42,13 +47,16 @@ const ToolInfo = () => {
 						);
 					}}
 				/>
+				<ErrorMessage>{errors.images?.message}</ErrorMessage>
 			</ToolEditField>
 			<ToolEditField label={`소개글\n(500자)`}>
 				<TextArea
 					placeholder="내용을 입력하세요"
 					maxLength={500}
 					{...register("detailDescription")}
+					isError={!!errors.detailDescription}
 				/>
+				<ErrorMessage>{errors.detailDescription?.message}</ErrorMessage>
 			</ToolEditField>
 		</ToolEditSection>
 	);
