@@ -11,6 +11,7 @@ export const TextArea = ({
 	onBlur,
 	value,
 	onChange,
+	isError = false,
 	...rest
 }: TextAreaProps) => {
 	const [isActive, setIsActive] = useState(false);
@@ -19,6 +20,7 @@ export const TextArea = ({
 		size,
 		active: isActive,
 		disabled,
+		isError,
 	});
 
 	const handleFocus = (e: React.FocusEvent<HTMLTextAreaElement>) => {

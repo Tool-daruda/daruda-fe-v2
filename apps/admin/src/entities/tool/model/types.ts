@@ -1,10 +1,14 @@
 import { z } from "zod";
 
-export const PlatformSchema = z.object({
-	supportWeb: z.boolean(),
-	supportWindows: z.boolean(),
-	supportMac: z.boolean(),
-});
+export const PlatformSchema = z
+	.object({
+		supportWeb: z.boolean(),
+		supportWindows: z.boolean(),
+		supportMac: z.boolean(),
+	})
+	.refine((data) => data.supportWeb || data.supportWindows || data.supportMac, {
+		message: "적어도 하나는 선택해야 합니다.",
+	});
 
 export const CoreSchema = z.object({
 	coreTitle: z.string(),
@@ -97,37 +101,50 @@ export const PostToolRequestSchema = z.object({
 	planLink: z.string().url("올바른 URL을 입력해주세요").min(1, "필수 입력값입니다."),
 	bgColor: z.string().optional(),
 	fontColor: z.boolean().optional(),
-	toolLogo: z.union([z.string().min(1, "필수 입력값입니다."), z.instanceof(File)]),
+	toolLogo: z.any().refine(
+		(data) => {
+			if (data instanceof File) return true;
+			if (typeof data === "string" && data.length > 0) return true;
+			return false;
+		},
+		{
+			message: "필수 입력값입니다.",
+		}
+	),
 	toolPlatForm: PlatformSchema,
 	keywords: z
-		.array(z.string())
-		.min(1, "필수 입력값입니다.")
+		.array(z.string(), {
+			error: "필수 입력값입니다.",
+		})
 		.max(2, "최대 2개까지 입력 가능합니다."),
 	cores: z
 		.array(
 			z.object({
-				coreName: z.string().max(20, "최대 20자까지 입력 가능합니다."),
-				coreContent: z.string().max(500, "최대 500자까지 입력 가능합니다."),
+				coreName: z.string().min(1, "필수 입력값입니다.").max(20, "최대 20자까지 입력 가능합니다."),
+				coreContent: z
+					.string()
+					.min(1, "필수 입력값입니다.")
+					.max(500, "최대 500자까지 입력 가능합니다."),
 			})
 		)
+		.min(1, "필수 입력값입니다.")
 		.max(10, "최대 10개까지 입력 가능합니다."),
 	plans: z.array(
 		z.object({
-			planName: z.string().max(20, "최대 50자까지 입력 가능합니다."),
-			priceMonthly: z.number().nullable(),
-			priceAnnual: z.number().nullable(),
-			description: z.string().max(500, "최대 500자까지 입력 가능합니다."),
-			isDollar: z.boolean(),
+			planName: z.string().min(1, "필수 입력값입니다.").max(20, "최대 50자까지 입력 가능합니다."),
+			planPrice: z.coerce.number({
+				error: "필수 입력값입니다.",
+			}),
+			planDescription: z
+				.string()
+				.min(1, "필수 입력값입니다.")
+				.max(500, "최대 500자까지 입력 가능합니다."),
 		})
 	),
 	images: z.array(z.string()).min(1, "필수 입력값입니다."),
-	videos: z
-		.array(z.string().url("올바른 URL을 입력해주세요").optional())
-		.max(2, "최대 2개까지 입력 가능합니다."),
-	relatedToolIds: z.array(z.number()).length(2, "2개만 입력해주세요"),
-	blogLinks: z
-		.array(z.string().url("올바른 URL을 입력해주세요").optional())
-		.max(3, "최대 3개까지 입력 가능합니다."),
+	videos: z.array(z.string().url("올바른 URL을 입력해주세요")).optional().default([]),
+	relatedToolIds: z.array(z.number()).length(2, "2개를 입력해주세요"),
+	blogLinks: z.array(z.string().url("올바른 URL을 입력해주세요")).optional().default([]),
 	planType: z.enum(["무료", "월간", "구매", "월간 & 연간"], { error: () => "필수 입력값입니다." }),
 });
 

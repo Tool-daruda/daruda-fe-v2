@@ -7,4 +7,5 @@ type Variants = RecipeVariants<typeof textFieldRecipe>;
 export type TextFieldProps = Variants & {
 	type?: "text" | "search";
 	onClear?: () => void; // x 버튼 클릭
+	isError?: boolean;
 } & Omit<InputHTMLAttributes<HTMLInputElement>, "size">;

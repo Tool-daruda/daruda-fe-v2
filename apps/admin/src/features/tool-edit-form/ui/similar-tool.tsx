@@ -6,24 +6,22 @@ import type { SearchTool, Tool } from "@/entities/tool";
 import { useSearchToolQuery } from "@/entities/tool/api/queries";
 import IcCross from "@/shared/assets/icons/ic_cross.svg?react";
 import { ToolEditField, ToolEditSection } from "@/shared/ui/tool-edit-section";
+import ErrorMessage from "./error-message";
 import * as S from "./tool-edit-form.css";
 
 const SimilarTool = () => {
 	const [keyword, setKeyword] = useState("");
 	const [searchQuery, setSearchQuery] = useState("");
 
-	const { control, setValue } = useFormContext<Tool>();
-
 	const {
-		field,
-		fieldState: { error },
-	} = useController<Tool, "relatedTools">({
+		control,
+		setValue,
+		formState: { errors },
+	} = useFormContext<Tool>();
+
+	const { field } = useController<Tool, "relatedTools">({
 		name: "relatedTools",
 		control,
-		rules: {
-			validate: (value: SearchTool[] | undefined) =>
-				value?.length === 2 || "유사한 툴은 2개를 선택해야 합니다.",
-		},
 	});
 
 	const selectedTools: SearchTool[] = field.value ?? [];
@@ -118,7 +116,7 @@ const SimilarTool = () => {
 						))}
 					</ul>
 				)}
-				{error && <p className={S.errorStyle}>{error.message}</p>}
+				<ErrorMessage>{errors.relatedToolIds?.message}</ErrorMessage>
 			</ToolEditField>
 		</ToolEditSection>
 	);

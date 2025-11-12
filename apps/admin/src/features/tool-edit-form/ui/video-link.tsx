@@ -2,9 +2,13 @@ import { TextField } from "@repo/ui";
 import { Controller, useFormContext } from "react-hook-form";
 import type { Tool } from "@/entities/tool";
 import { ToolEditField, ToolEditSection } from "@/shared/ui/tool-edit-section";
+import ErrorMessage from "./error-message";
 
 const VideoLink = () => {
-	const { control } = useFormContext<Tool>();
+	const {
+		control,
+		formState: { errors },
+	} = useFormContext<Tool>();
 
 	return (
 		<ToolEditSection title="5. 참고하면 좋은 영상">
@@ -13,12 +17,6 @@ const VideoLink = () => {
 					<Controller
 						name={`videos.${index}.videoUrl` as const}
 						control={control}
-						rules={{
-							pattern: {
-								value: /^https?:\/\/.+/,
-								message: "올바른 URL 형식을 입력하세요",
-							},
-						}}
 						render={({ field }) => (
 							<TextField
 								size="xl"
@@ -26,9 +24,11 @@ const VideoLink = () => {
 								value={field.value ?? ""}
 								onChange={field.onChange}
 								onClear={() => field.onChange("")}
+								isError={!!errors.videos?.[index]}
 							/>
 						)}
 					/>
+					<ErrorMessage>{errors.videos?.[index]?.message}</ErrorMessage>
 				</ToolEditField>
 			))}
 		</ToolEditSection>

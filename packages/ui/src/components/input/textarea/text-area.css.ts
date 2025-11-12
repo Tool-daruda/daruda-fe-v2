@@ -42,6 +42,11 @@ export const textAreaRecipe = recipe({
 				cursor: "not-allowed",
 			},
 		},
+		isError: {
+			true: {
+				borderColor: themeVars.colors.system.red.lt,
+			},
+		},
 	},
 
 	defaultVariants: {

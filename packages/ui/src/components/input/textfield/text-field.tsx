@@ -15,6 +15,7 @@ export const TextField = ({
 	value,
 	onChange,
 	onClear,
+	isError = false,
 	...rest
 }: TextFieldProps) => {
 	const [isActive, setIsActive] = useState(false);
@@ -23,6 +24,7 @@ export const TextField = ({
 		size,
 		active: isActive,
 		disabled,
+		isError,
 	});
 
 	const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {

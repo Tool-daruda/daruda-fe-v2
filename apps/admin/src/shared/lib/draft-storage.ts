@@ -26,8 +26,33 @@ const fileToBase64 = (file: File): Promise<string> => {
 	});
 };
 
+export const base64ToFile = (dataUrl: string, filename: string): File | null => {
+	const arr = dataUrl.split(",");
+	if (arr.length < 2) return null;
+
+	const mimeMatch = arr[0].match(/:(.*?);/);
+	if (!mimeMatch || !mimeMatch[1]) return null;
+
+	const mime = mimeMatch[1];
+	const bstr = atob(arr[1]);
+	let n = bstr.length;
+	const u8arr = new Uint8Array(n);
+
+	while (n--) {
+		u8arr[n] = bstr.charCodeAt(n);
+	}
+
+	return new File([u8arr], filename, { type: mime });
+};
+
 const sanitizeForStorage = async (data: Partial<Tool>): Promise<Partial<Tool>> => {
 	const sanitized = { ...data };
+
+	if (sanitized.relatedToolIds) {
+		sanitized.relatedToolIds = sanitized.relatedToolIds
+			.map((id) => (typeof id === "string" ? Number(id) : id))
+			.filter((id): id is number => Number.isFinite(id));
+	}
 
 	if (sanitized.toolLogo instanceof File) {
 		sanitized.toolLogo = await fileToBase64(sanitized.toolLogo);
@@ -115,7 +140,7 @@ export const DraftStorage = {
 		};
 
 		if (merged.relatedTools && Array.isArray(merged.relatedTools)) {
-			merged.relatedToolIds = merged.relatedTools.map((tool) => tool.toolId);
+			merged.relatedToolIds = merged.relatedTools.map((tool) => Number(tool.toolId));
 		}
 
 		return merged;
