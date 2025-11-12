@@ -16,7 +16,13 @@ export default defineConfig({
 			fileName: (_format, entryName) => `${entryName}.js`,
 		},
 		rollupOptions: {
-			external: ["react", "react-dom", "@vanilla-extract/css"],
+			external: [
+				"react",
+				"react-dom",
+				"@vanilla-extract/css",
+				"react/jsx-runtime",
+				"react/jsx-dev-runtime",
+			],
 			output: {
 				preserveModules: false,
 				exports: "named",
