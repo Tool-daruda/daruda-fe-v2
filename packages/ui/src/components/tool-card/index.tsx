@@ -3,6 +3,7 @@ import * as styles from "./tool-card.css";
 
 interface ToolCardProps {
 	toolId: number;
+	toolIndex: number;
 	toolLogo: string;
 	toolName: string;
 	description: string;
@@ -13,6 +14,7 @@ interface ToolCardProps {
 
 const ToolCard = ({
 	toolId,
+	toolIndex,
 	toolLogo,
 	toolName,
 	description,
@@ -24,6 +26,7 @@ const ToolCard = ({
 		<section className={styles.card}>
 			<div className={styles.cardHead}>
 				<span>{toolId}</span>
+				<span>{toolIndex}</span>
 				<img src={toolLogo} alt={toolName} className={styles.cardLogo} />
 			</div>
 			<h1 className={styles.cardName}>{toolName}</h1>
