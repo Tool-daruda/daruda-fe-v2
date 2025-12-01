@@ -13,6 +13,7 @@ const Plan = () => {
 		register,
 		control,
 		formState: { errors },
+		setValue,
 	} = useFormContext<Tool>();
 
 	const plantype = useWatch({ control, name: "plantype" });
@@ -36,33 +37,36 @@ const Plan = () => {
 	useEffect(() => {
 		if (plantype === "무료") {
 			if (fields.length > 0) replace([]);
+			setValue("planLink", "");
 			return;
 		}
 
 		if (fields.length === 0) {
 			replace([emptyPlan]);
 		}
-	}, [plantype, fields.length, replace, emptyPlan]);
+	}, [plantype, fields.length, replace, emptyPlan, setValue]);
 
 	return (
 		<ToolEditSection title="6. 플랜">
-			<ToolEditField label="가격정책 링크">
-				<Controller
-					name="planLink"
-					control={control}
-					render={({ field }) => (
-						<TextField
-							size="xl"
-							placeholder="내용을 입력하세요"
-							value={field.value}
-							onChange={field.onChange}
-							onClear={() => field.onChange("")}
-							isError={!!errors.planLink}
-						/>
-					)}
-				/>
-				<ErrorMessage>{errors?.planLink?.message}</ErrorMessage>
-			</ToolEditField>
+			{plantype !== "무료" && (
+				<ToolEditField label="가격정책 링크">
+					<Controller
+						name="planLink"
+						control={control}
+						render={({ field }) => (
+							<TextField
+								size="xl"
+								placeholder="내용을 입력하세요"
+								value={field.value}
+								onChange={field.onChange}
+								onClear={() => field.onChange("")}
+								isError={!!errors.planLink}
+							/>
+						)}
+					/>
+					<ErrorMessage>{errors?.planLink?.message}</ErrorMessage>
+				</ToolEditField>
+			)}
 
 			<ToolEditField label="플랜 유형">
 				<Controller
@@ -140,31 +144,86 @@ const Plan = () => {
 							<ErrorMessage>{errors?.plans?.[index]?.description?.message}</ErrorMessage>
 						</ToolEditField>
 
-						<ToolEditField label="가격(원화)">
-							<Controller
-								name={`plans.${index}.priceMonthly`}
-								control={control}
-								render={({ field }) => (
-									<TextField
-										placeholder="내용을 입력하세요"
-										value={field.value ?? ""}
-										onChange={(e) => {
-											const raw = e.target.value;
-											if (raw === "") {
-												field.onChange(null);
-												return;
-											}
-											const n = Number(raw.replaceAll(",", ""));
-											if (Number.isNaN(n)) return;
-											field.onChange(n);
-										}}
-										onClear={() => field.onChange(null)}
-										isError={!!errors.plans?.[index]?.priceMonthly}
+						{plantype !== "월간 & 연간" ? (
+							<ToolEditField label="가격(원화)">
+								<Controller
+									name={`plans.${index}.priceMonthly`}
+									control={control}
+									render={({ field }) => (
+										<TextField
+											placeholder="내용을 입력하세요"
+											value={field.value ?? ""}
+											onChange={(e) => {
+												const raw = e.target.value;
+												if (raw === "") {
+													field.onChange(null);
+													return;
+												}
+												const n = Number(raw.replaceAll(",", ""));
+												if (Number.isNaN(n)) return;
+												field.onChange(n);
+											}}
+											onClear={() => field.onChange(null)}
+											isError={!!errors.plans?.[index]?.priceMonthly}
+										/>
+									)}
+								/>
+								<ErrorMessage>{errors?.plans?.[index]?.priceMonthly?.message}</ErrorMessage>
+							</ToolEditField>
+						) : (
+							<>
+								<ToolEditField label="월간 가격(원화)">
+									<Controller
+										name={`plans.${index}.priceMonthly`}
+										control={control}
+										render={({ field }) => (
+											<TextField
+												placeholder="내용을 입력하세요"
+												value={field.value ?? ""}
+												onChange={(e) => {
+													const raw = e.target.value;
+													if (raw === "") {
+														field.onChange(null);
+														return;
+													}
+													const n = Number(raw.replaceAll(",", ""));
+													if (Number.isNaN(n)) return;
+													field.onChange(n);
+												}}
+												onClear={() => field.onChange(null)}
+												isError={!!errors.plans?.[index]?.priceMonthly}
+											/>
+										)}
 									/>
-								)}
-							/>
-							<ErrorMessage>{errors?.plans?.[index]?.priceMonthly?.message}</ErrorMessage>
-						</ToolEditField>
+									<ErrorMessage>{errors?.plans?.[index]?.priceMonthly?.message}</ErrorMessage>
+								</ToolEditField>
+								<ToolEditField label="연간 가격(원화)">
+									<Controller
+										name={`plans.${index}.priceAnnual`}
+										control={control}
+										render={({ field }) => (
+											<TextField
+												placeholder="내용을 입력하세요"
+												value={field.value ?? ""}
+												onChange={(e) => {
+													const raw = e.target.value;
+													if (raw === "") {
+														field.onChange(null);
+														return;
+													}
+													const n = Number(raw.replaceAll(",", ""));
+													if (Number.isNaN(n)) return;
+													field.onChange(n);
+												}}
+												onClear={() => field.onChange(null)}
+												isError={!!errors.plans?.[index]?.priceAnnual}
+											/>
+										)}
+									/>
+									<ErrorMessage>{errors?.plans?.[index]?.priceMonthly?.message}</ErrorMessage>
+								</ToolEditField>
+							</>
+						)}
 					</div>
 				))}
 		</ToolEditSection>

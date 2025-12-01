@@ -1,13 +1,15 @@
 import type { ReactNode } from "react";
-import * as S from "./tool-edit-form.css";
+import { errorRecipe } from "./tool-edit-form.css";
 
 interface ErrorMessageProps {
 	children?: ReactNode;
+	info?: boolean;
 }
 
-const ErrorMessage = ({ children }: ErrorMessageProps) => {
+const ErrorMessage = ({ children, info = false }: ErrorMessageProps) => {
 	if (!children) return;
-	return <p className={S.errorStyle}>{children}</p>;
+	const error = errorRecipe({ info });
+	return <p className={error}>{children}</p>;
 };
 
 export default ErrorMessage;

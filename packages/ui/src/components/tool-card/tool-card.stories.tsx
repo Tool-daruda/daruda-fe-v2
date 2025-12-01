@@ -18,6 +18,7 @@ const tools = [
 		description: "생각하는 방식에 적응하는 개인적이고 유연한 글쓰기 앱",
 		category: "생산성",
 		updatedAt: "2025.10.19",
+		toolIndex: 1,
 	},
 	{
 		toolId: 2,
@@ -26,6 +27,7 @@ const tools = [
 		description: "온라인에서 무료 목업을 제공하는 가장 큰 마켓플레이스",
 		category: "목업",
 		updatedAt: "2025.10.20",
+		toolIndex: 2,
 	},
 	{
 		toolId: 3,
@@ -36,6 +38,7 @@ const tools = [
 			"진리의 서버시간 진리의 서버시간 진리의 서버시간 진리의 서버시간 진리의 서버시간 진리의 서버시간 진리의 서버시간 진리의 서버시간 진리의 서버시간",
 		category: "서버시간",
 		updatedAt: "2025.10.18",
+		toolIndex: 3,
 	},
 ];
 
@@ -67,6 +70,7 @@ export const MultipleCards: Story = {
 				<ToolCard
 					key={tool.toolId}
 					toolId={tool.toolId}
+					toolIndex={tool.toolIndex}
 					toolLogo={tool.toolLogo}
 					toolName={tool.toolName}
 					description={tool.description}

@@ -1,4 +1,4 @@
-import { LICENSE_OPTIONS, TOOL_CATEGORY_LIST } from "./constants";
+import { LICENSE_OPTIONS } from "./constants";
 import type { PostToolRequest, Tool } from "./types";
 
 export const normalizePlansForRequest = (
@@ -38,7 +38,7 @@ export const transformToCreateRequest = async (
 		plans: normalizePlansForRequest(formData.plans),
 		videos: (formData.videos || []).map((v) => v.videoUrl).filter(Boolean),
 		blogLinks: formData.blogLinks.filter((link) => link !== ""),
-		category: TOOL_CATEGORY_LIST.find((c) => c.name === formData.category)?.name ?? "",
+		category: formData.category,
 		license: LICENSE_OPTIONS.find((o) => o.value === formData.license)?.label ?? formData.license,
 	};
 };

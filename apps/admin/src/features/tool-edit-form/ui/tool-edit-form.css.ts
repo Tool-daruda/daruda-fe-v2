@@ -1,5 +1,6 @@
 import { themeVars } from "@repo/ui";
 import { style } from "@vanilla-extract/css";
+import { recipe } from "@vanilla-extract/recipes";
 
 export const sectionStyle = style({
 	width: "100%",
@@ -91,13 +92,21 @@ export const selectedToolsBtnStyle = style({
 	fill: "none",
 });
 
-export const errorStyle = style({
-	position: "absolute",
-	left: "12.3rem",
-	bottom: "-2rem",
-	color: themeVars.colors.system.red.lt,
-	...themeVars.fonts.caption2_1,
-	marginTop: "0.8rem",
+export const errorRecipe = recipe({
+	base: {
+		position: "absolute",
+		left: "12.3rem",
+		bottom: "-2rem",
+		color: themeVars.colors.system.red.lt,
+		...themeVars.fonts.caption2_1,
+		marginTop: "0.8rem",
+	},
+
+	variants: {
+		info: {
+			true: { color: themeVars.colors.brand.orange[400] },
+		},
+	},
 });
 
 // 임시저장

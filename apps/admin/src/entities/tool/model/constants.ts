@@ -25,7 +25,7 @@ export const getKoreanCategoryName = (categoryName: string): string => {
 export const TOOL_CATEGORY_OPTIONS = TOOL_CATEGORY_LIST.filter(
 	(category) => category.name !== "ALL"
 ).map((category) => ({
-	value: category.name,
+	value: category.koreanName,
 	label: category.koreanName,
 }));
 
