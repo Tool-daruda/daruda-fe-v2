@@ -3,10 +3,13 @@ name: ci
 on:
   push:
     branches:
-      - main  
+      - main
+      - develop
   pull_request:
-
-jobs: 
+    branches:
+      - main
+      - develop
+jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
@@ -17,12 +20,11 @@ jobs:
         run: echo "version=$(jq -r '.engines.node' package.json)" >> $GITHUB_OUTPUT
 
       - uses: actions/setup-node@v4
-        with: 
+        with:
           node-version: ${{ steps.get_node_version.outputs.version }}
 
       - name: Setup Pnpm
         uses: pnpm/action-setup@v4
-
 
       - run: pnpm install --frozen-lockfile
       - run: pnpm exec biome ci
@@ -30,18 +32,70 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-        - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-        - name: Extract Node.js version from package.json
-          id: get_node_version
-          run: echo "version=$(jq -r '.engines.node' package.json)" >> $GITHUB_OUTPUT
+      - name: Extract Node.js version from package.json
+        id: get_node_version
+        run: echo "version=$(jq -r '.engines.node' package.json)" >> $GITHUB_OUTPUT
 
-        - uses: actions/setup-node@v4
-          with: 
-            node-version: ${{ steps.get_node_version.outputs.version }}
-  
-        - name: Setup Pnpm
-          uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ steps.get_node_version.outputs.version }}
 
-        - run: pnpm install --frozen-lockfile
-        - run: pnpm run build
+      - name: Setup Pnpm
+        uses: pnpm/action-setup@v4
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run build
+
+  sync-main:
+    name: Sync main to fork (prod)
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: main
+
+      - name: Add fork remote (main)
+        run: |
+          git remote add fork https://imddoy:${{ secrets.SYNC_FORK_TOKEN }}@github.com/imddoy/daruda-fe-v2.git
+          git config user.name "imddoy"
+          git config user.email "imddoy@duksung.ac.kr"
+
+      - name: Push main to fork/main
+        run: |
+          git push fork main:main
+
+      - name: Clean up
+        run: git remote remove fork
+
+  sync-develop:
+    name: Sync develop to fork (dev)
+    if: github.ref == 'refs/heads/develop'
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Checkout develop
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: develop
+
+      - name: Add fork remote (develop)
+        run: |
+          git remote add fork https://imddoy:${{ secrets.SYNC_FORK_TOKEN }}@github.com/imddoy/daruda-fe-v2.git
+          git config user.name "imddoy"
+          git config user.email "imddoy@duksung.ac.kr"
+
+      - name: Push develop to fork/develop
+        run: |
+          git push fork develop:develop
+
+      - name: Clean up
+        run: git remote remove fork
