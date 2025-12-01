@@ -117,9 +117,8 @@ export const PostToolRequestSchema = z
 		),
 		toolPlatForm: PlatformSchema,
 		keywords: z
-			.array(z.string(), {
-				error: "필수 입력값입니다.",
-			})
+			.array(z.string())
+			.min(1, "필수 입력값입니다.")
 			.max(2, "최대 2개까지 입력 가능합니다."),
 		cores: z
 			.array(
@@ -139,8 +138,8 @@ export const PostToolRequestSchema = z
 		plans: z.array(
 			z.object({
 				planName: z.string().min(1, "필수 입력값입니다.").max(20, "최대 20자까지 입력 가능합니다."),
-				planPrice: z.coerce.number({
-					error: "필수 입력값입니다.",
+				planPrice: z.coerce.number().refine((v) => !Number.isNaN(v), {
+					message: "필수 입력값입니다.",
 				}),
 				planDescription: z
 					.string()
@@ -152,9 +151,11 @@ export const PostToolRequestSchema = z
 		videos: z.array(z.string().url("올바른 URL을 입력해주세요")).optional().default([]),
 		relatedToolIds: z.array(z.number()).length(2, "2개를 입력해주세요"),
 		blogLinks: z.array(z.string().url("올바른 URL을 입력해주세요")).optional().default([]),
-		planType: z.enum(["무료", "월간", "구매", "월간 & 연간"], {
-			error: () => "필수 입력값입니다.",
-		}),
+		planType: z
+			.union([z.enum(["무료", "월간", "구매", "월간 & 연간"]), z.literal("")])
+			.refine((v) => v !== "", {
+				message: "필수 입력값입니다.",
+			}),
 	})
 	.superRefine((data, ctx) => {
 		const { license, planType, planLink } = data;
