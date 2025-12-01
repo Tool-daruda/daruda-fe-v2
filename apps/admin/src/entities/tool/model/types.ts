@@ -138,7 +138,7 @@ export const PostToolRequestSchema = z
 			.max(10, "최대 10개까지 입력 가능합니다."),
 		plans: z.array(
 			z.object({
-				planName: z.string().min(1, "필수 입력값입니다.").max(20, "최대 50자까지 입력 가능합니다."),
+				planName: z.string().min(1, "필수 입력값입니다.").max(20, "최대 20자까지 입력 가능합니다."),
 				planPrice: z.coerce.number({
 					error: "필수 입력값입니다.",
 				}),

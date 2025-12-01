@@ -220,7 +220,7 @@ const Plan = () => {
 											/>
 										)}
 									/>
-									<ErrorMessage>{errors?.plans?.[index]?.priceMonthly?.message}</ErrorMessage>
+									<ErrorMessage>{errors?.plans?.[index]?.priceAnnual?.message}</ErrorMessage>
 								</ToolEditField>
 							</>
 						)}
