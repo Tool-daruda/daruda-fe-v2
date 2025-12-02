@@ -1,4 +1,4 @@
-import { LICENSE_OPTIONS, TOOL_CATEGORY_LIST } from "./constants";
+import { LICENSE_OPTIONS } from "./constants";
 import type { PostToolRequest, Tool } from "./types";
 
 export const normalizePlansForRequest = (
@@ -8,7 +8,8 @@ export const normalizePlansForRequest = (
 
 	return plans.map((p) => ({
 		planName: p.planName,
-		planPrice: Number(p.priceMonthly ?? p.priceAnnual),
+		priceMonthly: p.priceMonthly ? Number(p.priceMonthly) : 0,
+		priceAnnual: p.priceAnnual ? Number(p.priceAnnual) : 0,
 		planDescription: p.description ?? "",
 	}));
 };
@@ -35,10 +36,12 @@ export const transformToCreateRequest = async (
 			coreName: c.coreTitle,
 			coreContent: c.coreContent,
 		})),
-		plans: normalizePlansForRequest(formData.plans),
+		plans: normalizePlansForRequest(formData.plans).map(({ priceAnnual, ...rest }) =>
+			priceAnnual === 0 ? rest : { priceAnnual, ...rest }
+		),
 		videos: (formData.videos || []).map((v) => v.videoUrl).filter(Boolean),
 		blogLinks: formData.blogLinks.filter((link) => link !== ""),
-		category: TOOL_CATEGORY_LIST.find((c) => c.name === formData.category)?.name ?? "",
+		category: formData.category,
 		license: LICENSE_OPTIONS.find((o) => o.value === formData.license)?.label ?? formData.license,
 	};
 };

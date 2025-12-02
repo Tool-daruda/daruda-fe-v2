@@ -47,7 +47,11 @@ const ToolInfo = () => {
 						);
 					}}
 				/>
-				<ErrorMessage>{errors.images?.message}</ErrorMessage>
+				{errors.images ? (
+					<ErrorMessage>{errors.images?.message}</ErrorMessage>
+				) : (
+					<ErrorMessage info>최대 3장까지 업로드 가능</ErrorMessage>
+				)}
 			</ToolEditField>
 			<ToolEditField label={`소개글\n(500자)`}>
 				<TextArea

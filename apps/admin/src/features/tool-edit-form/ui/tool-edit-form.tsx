@@ -6,6 +6,7 @@ import {
 	useActionData,
 	useLoaderData,
 	useNavigate,
+	useNavigation,
 	useParams,
 	useSubmit,
 } from "react-router-dom";
@@ -42,6 +43,7 @@ const FormContent = () => {
 	const loaderData = useLoaderData() as LoaderData | null;
 	const { toolData, hasDraft, draftTimestamp, draftId } = loaderData || {};
 	const { toolId } = useParams();
+	const navigation = useNavigation();
 	const isEditMode = !!toolId && toolId !== "new";
 	const [showDraftNotification, setShowDraftNotification] = useState(false);
 
@@ -299,7 +301,14 @@ const FormContent = () => {
 				>
 					임시저장하기
 				</Button>
-				<Button type="button" size="lg" intent="primary" appearance="filled" onClick={onFormSubmit}>
+				<Button
+					type="button"
+					size="lg"
+					intent="primary"
+					appearance="filled"
+					onClick={onFormSubmit}
+					loading={navigation.state === "submitting"}
+				>
 					저장하기
 				</Button>
 			</div>

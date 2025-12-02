@@ -51,22 +51,26 @@ const ToolListPage = () => {
 					툴 개수 <span className={S.toolCount}>{toolData?.totalElements}</span>개
 				</h1>
 				<div className={S.tableHeader}>
-					<span>No.</span>
-					<span>로고</span>
-					<span>툴 이름</span>
-					<span>한줄 소개</span>
-					<span>카테고리</span>
-					<span>추가된 날짜</span>
-					<span>설정</span>
+					<div className={S.toolHead}>
+						<span>No.</span>
+						<span>순서</span>
+						<span>로고</span>
+					</div>
+					<span className={S.toolName}>툴 이름</span>
+					<span className={S.toolDescription}>한줄 소개</span>
+					<span className={S.toolCategory}>카테고리</span>
+					<span className={S.toolCreatedAt}>추가된 날짜</span>
+					<span className={S.toolSetting}>설정</span>
 				</div>
 			</div>
 
 			<div>
 				{tools.length > 0 ? (
-					tools.map((tool) => (
+					tools.map((tool, index) => (
 						<ToolCard
 							key={tool.toolId}
 							toolId={tool.toolId}
+							toolIndex={(currentPage - 1) * 10 + index + 1}
 							toolLogo={tool.toolLogo}
 							toolName={tool.toolName}
 							description={tool.description}

@@ -65,15 +65,15 @@ export async function loader({ params }: LoaderFunctionArgs) {
 			mappedPlans = (planData?.toolPlans || []).map((apiPlan) => ({
 				planName: apiPlan.planName,
 				description: apiPlan.description,
-				priceMonthly: apiPlan.monthlyPrice,
-				priceAnnual: apiPlan.annualPrice,
+				priceMonthly: apiPlan.priceMonthly,
+				priceAnnual: apiPlan.priceAnnual,
 				isDollar: apiPlan.isDollar,
 			}));
 		}
 
 		let calculatedPlanType: "무료" | "월간" | "구매" | "월간 & 연간";
-		const hasMonthly = planData?.toolPlans?.some((plan) => plan.monthlyPrice !== null) ?? false;
-		const hasAnnual = planData?.toolPlans?.some((plan) => plan.annualPrice !== null) ?? false;
+		const hasMonthly = planData?.toolPlans?.some((plan) => plan.priceMonthly !== null) ?? false;
+		const hasAnnual = planData?.toolPlans?.some((plan) => plan.priceAnnual !== null) ?? false;
 
 		if (hasMonthly && hasAnnual) {
 			calculatedPlanType = "월간 & 연간";
@@ -93,6 +93,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 			cores: coreFeatureData?.toolCoreResList || [],
 			plantype: calculatedPlanType,
 			plans: mappedPlans,
+			planLink: planData?.planLink,
 			relatedTools: alternativeToolData?.relatedToolResList || [],
 			relatedToolIds: alternativeToolData?.relatedToolResList?.map((tool) => tool.toolId) || [],
 			keywords: (detailData?.keywords || []).map((val: string) => ({

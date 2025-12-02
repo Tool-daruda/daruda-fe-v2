@@ -14,6 +14,7 @@
 		"@repo/ui": "workspace:*",
 		"@tanstack/react-query": "^5.90.5",
 		"@vanilla-extract/css": "^1.17.4",
+		"@vanilla-extract/recipes": "^0.5.7",
 		"@vanilla-extract/vite-plugin": "^5.1.1",
 		"axios": "^1.13.1",
 		"react": "^19.1.1",
