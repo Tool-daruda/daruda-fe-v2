@@ -69,7 +69,7 @@ jobs:
 
       - name: Push main to fork/main
         run: |
-          git push fork main:main
+          git push -f fork main:main
 
       - name: Clean up
         run: git remote remove fork
@@ -87,12 +87,6 @@ jobs:
           fetch-depth: 0
           ref: develop
 
-      - name: Debug token length
-        run: |
-          echo "TOKEN_LENGTH=${#TOKEN}"
-        env:
-          TOKEN: ${{ secrets.SYNC_FORK_TOKEN }}
-
       - name: Add fork remote (develop)
         run: |
           git remote add fork https://imddoy:${{ secrets.SYNC_FORK_TOKEN }}@github.com/imddoy/daruda-fe-v2.git
@@ -101,7 +95,7 @@ jobs:
 
       - name: Push develop to fork/develop
         run: |
-          git push fork develop:develop
+          git push -f fork develop:develop
 
       - name: Clean up
         run: git remote remove fork
