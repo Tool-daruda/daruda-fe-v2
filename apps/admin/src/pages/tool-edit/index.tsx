@@ -203,7 +203,6 @@ export async function submitTool({ request, params }: ActionFunctionArgs) {
 			const toolDataWithUrls = await handleFileUploads(formDataObject);
 			const createRequest = await transformToCreateRequest(toolDataWithUrls);
 
-			console.log(createRequest);
 			if (toolId && toolId !== "new") {
 				await patchTool(createRequest, Number(toolId));
 			} else {
