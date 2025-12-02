@@ -87,6 +87,12 @@ jobs:
           fetch-depth: 0
           ref: develop
 
+      - name: Debug token length
+        run: |
+          echo "TOKEN_LENGTH=${#TOKEN}"
+        env:
+          TOKEN: ${{ secrets.SYNC_FORK_TOKEN }}
+
       - name: Add fork remote (develop)
         run: |
           git remote add fork https://imddoy:${{ secrets.SYNC_FORK_TOKEN }}@github.com/imddoy/daruda-fe-v2.git
