@@ -138,9 +138,8 @@ export const PostToolRequestSchema = z
 		plans: z.array(
 			z.object({
 				planName: z.string().min(1, "필수 입력값입니다.").max(20, "최대 20자까지 입력 가능합니다."),
-				planPrice: z.coerce.number().refine((v) => !Number.isNaN(v), {
-					message: "필수 입력값입니다.",
-				}),
+				priceMonthly: z.coerce.number().min(1, "필수 입력값입니다."),
+				priceAnnual: z.coerce.number().optional(),
 				planDescription: z
 					.string()
 					.min(1, "필수 입력값입니다.")
@@ -158,7 +157,7 @@ export const PostToolRequestSchema = z
 			}),
 	})
 	.superRefine((data, ctx) => {
-		const { license, planType, planLink } = data;
+		const { license, planType, planLink, plans } = data;
 
 		if (license === "FREE" && planType !== "무료") {
 			ctx.addIssue({
@@ -175,7 +174,6 @@ export const PostToolRequestSchema = z
 					message: "필수 입력값입니다.",
 					path: ["planLink"],
 				});
-				return;
 			}
 
 			const urlCheck = z.string().url("올바른 URL을 입력해주세요").safeParse(planLink);
@@ -186,6 +184,18 @@ export const PostToolRequestSchema = z
 					path: ["planLink"],
 				});
 			}
+		}
+
+		if (planType === "월간 & 연간") {
+			plans.forEach((plan, index) => {
+				if (plan.priceAnnual === undefined || plan.priceAnnual === 0) {
+					ctx.addIssue({
+						code: z.ZodIssueCode.custom,
+						message: "필수 입력값입니다.",
+						path: ["plans", index, "priceAnnual"],
+					});
+				}
+			});
 		}
 	});
 
@@ -226,13 +236,14 @@ export const ToolPlanSchema = z.object({
 	price: z.union([z.string(), z.number()]),
 	planId: z.number(),
 	planName: z.string(),
-	monthlyPrice: z.number().nullable(),
-	annualPrice: z.number().nullable(),
+	priceMonthly: z.number().nullable(),
+	priceAnnual: z.number().nullable(),
 	description: z.string(),
 	isDollar: z.boolean(),
 });
 
 export const ToolPlanResponseSchema = z.object({
+	planLink: z.string(),
 	toolPlans: z.array(ToolPlanSchema),
 });
 

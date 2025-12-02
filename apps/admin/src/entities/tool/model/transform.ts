@@ -8,7 +8,8 @@ export const normalizePlansForRequest = (
 
 	return plans.map((p) => ({
 		planName: p.planName,
-		planPrice: Number(p.priceMonthly ?? p.priceAnnual),
+		priceMonthly: p.priceMonthly ? Number(p.priceMonthly) : 0,
+		priceAnnual: p.priceAnnual ? Number(p.priceAnnual) : 0,
 		planDescription: p.description ?? "",
 	}));
 };
@@ -35,7 +36,9 @@ export const transformToCreateRequest = async (
 			coreName: c.coreTitle,
 			coreContent: c.coreContent,
 		})),
-		plans: normalizePlansForRequest(formData.plans),
+		plans: normalizePlansForRequest(formData.plans).map(({ priceAnnual, ...rest }) =>
+			priceAnnual === 0 ? rest : { priceAnnual, ...rest }
+		),
 		videos: (formData.videos || []).map((v) => v.videoUrl).filter(Boolean),
 		blogLinks: formData.blogLinks.filter((link) => link !== ""),
 		category: formData.category,
