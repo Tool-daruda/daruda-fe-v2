@@ -58,18 +58,19 @@ jobs:
       - name: Checkout main
         uses: actions/checkout@v4
         with:
+          token: ${{ secrets.SYNC_FORK_TOKEN }}
           fetch-depth: 0
           ref: main
 
       - name: Add fork remote (main)
         run: |
-          git remote add fork https://imddoy:${{ secrets.SYNC_FORK_TOKEN }}@github.com/imddoy/daruda-fe-v2.git
+          git remote add fork https://imddoy:${{ secrets.SYNC_FORK_TOKEN }}@github.com/imddoy/daruda-fe-v2
           git config user.name "imddoy"
           git config user.email "imddoy@duksung.ac.kr"
 
       - name: Push main to fork/main
         run: |
-          git push -f fork main:main
+          git push -f fork main
 
       - name: Clean up
         run: git remote remove fork
@@ -84,18 +85,19 @@ jobs:
       - name: Checkout develop
         uses: actions/checkout@v4
         with:
+          token: ${{ secrets.SYNC_FORK_TOKEN }}
           fetch-depth: 0
           ref: develop
 
       - name: Add fork remote (develop)
         run: |
-          git remote add fork https://imddoy:${{ secrets.SYNC_FORK_TOKEN }}@github.com/imddoy/daruda-fe-v2.git
+          git remote add fork https://imddoy:${{ secrets.SYNC_FORK_TOKEN }}@github.com/imddoy/daruda-fe-v2
           git config user.name "imddoy"
           git config user.email "imddoy@duksung.ac.kr"
 
       - name: Push develop to fork/develop
         run: |
-          git push -f fork develop:develop
+          git push -f fork develop
 
       - name: Clean up
         run: git remote remove fork
