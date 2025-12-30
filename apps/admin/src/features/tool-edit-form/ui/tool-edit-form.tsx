@@ -189,6 +189,12 @@ const FormContent = () => {
 	};
 
 	const onFormSubmit = async () => {
+		if (document.activeElement instanceof HTMLElement) {
+			document.activeElement.blur();
+		}
+
+		await new Promise((resolve) => setTimeout(resolve, 0));
+
 		clearErrors();
 		const formData = getValues();
 		const transformedData = transformFormDataForValidation(formData);
