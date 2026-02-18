@@ -2,12 +2,20 @@ import type React from "react";
 import { useState } from "react";
 import IcClear from "../../../assets/icons/ic_cross.svg?react";
 import IcSearch from "../../../assets/icons/ic_search.svg?react";
-import { buttonStyle, inputStyle, textFieldRecipe } from "./text-field.css";
+import {
+	buttonStyle,
+	inputStyle,
+	textFieldActiveStyles,
+	textFieldBaseStyle,
+	textFieldDisabledStyle,
+	textFieldErrorStyle,
+	textFieldSizeStyles,
+} from "./text-field.css";
 import type { TextFieldProps } from "./text-field.types";
 
 export const TextField = ({
 	type = "text",
-	size,
+	size = "xl",
 	disabled,
 	className,
 	onFocus,
@@ -20,12 +28,10 @@ export const TextField = ({
 }: TextFieldProps) => {
 	const [isActive, setIsActive] = useState(false);
 
-	const containerClasses = textFieldRecipe({
-		size,
-		active: isActive,
-		disabled,
-		isError,
-	});
+	const sizeClass = textFieldSizeStyles[size];
+	const activeClass = isActive ? textFieldActiveStyles.active : textFieldActiveStyles.inactive;
+	const disabledClass = disabled ? textFieldDisabledStyle : "";
+	const errorClass = isError ? textFieldErrorStyle : "";
 
 	const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
 		setIsActive(true);
@@ -55,7 +61,11 @@ export const TextField = ({
 		);
 
 	return (
-		<div className={`${containerClasses} ${className ?? ""}`}>
+		<div
+			className={`${textFieldBaseStyle} ${sizeClass} ${activeClass} ${disabledClass} ${errorClass} ${
+				className ?? ""
+			}`.trim()}
+		>
 			<input
 				className={inputStyle}
 				disabled={disabled}

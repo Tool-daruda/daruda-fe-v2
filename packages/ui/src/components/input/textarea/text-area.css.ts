@@ -1,59 +1,47 @@
 import { style } from "@vanilla-extract/css";
-import { recipe } from "@vanilla-extract/recipes";
 import { themeVars } from "src/foundations";
 
-export const textAreaRecipe = recipe({
-	base: {
-		display: "inline-flex",
-		alignItems: "center",
-		gap: "12px",
-		border: `1px solid`,
-		color: themeVars.colors.grayscale[500],
-		backgroundColor: themeVars.colors.grayscale[0],
-		width: "424px",
-		borderRadius: "14px",
-		padding: `12px 12px 12px 20px`,
-		...themeVars.fonts.caption1_1,
-		boxSizing: "border-box",
+export const textAreaBaseStyle = style({
+	display: "inline-flex",
+	alignItems: "center",
+	gap: "12px",
+	border: "1px solid",
+	color: themeVars.colors.grayscale[500],
+	backgroundColor: themeVars.colors.grayscale[0],
+	width: "424px",
+	borderRadius: "14px",
+	padding: "12px 12px 12px 20px",
+	...themeVars.fonts.caption1_1,
+	boxSizing: "border-box",
 
-		"::placeholder": {
+	selectors: {
+		"&::placeholder": {
 			color: themeVars.colors.grayscale[500],
 			...themeVars.fonts.caption1_1,
 		},
 	},
+});
 
-	variants: {
-		size: {
-			xl: {
-				width: "424px",
-				height: "124px",
-			},
-		},
-		active: {
-			true: {
-				borderColor: themeVars.colors.grayscale[400],
-			},
-			false: {
-				borderColor: themeVars.colors.grayscale[50],
-			},
-		},
-		disabled: {
-			true: {
-				cursor: "not-allowed",
-			},
-		},
-		isError: {
-			true: {
-				borderColor: themeVars.colors.system.red.lt,
-			},
-		},
-	},
+export const textAreaSizeStyle = style({
+	width: "424px",
+	height: "124px",
+});
 
-	defaultVariants: {
-		size: "xl",
-		active: false,
-		disabled: false,
-	},
+export const textAreaActiveStyles = {
+	active: style({
+		borderColor: themeVars.colors.grayscale[400],
+	}),
+	inactive: style({
+		borderColor: themeVars.colors.grayscale[50],
+	}),
+} as const;
+
+export const textAreaDisabledStyle = style({
+	cursor: "not-allowed",
+});
+
+export const textAreaErrorStyle = style({
+	borderColor: themeVars.colors.system.red.lt,
 });
 
 export const inputStyle = style({

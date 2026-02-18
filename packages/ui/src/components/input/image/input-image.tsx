@@ -2,7 +2,16 @@ import type React from "react";
 import { useEffect, useMemo, useRef } from "react";
 import IcAddImg from "../../../assets/icons/ic_add_img.svg?react";
 import IcRemoveImg from "../../../assets/icons/ic_cross.svg?react";
-import * as S from "./input-image.css";
+import {
+	containerStyle,
+	imagePreviewStyle,
+	inputStyle,
+	previewContainerStyle,
+	removeButtonBaseStyle,
+	removeButtonDisabledStyle,
+	uploadButtonBaseStyle,
+	uploadButtonDisabledStyle,
+} from "./input-image.css";
 import type { InputImageProps } from "./input-image.types";
 
 export const InputImage = ({
@@ -68,17 +77,21 @@ export const InputImage = ({
 	}, [objectUrls]);
 
 	return (
-		<div className={`${S.containerStyle} ${className ?? ""}`}>
-			<div className={S.previewContainerStyle}>
+		<div className={`${containerStyle} ${className ?? ""}`}>
+			<div className={previewContainerStyle}>
 				{canUpload && (
-					<label className={S.uploadButtonRecipe({ disabled })}>
+					<label
+						className={`${uploadButtonBaseStyle} ${
+							disabled ? uploadButtonDisabledStyle : ""
+						}`.trim()}
+					>
 						<IcAddImg />
 						<input
 							ref={inputRef}
 							type="file"
 							multiple
 							accept={accept}
-							className={S.inputStyle}
+							className={inputStyle}
 							aria-label={uploadAriaLabel}
 							onChange={handleFileChange}
 							disabled={!canUpload}
@@ -86,10 +99,12 @@ export const InputImage = ({
 					</label>
 				)}
 				{existingImages.map((url) => (
-					<div key={url} className={S.imagePreviewStyle}>
+					<div key={url} className={imagePreviewStyle}>
 						<img src={url} alt="기존 이미지" />
 						<button
-							className={S.removeButtonRecipe({ disabled })}
+							className={`${removeButtonBaseStyle} ${
+								disabled ? removeButtonDisabledStyle : ""
+							}`.trim()}
 							onClick={() => onDeleteExisting?.(url)}
 							aria-label={`${removeAriaLabel}: ${url}`}
 							type="button"
@@ -100,10 +115,12 @@ export const InputImage = ({
 					</div>
 				))}
 				{newImages.map((file, idx) => (
-					<div key={file.name} className={S.imagePreviewStyle}>
+					<div key={file.name} className={imagePreviewStyle}>
 						<img src={objectUrls[idx]} alt={file.name} />
 						<button
-							className={S.removeButtonRecipe({ disabled })}
+							className={`${removeButtonBaseStyle} ${
+								disabled ? removeButtonDisabledStyle : ""
+							}`.trim()}
 							onClick={() => onDeleteNew?.(file)}
 							aria-label={`${removeAriaLabel}: ${file.name}`}
 							type="button"

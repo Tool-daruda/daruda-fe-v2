@@ -1,61 +1,51 @@
 import { style } from "@vanilla-extract/css";
-import { recipe } from "@vanilla-extract/recipes";
 import { themeVars } from "src/foundations";
 
-export const textFieldRecipe = recipe({
-	base: {
-		display: "inline-flex",
-		alignItems: "center",
-		gap: "12px",
-		border: `1px solid`,
-		color: themeVars.colors.grayscale[500],
-		backgroundColor: themeVars.colors.grayscale[0],
-		height: "44px",
-		borderRadius: "14px",
-		padding: `12px 12px 12px 20px`,
-		...themeVars.fonts.caption1_1,
-		boxSizing: "border-box",
+export const textFieldBaseStyle = style({
+	display: "inline-flex",
+	alignItems: "center",
+	gap: "12px",
+	border: "1px solid",
+	color: themeVars.colors.grayscale[500],
+	backgroundColor: themeVars.colors.grayscale[0],
+	height: "44px",
+	borderRadius: "14px",
+	padding: "12px 12px 12px 20px",
+	...themeVars.fonts.caption1_1,
+	boxSizing: "border-box",
 
-		"::placeholder": {
+	selectors: {
+		"&::placeholder": {
 			color: themeVars.colors.grayscale[500],
 			...themeVars.fonts.caption1_1,
 		},
 	},
+});
 
-	variants: {
-		size: {
-			xl: {
-				width: "424px",
-			},
-			s: {
-				width: "194px",
-			},
-		},
-		active: {
-			true: {
-				borderColor: themeVars.colors.grayscale[400],
-			},
-			false: {
-				borderColor: themeVars.colors.grayscale[50],
-			},
-		},
-		disabled: {
-			true: {
-				cursor: "not-allowed",
-			},
-		},
-		isError: {
-			true: {
-				borderColor: themeVars.colors.system.red.lt,
-			},
-		},
-	},
+export const textFieldSizeStyles = {
+	xl: style({
+		width: "424px",
+	}),
+	s: style({
+		width: "194px",
+	}),
+} as const;
 
-	defaultVariants: {
-		size: "xl",
-		active: false,
-		disabled: false,
-	},
+export const textFieldActiveStyles = {
+	active: style({
+		borderColor: themeVars.colors.grayscale[400],
+	}),
+	inactive: style({
+		borderColor: themeVars.colors.grayscale[50],
+	}),
+} as const;
+
+export const textFieldDisabledStyle = style({
+	cursor: "not-allowed",
+});
+
+export const textFieldErrorStyle = style({
+	borderColor: themeVars.colors.system.red.lt,
 });
 
 export const inputStyle = style({

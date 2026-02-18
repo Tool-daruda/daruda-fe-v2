@@ -1,14 +1,9 @@
-import type { RecipeVariants } from "@vanilla-extract/recipes";
-import type { dropdownTriggerRecipe } from "./dropdown.css";
-
-type Variants = RecipeVariants<typeof dropdownTriggerRecipe>;
-
 export interface Option {
 	label: string;
 	value: string;
 }
 
-export type DropdownProps = Variants & {
+export type DropdownProps = {
 	options: Option[];
 	value?: string;
 	onChange: (option: Option) => void;
