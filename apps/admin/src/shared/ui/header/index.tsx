@@ -1,3 +1,4 @@
+import { cx } from "@repo/ui";
 import { Link, NavLink } from "react-router-dom";
 import IcLogo from "@/shared/assets/icons/ic_darudalogo.svg?react";
 import * as S from "./index.css";
@@ -23,7 +24,7 @@ const Header = () => {
 					</NavLink>
 				))}
 			</nav>
-			<Link to="/tool/new" className={`${S.linkStyle} ${S.primaryLink}`}>
+			<Link to="/tool/new" className={cx(S.linkStyle, S.primaryLink)}>
 				툴 추가하기
 			</Link>
 		</header>

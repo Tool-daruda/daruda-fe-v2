@@ -1,5 +1,6 @@
 import CircleLeft from "../../assets/icons/ic_circle_left.svg?react";
 import CircleRight from "../../assets/icons/ic_circle_right.svg?react";
+import { cx } from "../../cx";
 import usePagination from "../../hooks/use-pagenation";
 import * as styles from "./pagenation.css";
 
@@ -36,7 +37,7 @@ const Pagination = ({ page, totalPages, onPageChange }: PageNationProps) => {
 				<button
 					key={num}
 					type="button"
-					className={`${styles.pageButton} ${num === page ? styles.active : ""}`}
+					className={cx(styles.pageButton, { [styles.active]: num === page })}
 					onClick={() => handlePageChange(num)}
 				>
 					{num}

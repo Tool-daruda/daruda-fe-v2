@@ -1,4 +1,4 @@
-import "@repo/ui/style.css";
+import "@repo/ui/index.css";
 import { themeClass } from "@repo/ui/foundations";
 import type { Metadata } from "next";
 import type { PropsWithChildren } from "react";

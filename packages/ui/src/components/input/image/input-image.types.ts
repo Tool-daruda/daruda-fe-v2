@@ -1,4 +1,9 @@
-export type InputImageProps = {
+import type { RecipeVariants } from "@vanilla-extract/recipes";
+import type { uploadButtonRecipe } from "./input-image.css";
+
+type ButtonVariants = RecipeVariants<typeof uploadButtonRecipe>;
+
+export type InputImageProps = ButtonVariants & {
 	existingImages?: string[]; // 기존 이미지 배열
 	newImages?: File[]; // 새로 추가된 이미지 파일 배열
 	onImageChange: (files: File[]) => void;

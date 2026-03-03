@@ -60,9 +60,6 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.90.5
         version: 5.90.8(react@19.2.0)
-      '@vanilla-extract/css':
-        specifier: ^1.17.4
-        version: 1.17.4
       '@vanilla-extract/recipes':
         specifier: ^0.5.7
         version: 0.5.7(@vanilla-extract/css@1.17.4)
@@ -103,6 +100,12 @@ importers:
       '@types/react-dom':
         specifier: ^19.1.9
         version: 19.2.3(@types/react@19.2.4)
+      '@vanilla-extract/css':
+        specifier: ^1.17.4
+        version: 1.17.4
+      '@vanilla-extract/private':
+        specifier: ^1.0.9
+        version: 1.0.9
       '@vitejs/plugin-react':
         specifier: ^5.0.3
         version: 5.1.1(vite@7.2.2(@types/node@22.19.1)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.1))
@@ -185,16 +188,19 @@ importers:
       '@vanilla-extract/recipes':
         specifier: ^0.5.7
         version: 0.5.7(@vanilla-extract/css@1.17.4)
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
       react:
         specifier: ^19.1.0
-        version: 19.2.0
+        version: 19.2.3
       react-dom:
         specifier: ^19.1.0
-        version: 19.2.0(react@19.2.0)
+        version: 19.2.3(react@19.2.3)
     devDependencies:
       '@chromatic-com/storybook':
         specifier: ^3
-        version: 3.2.7(react@19.2.0)(storybook@8.6.14)
+        version: 3.2.7(react@19.2.3)(storybook@8.6.14)
       '@storybook/addon-essentials':
         specifier: 8.6.14
         version: 8.6.14(@types/react@19.1.0)(storybook@8.6.14)
@@ -206,16 +212,16 @@ importers:
         version: 8.6.14(storybook@8.6.14)
       '@storybook/blocks':
         specifier: ^8.6.14
-        version: 8.6.14(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(storybook@8.6.14)
+        version: 8.6.14(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(storybook@8.6.14)
       '@storybook/experimental-addon-test':
         specifier: ^8.6.14
-        version: 8.6.14(@vitest/browser@3.2.4(playwright@1.56.1)(vite@7.2.2(@types/node@22.19.1)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.1))(vitest@3.2.4))(@vitest/runner@3.2.4)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(storybook@8.6.14)(vitest@3.2.4(@types/node@22.19.1)(@vitest/browser@3.2.4)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.1))
+        version: 8.6.14(@vitest/browser@3.2.4(playwright@1.56.1)(vite@7.2.2(@types/node@22.19.1)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.1))(vitest@3.2.4))(@vitest/runner@3.2.4)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(storybook@8.6.14)(vitest@3.2.4(@types/node@22.19.1)(@vitest/browser@3.2.4)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.1))
       '@storybook/react':
         specifier: 8.6.14
-        version: 8.6.14(@storybook/test@8.6.14(storybook@8.6.14))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(storybook@8.6.14)(typescript@5.9.2)
+        version: 8.6.14(@storybook/test@8.6.14(storybook@8.6.14))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(storybook@8.6.14)(typescript@5.9.2)
       '@storybook/react-vite':
         specifier: 8.6.14
-        version: 8.6.14(@storybook/test@8.6.14(storybook@8.6.14))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(rollup@4.53.2)(storybook@8.6.14)(typescript@5.9.2)(vite@7.2.2(@types/node@22.19.1)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.1))
+        version: 8.6.14(@storybook/test@8.6.14(storybook@8.6.14))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(rollup@4.53.2)(storybook@8.6.14)(typescript@5.9.2)(vite@7.2.2(@types/node@22.19.1)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.1))
       '@storybook/test':
         specifier: ^8.6.14
         version: 8.6.14(storybook@8.6.14)
@@ -2155,6 +2161,10 @@ packages:
   clone@1.0.4:
     resolution: {integrity: sha512-JQHZ2QMW6l3aH/j6xCqQThY/9OH4D/9ls34cgkUBiEeocRTU04tHfKPBsUK1PqZCUQM7GiA0IIXJSuXHI64Kbg==}
     engines: {node: '>=0.8'}
+
+  clsx@2.1.1:
+    resolution: {integrity: sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA==}
+    engines: {node: '>=6'}
 
   color-convert@1.9.3:
     resolution: {integrity: sha512-QfAUtd+vFdAtFQcC8CCyYt1fYWxSqAiK2cSD6zDB8N3cpsEBAvRxp9zOGg6G/SHHJYAT88/az/IuDGALsNVbGg==}
@@ -4452,12 +4462,12 @@ snapshots:
   '@biomejs/cli-win32-x64@2.3.5':
     optional: true
 
-  '@chromatic-com/storybook@3.2.7(react@19.2.0)(storybook@8.6.14)':
+  '@chromatic-com/storybook@3.2.7(react@19.2.3)(storybook@8.6.14)':
     dependencies:
       chromatic: 11.29.0
       filesize: 10.1.6
       jsonfile: 6.2.0
-      react-confetti: 6.4.0(react@19.2.0)
+      react-confetti: 6.4.0(react@19.2.3)
       storybook: 8.6.14
       strip-ansi: 7.1.2
     transitivePeerDependencies:
@@ -5196,15 +5206,6 @@ snapshots:
       memoizerific: 1.11.3
       storybook: 8.6.14
 
-  '@storybook/blocks@8.6.14(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(storybook@8.6.14)':
-    dependencies:
-      '@storybook/icons': 1.6.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
-      storybook: 8.6.14
-      ts-dedent: 2.2.0
-    optionalDependencies:
-      react: 19.2.0
-      react-dom: 19.2.0(react@19.2.0)
-
   '@storybook/blocks@8.6.14(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(storybook@8.6.14)':
     dependencies:
       '@storybook/icons': 1.6.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
@@ -5250,10 +5251,10 @@ snapshots:
       storybook: 8.6.14
       unplugin: 1.16.1
 
-  '@storybook/experimental-addon-test@8.6.14(@vitest/browser@3.2.4(playwright@1.56.1)(vite@7.2.2(@types/node@22.19.1)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.1))(vitest@3.2.4))(@vitest/runner@3.2.4)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(storybook@8.6.14)(vitest@3.2.4(@types/node@22.19.1)(@vitest/browser@3.2.4)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.1))':
+  '@storybook/experimental-addon-test@8.6.14(@vitest/browser@3.2.4(playwright@1.56.1)(vite@7.2.2(@types/node@22.19.1)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.1))(vitest@3.2.4))(@vitest/runner@3.2.4)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(storybook@8.6.14)(vitest@3.2.4(@types/node@22.19.1)(@vitest/browser@3.2.4)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.1))':
     dependencies:
       '@storybook/global': 5.0.0
-      '@storybook/icons': 1.6.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      '@storybook/icons': 1.6.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       '@storybook/instrumenter': 8.6.14(storybook@8.6.14)
       '@storybook/test': 8.6.14(storybook@8.6.14)
       polished: 4.3.1
@@ -5269,11 +5270,6 @@ snapshots:
       - react-dom
 
   '@storybook/global@5.0.0': {}
-
-  '@storybook/icons@1.6.0(react-dom@19.2.0(react@19.2.0))(react@19.2.0)':
-    dependencies:
-      react: 19.2.0
-      react-dom: 19.2.0(react@19.2.0)
 
   '@storybook/icons@1.6.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3)':
     dependencies:
@@ -5294,29 +5290,23 @@ snapshots:
     dependencies:
       storybook: 8.6.14
 
-  '@storybook/react-dom-shim@8.6.14(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(storybook@8.6.14)':
-    dependencies:
-      react: 19.2.0
-      react-dom: 19.2.0(react@19.2.0)
-      storybook: 8.6.14
-
   '@storybook/react-dom-shim@8.6.14(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(storybook@8.6.14)':
     dependencies:
       react: 19.2.3
       react-dom: 19.2.3(react@19.2.3)
       storybook: 8.6.14
 
-  '@storybook/react-vite@8.6.14(@storybook/test@8.6.14(storybook@8.6.14))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(rollup@4.53.2)(storybook@8.6.14)(typescript@5.9.2)(vite@7.2.2(@types/node@22.19.1)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.1))':
+  '@storybook/react-vite@8.6.14(@storybook/test@8.6.14(storybook@8.6.14))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(rollup@4.53.2)(storybook@8.6.14)(typescript@5.9.2)(vite@7.2.2(@types/node@22.19.1)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.1))':
     dependencies:
       '@joshwooding/vite-plugin-react-docgen-typescript': 0.5.0(typescript@5.9.2)(vite@7.2.2(@types/node@22.19.1)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.1))
       '@rollup/pluginutils': 5.3.0(rollup@4.53.2)
       '@storybook/builder-vite': 8.6.14(storybook@8.6.14)(vite@7.2.2(@types/node@22.19.1)(jiti@2.6.1)(terser@5.46.0)(yaml@2.8.1))
-      '@storybook/react': 8.6.14(@storybook/test@8.6.14(storybook@8.6.14))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(storybook@8.6.14)(typescript@5.9.2)
+      '@storybook/react': 8.6.14(@storybook/test@8.6.14(storybook@8.6.14))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(storybook@8.6.14)(typescript@5.9.2)
       find-up: 5.0.0
       magic-string: 0.30.21
-      react: 19.2.0
+      react: 19.2.3
       react-docgen: 7.1.1
-      react-dom: 19.2.0(react@19.2.0)
+      react-dom: 19.2.3(react@19.2.3)
       resolve: 1.22.11
       storybook: 8.6.14
       tsconfig-paths: 4.2.0
@@ -5328,16 +5318,16 @@ snapshots:
       - supports-color
       - typescript
 
-  '@storybook/react@8.6.14(@storybook/test@8.6.14(storybook@8.6.14))(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(storybook@8.6.14)(typescript@5.9.2)':
+  '@storybook/react@8.6.14(@storybook/test@8.6.14(storybook@8.6.14))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(storybook@8.6.14)(typescript@5.9.2)':
     dependencies:
       '@storybook/components': 8.6.14(storybook@8.6.14)
       '@storybook/global': 5.0.0
       '@storybook/manager-api': 8.6.14(storybook@8.6.14)
       '@storybook/preview-api': 8.6.14(storybook@8.6.14)
-      '@storybook/react-dom-shim': 8.6.14(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(storybook@8.6.14)
+      '@storybook/react-dom-shim': 8.6.14(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(storybook@8.6.14)
       '@storybook/theming': 8.6.14(storybook@8.6.14)
-      react: 19.2.0
-      react-dom: 19.2.0(react@19.2.0)
+      react: 19.2.3
+      react-dom: 19.2.3(react@19.2.3)
       storybook: 8.6.14
     optionalDependencies:
       '@storybook/test': 8.6.14(storybook@8.6.14)
@@ -6404,6 +6394,8 @@ snapshots:
       wrap-ansi: 7.0.0
 
   clone@1.0.4: {}
+
+  clsx@2.1.1: {}
 
   color-convert@1.9.3:
     dependencies:
@@ -7693,9 +7685,9 @@ snapshots:
     dependencies:
       safe-buffer: 5.2.1
 
-  react-confetti@6.4.0(react@19.2.0):
+  react-confetti@6.4.0(react@19.2.3):
     dependencies:
-      react: 19.2.0
+      react: 19.2.3
       tween-functions: 1.2.0
 
   react-docgen-typescript@2.4.0(typescript@5.9.2):

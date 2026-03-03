@@ -2,21 +2,8 @@ import { assignInlineVars } from "@vanilla-extract/dynamic";
 import type React from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import IcArrowBottom from "../../assets/icons/ic_arrow_bottom.svg?react";
-import {
-	arrowIconStyle,
-	dropdownTriggerBaseStyle,
-	dropdownTriggerDisabledStyle,
-	dropdownTriggerHasValueStyle,
-	dropdownTriggerNoValueStyle,
-	dropdownTriggerOpenStyle,
-	optionButtonStyle,
-	optionItemBaseStyle,
-	optionItemSelectedStyle,
-	optionsListCapped,
-	optionsListStyle,
-	rootStyle,
-	rowsVar,
-} from "./dropdown.css";
+import { cx } from "../../cx";
+import * as S from "./dropdown.css";
 import type { DropdownProps, Option } from "./dropdown.types";
 
 const useOutsideClick = (ref: React.RefObject<HTMLDivElement | null>, handler: () => void) => {
@@ -60,20 +47,15 @@ export const Dropdown = ({
 		setIsOpen(false);
 	};
 
-	const triggerClasses = [
-		dropdownTriggerBaseStyle,
-		isOpen ? dropdownTriggerOpenStyle : "",
-		disabled ? dropdownTriggerDisabledStyle : "",
-		selectedOption ? dropdownTriggerHasValueStyle : dropdownTriggerNoValueStyle,
-	]
-		.filter(Boolean)
-		.join(" ");
-
 	return (
-		<div ref={dropdownRef} className={`${rootStyle} ${className ?? ""}`}>
+		<div ref={dropdownRef} className={cx(S.rootStyle, className)}>
 			<button
 				type="button"
-				className={triggerClasses}
+				className={S.dropdownTriggerRecipe({
+					open: isOpen,
+					disabled,
+					hasValue: !!selectedOption,
+				})}
 				onClick={handleToggle}
 				disabled={disabled}
 				aria-haspopup="listbox"
@@ -81,49 +63,43 @@ export const Dropdown = ({
 				data-state={isOpen ? "open" : "closed"}
 			>
 				<span>{selectedOption?.label || placeholder}</span>
-				<span className={arrowIconStyle}>
+				<span className={S.arrowIconStyle}>
 					<IcArrowBottom />
 				</span>
 			</button>
 
 			{isOpen && (
 				<ul
-					className={
-						typeof maxHeight === "number" && maxHeight > 0
-							? `${optionsListStyle} ${optionsListCapped}`
-							: optionsListStyle
-					}
+					className={cx(S.optionsListStyle, {
+						[S.optionsListCapped]: typeof maxHeight === "number" && maxHeight > 0,
+					})}
 					style={
 						typeof maxHeight === "number" && maxHeight > 0
-							? assignInlineVars({ [rowsVar]: String(maxHeight) })
+							? assignInlineVars({ [S.rowsVar]: String(maxHeight) })
 							: undefined
 					}
 				>
-					{options.map((option) => {
-						const isSelected = option.value === value;
-						const itemClasses = [optionItemBaseStyle, isSelected ? optionItemSelectedStyle : ""]
-							.filter(Boolean)
-							.join(" ");
-
-						return (
-							<li key={option.value} className={itemClasses}>
-								<button
-									type="button"
-									className={optionButtonStyle}
-									onClick={() => handleSelect(option)}
-									onKeyDown={(e) => {
-										if (e.key === "Enter" || e.key === " ") {
-											e.preventDefault();
-											handleSelect(option);
-										}
-									}}
-									tabIndex={0}
-								>
-									{option.label}
-								</button>
-							</li>
-						);
-					})}
+					{options.map((option) => (
+						<li
+							key={option.value}
+							className={S.optionItemRecipe({ selected: option.value === value })}
+						>
+							<button
+								type="button"
+								className={S.optionButtonStyle}
+								onClick={() => handleSelect(option)}
+								onKeyDown={(e) => {
+									if (e.key === "Enter" || e.key === " ") {
+										e.preventDefault();
+										handleSelect(option);
+									}
+								}}
+								tabIndex={0}
+							>
+								{option.label}
+							</button>
+						</li>
+					))}
 				</ul>
 			)}
 		</div>

@@ -2,6 +2,7 @@ import type React from "react";
 import { useState } from "react";
 import IcCheckboxChecked from "../../../assets/icons/btn_check_active.svg?react";
 import IcCheckboxUnchecked from "../../../assets/icons/btn_check_normal.svg?react";
+import { cx } from "../../../cx";
 import { ToggleBase } from "../_primitives/toggle-base";
 import * as S from "./checkbox.css";
 import { useCheckboxContext } from "./checkbox-group";
@@ -53,7 +54,7 @@ export const Checkbox = (props: CheckboxProps) => {
 			checked={checked}
 			disabled={(inGroup && ctx ? ctx.disabled : false) || props.disabled}
 			onChange={handleChange}
-			className={`${S.checkboxItem} ${props.className ?? ""}`}
+			className={cx(S.checkboxItem, props.className)}
 		>
 			<span className="box">
 				<span className={S.iconUnchecked}>

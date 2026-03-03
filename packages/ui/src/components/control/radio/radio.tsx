@@ -1,6 +1,7 @@
 import type React from "react";
 import IcRadioChecked from "../../../assets/icons/btn_radio_active.svg?react";
 import IcRadioUnchecked from "../../../assets/icons/btn_radio_normal.svg?react";
+import { cx } from "../../../cx";
 import { ToggleBase } from "../_primitives/toggle-base";
 import * as S from "./radio.css";
 import { useRadioContext } from "./radio-group";
@@ -24,7 +25,7 @@ export const Radio = ({ value, disabled, className, children }: RadioProps) => {
 			checked={checked}
 			disabled={ctx.disabled || disabled}
 			onChange={(next) => next && ctx.setValue(value)}
-			className={`${S.radioItem} ${className ?? ""}`}
+			className={cx(S.radioItem, className)}
 		>
 			<span className="dot">
 				<span className={S.iconUnchecked}>

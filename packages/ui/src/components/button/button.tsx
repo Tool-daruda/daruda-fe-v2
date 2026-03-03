@@ -1,9 +1,4 @@
-import {
-	buttonBaseStyle,
-	buttonRoundedStyles,
-	buttonSizeStyles,
-	buttonVariantStyles,
-} from "./button.css";
+import { buttonRecipe } from "./button.css";
 import type { ButtonProps } from "./button.types";
 
 export const Button = ({
@@ -16,33 +11,17 @@ export const Button = ({
 	className,
 	...props
 }: ButtonProps) => {
-	const resolvedSize = size ?? "lg";
-	const resolvedIntent = intent ?? "primary";
-	const resolvedAppearance = appearance ?? "filled";
-	const resolvedRounded = rounded ?? "rounded";
-
-	const sizeClass = buttonSizeStyles[resolvedSize];
-	const roundedClass = buttonRoundedStyles[resolvedRounded];
-
-	let variantClass = buttonVariantStyles.tonal;
-	if (resolvedIntent === "primary") {
-		variantClass =
-			resolvedAppearance === "outlined"
-				? buttonVariantStyles.primaryOutlined
-				: buttonVariantStyles.primaryFilled;
-	} else if (resolvedIntent === "dangerous") {
-		variantClass =
-			resolvedAppearance === "outlined"
-				? buttonVariantStyles.dangerousOutlined
-				: buttonVariantStyles.dangerousFilled;
-	}
+	const buttonClassName = buttonRecipe({
+		size,
+		intent,
+		appearance,
+		rounded,
+	});
 
 	return (
 		<button
 			{...props}
-			className={`${buttonBaseStyle} ${sizeClass} ${roundedClass} ${variantClass}${
-				className ? ` ${className}` : ""
-			}`}
+			className={`${buttonClassName}${className || ""}`}
 			disabled={loading || props.disabled}
 		>
 			{/* todo: 스피너 생기면 스피너로 변경 */}

@@ -1,17 +1,11 @@
 import type React from "react";
 import { useState } from "react";
-import {
-	inputStyle,
-	textAreaActiveStyles,
-	textAreaBaseStyle,
-	textAreaDisabledStyle,
-	textAreaErrorStyle,
-	textAreaSizeStyle,
-} from "./text-area.css";
+import { cx } from "../../../cx";
+import { inputStyle, textAreaRecipe } from "./text-area.css";
 import type { TextAreaProps } from "./text-area.types";
 
 export const TextArea = ({
-	size = "xl",
+	size,
 	disabled,
 	className,
 	onFocus,
@@ -23,9 +17,12 @@ export const TextArea = ({
 }: TextAreaProps) => {
 	const [isActive, setIsActive] = useState(false);
 
-	const activeClass = isActive ? textAreaActiveStyles.active : textAreaActiveStyles.inactive;
-	const disabledClass = disabled ? textAreaDisabledStyle : "";
-	const errorClass = isError ? textAreaErrorStyle : "";
+	const containerClasses = textAreaRecipe({
+		size,
+		active: isActive,
+		disabled,
+		isError,
+	});
 
 	const handleFocus = (e: React.FocusEvent<HTMLTextAreaElement>) => {
 		setIsActive(true);
@@ -38,11 +35,7 @@ export const TextArea = ({
 	};
 
 	return (
-		<div
-			className={`${textAreaBaseStyle} ${size === "xl" ? textAreaSizeStyle : ""} ${activeClass} ${disabledClass} ${errorClass} ${
-				className ?? ""
-			}`.trim()}
-		>
+		<div className={cx(containerClasses, className)}>
 			<textarea
 				className={inputStyle}
 				disabled={disabled}
