@@ -21,7 +21,16 @@ export default defineConfig({
 			fileName: (_format, entryName) => `${entryName}.js`,
 		},
 		rollupOptions: {
+			external: [
+				"react",
+				"react-dom",
+				"@vanilla-extract/css",
+				"react/jsx-runtime",
+				"react/jsx-dev-runtime",
+			],
 			output: {
+				preserveModules: false,
+				exports: "named",
 				// JS는 무조건 .js
 				entryFileNames: "[name].js",
 				chunkFileNames: "[name]-[hash].js",
