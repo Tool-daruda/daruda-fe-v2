@@ -1,7 +1,8 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
-import "@repo/ui/style.css";
+import "@repo/ui/index.css";
+import "@repo/ui/foundations.css";
 import "@/app/styles/global.css.ts";
 import { themeClass } from "@repo/ui";
 import { QueryProvider } from "./app/providers/query-provider.tsx";

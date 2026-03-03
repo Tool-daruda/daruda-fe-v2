@@ -91,6 +91,8 @@ export const removeButtonRecipe = recipe({
 	},
 });
 
-globalStyle(`${removeButtonRecipe} svg`, {
+const removeButtonClass = removeButtonRecipe();
+
+globalStyle(`${removeButtonClass} svg`, {
 	flexShrink: 0,
 });

@@ -2,6 +2,7 @@ import type React from "react";
 import { useState } from "react";
 import IcClear from "../../../assets/icons/ic_cross.svg?react";
 import IcSearch from "../../../assets/icons/ic_search.svg?react";
+import { cx } from "../../../cx";
 import { buttonStyle, inputStyle, textFieldRecipe } from "./text-field.css";
 import type { TextFieldProps } from "./text-field.types";
 
@@ -55,7 +56,7 @@ export const TextField = ({
 		);
 
 	return (
-		<div className={`${containerClasses} ${className ?? ""}`}>
+		<div className={cx(containerClasses, className)}>
 			<input
 				className={inputStyle}
 				disabled={disabled}

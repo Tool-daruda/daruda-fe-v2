@@ -2,6 +2,7 @@ import { assignInlineVars } from "@vanilla-extract/dynamic";
 import type React from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import IcArrowBottom from "../../assets/icons/ic_arrow_bottom.svg?react";
+import { cx } from "../../cx";
 import * as S from "./dropdown.css";
 import type { DropdownProps, Option } from "./dropdown.types";
 
@@ -47,7 +48,7 @@ export const Dropdown = ({
 	};
 
 	return (
-		<div ref={dropdownRef} className={`${S.rootStyle} ${className ?? ""}`}>
+		<div ref={dropdownRef} className={cx(S.rootStyle, className)}>
 			<button
 				type="button"
 				className={S.dropdownTriggerRecipe({
@@ -69,11 +70,9 @@ export const Dropdown = ({
 
 			{isOpen && (
 				<ul
-					className={
-						typeof maxHeight === "number" && maxHeight > 0
-							? `${S.optionsListStyle} ${S.optionsListCapped} `
-							: S.optionsListStyle
-					}
+					className={cx(S.optionsListStyle, {
+						[S.optionsListCapped]: typeof maxHeight === "number" && maxHeight > 0,
+					})}
 					style={
 						typeof maxHeight === "number" && maxHeight > 0
 							? assignInlineVars({ [S.rowsVar]: String(maxHeight) })

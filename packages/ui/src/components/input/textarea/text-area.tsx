@@ -1,5 +1,6 @@
 import type React from "react";
 import { useState } from "react";
+import { cx } from "../../../cx";
 import { inputStyle, textAreaRecipe } from "./text-area.css";
 import type { TextAreaProps } from "./text-area.types";
 
@@ -34,7 +35,7 @@ export const TextArea = ({
 	};
 
 	return (
-		<div className={`${containerClasses} ${className ?? ""}`}>
+		<div className={cx(containerClasses, className)}>
 			<textarea
 				className={inputStyle}
 				disabled={disabled}

@@ -7,4 +7,5 @@ export * from "./components/input/textarea";
 export * from "./components/input/textfield";
 export { default as Pagination } from "./components/pagenation";
 export { default as ToolCard } from "./components/tool-card";
+export { cx } from "./cx";
 export * from "./foundations";

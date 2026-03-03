@@ -1,5 +1,6 @@
 import type React from "react";
 import { useContext, useId, useState } from "react";
+import { cx } from "../../../cx";
 import * as S from "./checkbox.css";
 import { CheckboxContext } from "./checkbox.types";
 
@@ -47,7 +48,7 @@ export const CheckboxGroup = ({
 			disabled={disabled}
 			data-orientation={orientation}
 			aria-describedby={describedById}
-			className={`${S.checkboxGroupStyle} ${className ?? ""}`}
+			className={cx(S.checkboxGroupStyle, className)}
 		>
 			<CheckboxContext.Provider value={{ name: name ?? `cg-${id}`, values: cur, toggle, disabled }}>
 				{children}

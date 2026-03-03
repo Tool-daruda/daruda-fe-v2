@@ -2,6 +2,7 @@ import type React from "react";
 import { useEffect, useMemo, useRef } from "react";
 import IcAddImg from "../../../assets/icons/ic_add_img.svg?react";
 import IcRemoveImg from "../../../assets/icons/ic_cross.svg?react";
+import { cx } from "../../../cx";
 import * as S from "./input-image.css";
 import type { InputImageProps } from "./input-image.types";
 
@@ -68,7 +69,7 @@ export const InputImage = ({
 	}, [objectUrls]);
 
 	return (
-		<div className={`${S.containerStyle} ${className ?? ""}`}>
+		<div className={cx(S.containerStyle, className)}>
 			<div className={S.previewContainerStyle}>
 				{canUpload && (
 					<label className={S.uploadButtonRecipe({ disabled })}>
