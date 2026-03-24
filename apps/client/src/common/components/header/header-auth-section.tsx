@@ -20,10 +20,10 @@ export default function HeaderAuthSection({ isLoggedIn }: Props) {
 	return (
 		<div className={styles.authSection}>
 			<button type="button" aria-label="알림" className={styles.iconButton}>
-				<Image src="/icons/ic_alarm_gray500_28.svg" alt="Daruda 로고" width={28} height={28} />
+				<Image src="/icons/ic_alarm_gray500_28.svg" alt="" width={28} height={28} />
 			</button>
 			<button type="button" aria-label="마이페이지" className={styles.iconButton}>
-				<Image src="/icons/ic_profile_gray500_28.svg" alt="Daruda 로고" width={28} height={28} />
+				<Image src="/icons/ic_profile_gray500_28.svg" alt="" width={28} height={28} />
 			</button>
 		</div>
 	);
