@@ -1,5 +1,5 @@
 import { globalStyle, style } from "@vanilla-extract/css";
-import { themeVars } from "src/foundations";
+import { themeVars } from "../../../foundations";
 
 export const radioGroupStyle = style({
 	display: "flex",

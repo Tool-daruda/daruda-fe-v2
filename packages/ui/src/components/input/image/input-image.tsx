@@ -1,3 +1,4 @@
+"use client";
 import type React from "react";
 import { useEffect, useMemo, useRef } from "react";
 import IcAddImg from "../../../assets/icons/ic_add_img.svg?react";

@@ -1,3 +1,4 @@
+"use client";
 import { assignInlineVars } from "@vanilla-extract/dynamic";
 import type React from "react";
 import { useCallback, useEffect, useRef, useState } from "react";

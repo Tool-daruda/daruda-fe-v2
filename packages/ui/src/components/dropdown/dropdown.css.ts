@@ -1,6 +1,6 @@
 import { createVar, style } from "@vanilla-extract/css";
 import { recipe } from "@vanilla-extract/recipes";
-import { themeVars } from "src/foundations/theme.css";
+import { themeVars } from "../../foundations/theme.css";
 
 const ROW_HEIGHT = 44;
 export const rowsVar = createVar();

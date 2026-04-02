@@ -1,3 +1,4 @@
+"use client";
 import type React from "react";
 import { useContext, useId, useState } from "react";
 import * as S from "./radio.css";
