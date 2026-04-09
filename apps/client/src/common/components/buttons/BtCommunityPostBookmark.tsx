@@ -1,15 +1,15 @@
 "use client";
 
 import type { ComponentProps } from "react";
-import { bookmarkButton } from "./BookmarkButton.css";
+import { btCommunityPostBookmark } from "./BtCommunityPostBookmark.css";
 
 interface Props extends ComponentProps<"button"> {
 	state?: "filled" | "subtle";
 	count: number;
 }
 
-export const BookmarkButton = ({ state = "filled", count, ...props }: Props) => {
-	const buttonClass = bookmarkButton({ state });
+export const BtCommunityPostBookmark = ({ state = "filled", count, ...props }: Props) => {
+	const buttonClass = btCommunityPostBookmark({ state });
 
 	const iconSrc =
 		state === "filled"

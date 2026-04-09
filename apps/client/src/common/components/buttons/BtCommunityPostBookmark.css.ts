@@ -1,7 +1,7 @@
 import { typographyTokens } from "@repo/ui/foundations";
 import { colorTokens } from "@repo/ui/foundations/tokens";
 import { recipe } from "@vanilla-extract/recipes";
-export const bookmarkButton = recipe({
+export const btCommunityPostBookmark = recipe({
 	base: {
 		display: "flex",
 		flexDirection: "row",
