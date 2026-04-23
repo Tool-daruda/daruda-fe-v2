@@ -13,6 +13,7 @@ export const btChipMainCategory = recipe({
 		height: "fit-content", // 콘텐츠 크기에 맞춤
 		padding: "4px 10px", // 높이에 맞춘 좌우 패딩
 		borderRadius: "39px", // 완전한 둥근 형태 (Pill shape)
+		gap: "10px", // 아이콘과 텍스트 사이의 간격 (필요시 조정)
 		boxSizing: "border-box",
 		border: "none",
 		outline: "none",

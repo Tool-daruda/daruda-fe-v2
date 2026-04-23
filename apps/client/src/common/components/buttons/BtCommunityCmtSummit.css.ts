@@ -12,7 +12,6 @@ export const btCommunityCmtSummit = recipe({
 		minHeight: "28px",
 		padding: "6px 20px",
 		borderRadius: "200px",
-		gap: "10px",
 		boxSizing: "border-box",
 		border: "none",
 		outline: "none",
