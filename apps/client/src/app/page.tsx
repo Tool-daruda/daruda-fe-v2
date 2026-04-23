@@ -1,5 +1,6 @@
 import { BtChipMainCategory } from "@/common/components/buttons/BtChipMainCategory";
 import { BtMyPageCommunityButton } from "@/common/components/buttons/BtMyPageCommunity";
+import { BtMyPageQuit } from "@/common/components/buttons/BtMyPageQuit";
 import { BtPopup } from "@/common/components/buttons/BtPopup";
 import { BtToolDetailFeedback } from "@/common/components/buttons/BtToolDetailFeedback";
 import { BtCommunityCmtSummit } from "../common/components/buttons/BtCommunityCmtSummit";
@@ -32,6 +33,7 @@ export default function Home() {
 			<BtPopup variant="primary">버튼</BtPopup>
 			<BtPopup variant="outline">버튼</BtPopup>
 			<BtPopup variant="danger">네, 탈퇴할게요</BtPopup>
+			<BtMyPageQuit state="default">탈퇴하기</BtMyPageQuit>
 			{/* 필요에 따라 더 많은 버튼을 추가할 수 있습니다. */}
 		</h1>
 	);
