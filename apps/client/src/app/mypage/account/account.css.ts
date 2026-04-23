@@ -1,3 +1,4 @@
+import { colors, themeVars } from "@repo/ui/foundations";
 import { style } from "@vanilla-extract/css";
 
 export const container = style({
@@ -8,33 +9,16 @@ export const container = style({
 });
 
 export const title = style({
-	fontSize: "20px",
-	fontWeight: "bold",
-	color: "#222",
-	marginBottom: "40px",
+	color: colors.grayscale[900],
+	...themeVars.fonts.t1_1,
+	marginBottom: "50px",
 });
 
 export const warningList = style({
 	listStyleType: "disc",
 	paddingLeft: "20px",
-	color: "#555",
-	fontSize: "15px",
-	lineHeight: "1.8",
-	marginBottom: "60px",
+	color: themeVars.colors.grayscale[600],
+	...themeVars.fonts.b4_1,
+	marginBottom: "90px",
 	wordBreak: "keep-all",
-});
-
-export const withdrawButton = style({
-	padding: "16px 56px",
-	backgroundColor: "#FDECE9",
-	color: "#E53E3E",
-	border: "none",
-	borderRadius: "8px",
-	fontSize: "16px",
-	fontWeight: "bold",
-	cursor: "pointer",
-	transition: "background-color 0.2s ease",
-	":hover": {
-		backgroundColor: "#FBD5CE",
-	},
 });

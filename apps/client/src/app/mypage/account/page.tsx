@@ -20,7 +20,7 @@ export default function AccountPage() {
 				<li>한 번 회원 탈퇴할 경우 계정을 복구할 수 없습니다.</li>
 			</ul>
 
-			<button type="button" onClick={handleWithdraw} className={styles.withdrawButton}>
+			<button type="button" onClick={handleWithdraw}>
 				탈퇴하기
 			</button>
 		</div>

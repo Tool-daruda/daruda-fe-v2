@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import * as styles from "../mypage.css";
+import * as styles from "./user.css";
 
 type ValidationStatus = "idle" | "success" | "error";
 

@@ -7,6 +7,7 @@ export const gridContainer = style({
 	paddingTop: "10px",
 });
 
+// TOOD: 공컴으로 변경
 export const card = style({
 	border: "1px solid #F0F0F0",
 	borderRadius: "16px",
