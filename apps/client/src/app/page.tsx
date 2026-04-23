@@ -3,6 +3,7 @@ import { BtMyPageCommunityButton } from "@/common/components/buttons/BtMyPageCom
 import { BtMyPageQuit } from "@/common/components/buttons/BtMyPageQuit";
 import { BtMyPageSave } from "@/common/components/buttons/BtMyPageSave";
 import { BtPopup } from "@/common/components/buttons/BtPopup";
+import { BtSignUp } from "@/common/components/buttons/BtSignUp";
 import { BtToolDetailFeedback } from "@/common/components/buttons/BtToolDetailFeedback";
 import { BtToolDetailShare } from "@/common/components/buttons/BtToolDetailShare";
 import { BtCommunityCmtSummit } from "../common/components/buttons/BtCommunityCmtSummit";
@@ -40,6 +41,8 @@ export default function Home() {
 			<BtMyPageSave state="default" />
 			<BtToolDetailShare state="default" />
 			<BtToolDetailShare state="hover" />
+			<BtSignUp state="default" />
+			<BtSignUp state="active" />
 			{/* 필요에 따라 더 많은 버튼을 추가할 수 있습니다. */}
 		</h1>
 	);
