@@ -15,7 +15,6 @@ export const BtToolDetailFeedback = ({ state = "default", count = 1, ...props }:
 	return (
 		<button className={buttonClass} {...props}>
 			{/* 상단: 하트 아이콘 + 텍스트 */}
-			{/* 필요에 따라 실제 하트 SVG 컴포넌트로 교체해서 사용하세요! */}
 			<span style={{ display: "flex", alignItems: "center", gap: "4px", ...typographyTokens.t4_1 }}>
 				♥ 도움이 되었어요
 			</span>

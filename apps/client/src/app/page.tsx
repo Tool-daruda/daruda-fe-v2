@@ -3,6 +3,7 @@ import { BtMyPageCommunityButton } from "@/common/components/buttons/BtMyPageCom
 import { BtToolDetailFeedback } from "@/common/components/buttons/BtToolDetailFeedback";
 import { BtCommunityCmtSummit } from "../common/components/buttons/BtCommunityCmtSummit";
 import { BtCommunityPostBookmark } from "../common/components/buttons/BtCommunityPostBookmark";
+import { BtToolDetailBookmark } from "../common/components/buttons/BtToolDetailBookmark";
 import Client from "./client";
 import { title } from "./page-style.css";
 
@@ -24,6 +25,9 @@ export default function Home() {
 			<BtToolDetailFeedback state="default" count={1} />
 			<BtToolDetailFeedback state="hover" count={5} />
 			<BtToolDetailFeedback state="active" count={10} />
+			<BtToolDetailBookmark state="default" />
+			<BtToolDetailBookmark state="hover" />
+			<BtToolDetailBookmark state="active" />
 			{/* 필요에 따라 더 많은 버튼을 추가할 수 있습니다. */}
 		</h1>
 	);
