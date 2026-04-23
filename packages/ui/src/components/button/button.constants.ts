@@ -1,4 +1,4 @@
-import { themeVars } from "src/foundations";
+import { themeVars } from "../../foundations";
 
 export const buttonColors = {
 	primary: {

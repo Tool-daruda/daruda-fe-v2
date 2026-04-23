@@ -19,7 +19,9 @@
 			}
 		],
 		"paths": {
-			"@/*": ["./src/*"]
+			"@/*": ["./src/*"],
+			"@repo/ui": ["../../packages/ui/src"], // UI 패키지의 진입점
+			"@repo/ui/*": ["../../packages/ui/src/*"] // 내부 파일 접근용
 		}
 	},
 	"include": [

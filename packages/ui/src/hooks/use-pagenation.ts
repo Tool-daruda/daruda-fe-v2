@@ -1,3 +1,4 @@
+"use client";
 import { useMemo, useState } from "react";
 
 const MAX_PAGE_VISIBLE = 5;

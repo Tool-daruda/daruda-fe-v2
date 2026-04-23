@@ -1,6 +1,6 @@
 import { globalStyle, style } from "@vanilla-extract/css";
 import { recipe } from "@vanilla-extract/recipes";
-import { themeVars } from "src/foundations";
+import { themeVars } from "../../../foundations";
 
 export const containerStyle = style({
 	position: "relative",

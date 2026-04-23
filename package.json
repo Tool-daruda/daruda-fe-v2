@@ -27,14 +27,20 @@
 		"@commitlint/cz-commitlint": "^20.1.0",
 		"@commitlint/prompt": "^20.1.0",
 		"@commitlint/types": "^20.0.0",
+		"@vanilla-extract/css": "^1.17.4",
+		"@vanilla-extract/next-plugin": "^2.4.17",
 		"commitizen": "^4.3.1",
 		"commitlint": "^20.1.0",
 		"lint-staged": "^16.2.3",
+		"react": "^19.2.4",
+		"react-dom": "^19.2.4",
 		"simple-git-hooks": "^2.13.1",
 		"sort-package-json": "^3.4.0"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.2.4",
+		"@types/react": "^19.2.14",
+		"@types/react-dom": "^19.2.3",
 		"turbo": "^2.5.8",
 		"typescript": "5.9.2"
 	},

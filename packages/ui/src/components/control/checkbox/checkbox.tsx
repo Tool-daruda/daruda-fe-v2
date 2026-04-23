@@ -1,3 +1,4 @@
+"use client";
 import type React from "react";
 import { useState } from "react";
 import IcCheckboxChecked from "../../../assets/icons/btn_check_active.svg?react";
