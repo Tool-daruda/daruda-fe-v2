@@ -76,11 +76,15 @@ export const inputField = style({
 	width: "100%",
 	padding: "14px 16px",
 	fontSize: "15px",
-	border: "1px solid #4CAF50", // 성공 상태 테두리
+	border: "1px solid #E5E5E5",
 	borderRadius: "8px",
 	outline: "none",
 	boxSizing: "border-box",
 	marginBottom: "8px",
+	transition: "border-color 0.2s",
+	":focus": {
+		borderColor: "#5B58FF",
+	},
 });
 
 export const successMessage = style({
@@ -144,4 +148,63 @@ export const submitButton = style({
 	":hover": {
 		backgroundColor: "#4946E6",
 	},
+});
+
+export const infoContainer = style({
+	display: "flex",
+	flexDirection: "column",
+	gap: "30px",
+	marginBottom: "60px",
+	padding: "0 20px",
+});
+
+export const infoRow = style({
+	display: "flex",
+	alignItems: "center",
+});
+
+export const infoLabel = style({
+	width: "100px",
+	fontSize: "15px",
+	fontWeight: "bold",
+	color: "#333",
+});
+
+export const infoValue = style({
+	fontSize: "15px",
+	color: "#5B58FF",
+});
+
+export const actionButtonGroup = style({
+	display: "flex",
+	justifyContent: "center",
+	gap: "60px",
+	marginTop: "40px",
+});
+
+export const textButtonBase = style({
+	background: "none",
+	border: "none",
+	fontSize: "16px",
+	fontWeight: "bold",
+	cursor: "pointer",
+	padding: "10px",
+});
+
+export const textButtonOrange = style([textButtonBase, { color: "#E53E3E" }]);
+export const textButtonBlue = style([textButtonBase, { color: "#5B58FF" }]);
+
+export const inputSuccess = style({ borderColor: "#4CAF50", ":focus": { borderColor: "#4CAF50" } });
+export const inputError = style({ borderColor: "#E53E3E", ":focus": { borderColor: "#E53E3E" } });
+
+export const messageSuccess = style({
+	color: "#4CAF50",
+	fontSize: "13px",
+	marginBottom: "12px",
+});
+
+export const messageError = style({
+	color: "#E53E3E",
+	fontSize: "13px",
+	marginBottom: "12px",
 });
