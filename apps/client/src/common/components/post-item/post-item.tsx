@@ -1,3 +1,4 @@
+import Image from "next/image";
 import * as styles from "./post-item.css";
 
 export interface PostType {
@@ -29,8 +30,14 @@ export default function PostItem({ post }: { post: PostType }) {
 				<p className={styles.postBody}>{post.content}</p>
 
 				<div className={styles.postFooter}>
-					<span className={styles.iconText}>💬 {post.comments}개</span>
-					<span className={styles.iconText}>🔖 {post.bookmarks}회</span>
+					<span className={styles.iconText}>
+						<Image src="/svg/post/ic_comment_16.svg" alt="댓글" width={16} height={16} />{" "}
+						{post.comments}개
+					</span>
+					<span className={styles.iconText}>
+						<Image src="/svg/post/ic_bookmark_16.svg" alt="북마크" width={16} height={16} />{" "}
+						{post.bookmarks}회
+					</span>
 				</div>
 			</div>
 

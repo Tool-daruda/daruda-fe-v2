@@ -1,8 +1,8 @@
 import { colors, themeVars } from "@repo/ui/foundations";
-import { style } from "@vanilla-extract/css";
+import { globalStyle, style } from "@vanilla-extract/css";
 
 const primaryColor = colors.brand.iris[500];
-const borderColor = colors.grayscale[50];
+const borderColor = colors.grayscale[200];
 
 export const formWrapper = style({
 	width: "100%",
@@ -25,63 +25,70 @@ export const label = style({
 export const inputField = style({
 	width: "100%",
 	padding: "14px 16px",
-	fontSize: "15px",
-	border: "1px solid #E5E5E5",
-	borderRadius: "8px",
+	...themeVars.fonts.b4_2,
+	color: colors.grayscale[900],
+	border: `1px solid ${borderColor}`,
+	borderRadius: "12px",
 	outline: "none",
 	boxSizing: "border-box",
-	marginBottom: "8px",
-	transition: "border-color 0.2s",
-	":focus": {
-		borderColor: "#5B58FF",
-	},
+	marginBottom: "10px",
 });
 
 export const successMessage = style({
 	color: colors.system.green.lt,
-	fontSize: "13px",
-	marginBottom: "12px",
+	...themeVars.fonts.b4_1,
+	marginBottom: "10px",
 });
 
 export const helpTextList = style({
 	listStyle: "none",
 	padding: 0,
 	margin: 0,
-	color: "#666",
-	fontSize: "13px",
-	lineHeight: "1.6",
-	marginBottom: "30px",
+	color: colors.grayscale[600],
+	...themeVars.fonts.b4_1,
+	marginBottom: "48px",
 });
 
-// 소속 라디오 버튼 그룹
 export const radioGroup = style({
 	display: "flex",
-	gap: "12px",
-	marginBottom: "50px",
+	gap: "16px",
+	marginBottom: "80px",
 });
 
-export const radioLabel = style({
+export const customRadio = style({
 	flex: 1,
-	display: "flex",
-	alignItems: "center",
-	justifyContent: "center",
-	gap: "8px",
-	padding: "12px",
+	padding: "12px 16px",
 	border: `1px solid ${borderColor}`,
-	borderRadius: "8px",
+	borderRadius: "12px",
 	cursor: "pointer",
-	fontSize: "15px",
-	color: "#555",
+	color: colors.grayscale[300],
+	...themeVars.fonts.b4_2,
+	boxSizing: "border-box",
+
+	selectors: {
+		'&[data-state="checked"]': {
+			border: `2px solid ${primaryColor}`,
+			color: primaryColor,
+			...themeVars.fonts.t4_1,
+		},
+	},
 });
 
-export const activeRadioLabel = style([
-	radioLabel,
-	{
-		border: `1.5px solid ${primaryColor}`,
-		color: primaryColor,
-		fontWeight: "bold",
-	},
-]);
+globalStyle(`${radioGroup} > div[role="radiogroup"]`, {
+	width: "100%",
+});
+
+globalStyle(`${customRadio} .ctrl-visual`, {
+	display: "flex",
+	width: "100%",
+	alignItems: "center",
+	justifyContent: "space-between",
+	flexDirection: "row-reverse",
+});
+
+globalStyle(`${customRadio} .label`, {
+	whiteSpace: "nowrap",
+});
 
 export const submitButton = style({
 	width: "100%",
@@ -135,26 +142,31 @@ export const actionButtonGroup = style({
 export const textButtonBase = style({
 	background: "none",
 	border: "none",
-	fontSize: "16px",
-	fontWeight: "bold",
+	...themeVars.fonts.b4_1,
 	cursor: "pointer",
 	padding: "10px",
 });
 
-export const textButtonOrange = style([textButtonBase, { color: "#E53E3E" }]);
-export const textButtonBlue = style([textButtonBase, { color: "#5B58FF" }]);
+export const textButtonOrange = style([textButtonBase, { color: colors.brand.orange[500] }]);
+export const textButtonBlue = style([textButtonBase, { color: colors.brand.iris[500] }]);
 
-export const inputSuccess = style({ borderColor: "#4CAF50", ":focus": { borderColor: "#4CAF50" } });
-export const inputError = style({ borderColor: "#E53E3E", ":focus": { borderColor: "#E53E3E" } });
+export const inputSuccess = style({
+	borderColor: colors.system.green.lt,
+	":focus": { borderColor: colors.system.green.lt },
+});
+export const inputError = style({
+	borderColor: colors.system.red.lt,
+	":focus": { borderColor: colors.system.red.lt },
+});
 
 export const messageSuccess = style({
-	color: "#4CAF50",
-	fontSize: "13px",
+	color: colors.system.green.lt,
+	...themeVars.fonts.b4_1,
 	marginBottom: "12px",
 });
 
 export const messageError = style({
-	color: "#E53E3E",
-	fontSize: "13px",
+	color: colors.system.red.lt,
+	...themeVars.fonts.b4_1,
 	marginBottom: "12px",
 });

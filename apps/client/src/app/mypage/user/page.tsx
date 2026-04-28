@@ -1,5 +1,6 @@
 "use client";
 
+import { Radio, RadioGroup } from "@repo/ui";
 import { useState } from "react";
 import * as styles from "./user.css";
 
@@ -91,7 +92,6 @@ export default function UserProfilePage() {
 					id="nicknameInput"
 					value={nickname}
 					onChange={handleNicknameChange}
-					// 상태에 따라 인풋 테두리 클래스 조합
 					className={`${styles.inputField} ${
 						nicknameStatus === "success"
 							? styles.inputSuccess
@@ -115,48 +115,17 @@ export default function UserProfilePage() {
 			<section>
 				<span className={styles.label}>소속</span>
 				<div className={styles.radioGroup}>
-					<label
-						className={affiliation === "student" ? styles.activeRadioLabel : styles.radioLabel}
-					>
-						학생
-						<input
-							type="radio"
-							name="affiliation"
-							value="student"
-							checked={affiliation === "student"}
-							onChange={(e) => setAffiliation(e.target.value)}
-							style={{ display: "none" }}
-						/>
-						{affiliation === "student" ? " ◉" : " ◯"}
-					</label>
-
-					<label className={affiliation === "worker" ? styles.activeRadioLabel : styles.radioLabel}>
-						직장인
-						<input
-							type="radio"
-							name="affiliation"
-							value="worker"
-							checked={affiliation === "worker"}
-							onChange={(e) => setAffiliation(e.target.value)}
-							style={{ display: "none" }}
-						/>
-						{affiliation === "worker" ? " ◉" : " ◯"}
-					</label>
-
-					<label
-						className={affiliation === "freelancer" ? styles.activeRadioLabel : styles.radioLabel}
-					>
-						프리랜서
-						<input
-							type="radio"
-							name="affiliation"
-							value="freelancer"
-							checked={affiliation === "freelancer"}
-							onChange={(e) => setAffiliation(e.target.value)}
-							style={{ display: "none" }}
-						/>
-						{affiliation === "freelancer" ? " ◉" : " ◯"}
-					</label>
+					<RadioGroup value={affiliation} onValueChange={setAffiliation}>
+						<Radio value="student" className={styles.customRadio}>
+							학생
+						</Radio>
+						<Radio value="worker" className={styles.customRadio}>
+							직장인
+						</Radio>
+						<Radio value="freelancer" className={styles.customRadio}>
+							프리랜서
+						</Radio>
+					</RadioGroup>
 				</div>
 			</section>
 
