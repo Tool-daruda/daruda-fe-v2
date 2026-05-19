@@ -18,6 +18,7 @@ export default function BookmarkIcon({ isBookmarked = false, className }: Bookma
 			viewBox="0 0 28 28"
 			fill="none"
 			xmlns="http://www.w3.org/2000/svg"
+			aria-label={isBookmarked ? "북마크 해제" : "북마크 추가"}
 			className={className}
 		>
 			<path

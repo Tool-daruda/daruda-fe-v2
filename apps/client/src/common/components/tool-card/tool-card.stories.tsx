@@ -20,7 +20,7 @@ const meta = {
 		},
 		badgeType: {
 			control: "radio",
-			options: ["hot", "new", "none"],
+			options: ["hot", "new", undefined],
 		},
 	},
 } satisfies Meta<typeof ToolCard>;

@@ -162,14 +162,13 @@ const baseTag = style({
 	whiteSpace: "nowrap",
 });
 
-export const tag = style({
-	padding: "2px 6px",
-	borderRadius: "4px",
-	backgroundColor: themeVars.colors.grayscale[25],
-	color: themeVars.colors.grayscale[300],
-	...themeVars.fonts.b5_2,
-	whiteSpace: "nowrap",
-});
+export const tag = style([
+	baseTag,
+	{
+		backgroundColor: themeVars.colors.grayscale[25],
+		color: themeVars.colors.grayscale[300],
+	},
+]);
 
 export const priceTag = style([baseTag]);
 
