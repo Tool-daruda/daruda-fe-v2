@@ -4,7 +4,9 @@
 	"private": true,
 	"scripts": {
 		"build": "next build --webpack",
+		"build:storybook": "storybook build",
 		"dev": "next dev --webpack -p 5173",
+		"dev:storybook": "storybook dev -p 6007",
 		"format": "biome format --write",
 		"lint": "biome check",
 		"start": "next start"
@@ -19,11 +21,17 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.2.0",
+		"@storybook/addon-essentials": "8.6.14",
+		"@storybook/react": "8.6.14",
+		"@storybook/react-vite": "8.6.14",
+		"@storybook/test": "^8.6.14",
 		"@types/node": "^20",
 		"@types/react": "^19",
 		"@types/react-dom": "^19",
 		"@vanilla-extract/next-plugin": "^2.4.17",
+		"@vanilla-extract/vite-plugin": "^5.1.1",
 		"babel-plugin-react-compiler": "1.0.0",
+		"storybook": "8.6.14",
 		"typescript": "^5"
 	}
 }
