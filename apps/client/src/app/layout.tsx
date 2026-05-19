@@ -3,6 +3,7 @@ import "@repo/ui/foundations.css";
 import { themeClass } from "@repo/ui/foundations";
 import type { Metadata } from "next";
 import type { PropsWithChildren } from "react";
+import "../common/styles/reset.css";
 
 export const metadata: Metadata = {
 	title: "daruda",

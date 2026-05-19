@@ -1,35 +1,63 @@
+import { ToolApi } from "@/common/api/tool-api";
 import { FilterBar } from "./_components/filter-bar";
 import { SearchBar } from "./_components/search-bar";
-import { Sidebar } from "./_components/sidebar";
+import { SidebarWrapper } from "./_components/sidebar-wrapper";
 import * as s from "./_components/toollist.css";
 
-const MOCK_DATA = Array.from({ length: 9 }).map((_, i) => ({
-	id: `tool-item-${i}`,
-}));
+interface Props {
+	searchParams: Promise<{
+		category?: string;
+		criteria?: string;
+	}>;
+}
 
-export default function ToolListPage() {
+export default async function ToolListPage({ searchParams }: Props) {
+	const resolvedSearchParams = await searchParams;
+	const currentCategory = resolvedSearchParams.category || "ALL";
+	const currentCriteria = resolvedSearchParams.criteria || "popular";
+
+	const [categoriesRes, initialToolsRes] = await Promise.all([
+		ToolApi.getCategories(),
+		ToolApi.getToolList({
+			category: currentCategory,
+			criteria: currentCriteria,
+			isFree: false,
+		}),
+	]);
+
+	const categories = categoriesRes || [];
+	const toolList = initialToolsRes?.tools || [];
+
+	console.log("toolList:", toolList);
+
 	return (
 		<>
 			<SearchBar />
 			<div className={s.container}>
 				<FilterBar />
 				<div className={s.mainLayout}>
-					<Sidebar />
+					<SidebarWrapper categories={categories} currentCategory={currentCategory} />
+
 					<section className={s.content}>
 						<div className={s.grid}>
-							{MOCK_DATA.map((item) => (
-								<div
-									key={item.id}
-									style={{
-										border: "1px solid #eee",
-										height: "200px",
-										borderRadius: "12px",
-										backgroundColor: "#fff",
-									}}
-								>
-									ToolCard Area
-								</div>
-							))}
+							{toolList.length === 0 ? (
+								<p>해당 카테고리의 툴이 없습니다.</p>
+							) : (
+								toolList.map((tool) => (
+									<div
+										key={tool.toolId}
+										style={{
+											border: "1px solid #eee",
+											padding: "20px",
+											borderRadius: "12px",
+											backgroundColor: "#fff",
+										}}
+									>
+										<h3>{tool.toolName}</h3>
+										<p>{tool.description}</p>
+									</div>
+								))
+							)}
 						</div>
 					</section>
 				</div>

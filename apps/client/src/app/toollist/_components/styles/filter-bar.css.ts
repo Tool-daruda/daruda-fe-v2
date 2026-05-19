@@ -1,3 +1,4 @@
+import { colors } from "@repo/ui/foundations";
 import { style } from "@vanilla-extract/css";
 
 export const container = style({
@@ -23,13 +24,13 @@ export const toggleLabel = style({
 export const switchRoot = style({
 	width: "50px",
 	height: "26px",
-	backgroundColor: "#E5E7EB",
+	backgroundColor: colors.grayscale[100],
 	borderRadius: "999px",
 	position: "relative",
 	transition: "background-color 0.2s ease",
 	selectors: {
 		"&[data-state='checked']": {
-			backgroundColor: "#5C5CFF",
+			backgroundColor: colors.brand.iris[500],
 		},
 	},
 });
@@ -37,13 +38,12 @@ export const switchRoot = style({
 export const switchThumb = style({
 	width: "20px",
 	height: "20px",
-	backgroundColor: "#fff",
+	backgroundColor: colors.grayscale[0],
 	borderRadius: "50%",
 	position: "absolute",
 	top: "3px",
 	left: "3px",
 	transition: "transform 0.2s ease",
-	boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
 	selectors: {
 		"[data-state='checked'] &": {
 			transform: "translateX(24px)",
