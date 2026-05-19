@@ -4,6 +4,7 @@ import * as s from "./styles/search-bar.css";
 export const SearchBar = () => {
 	return (
 		<header className={s.container}>
+			<h2 className={s.subTitle}>지금 내게 필요한 디지털 툴을 모아보다</h2>
 			<h1 className={s.title}>daruda 툴 리스트</h1>
 
 			<form action="/search" method="GET" className={s.inputWrapper}>

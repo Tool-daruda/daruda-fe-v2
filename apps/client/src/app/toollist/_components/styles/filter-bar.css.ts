@@ -1,4 +1,4 @@
-import { colors } from "@repo/ui/foundations";
+import { colors, themeVars } from "@repo/ui/foundations";
 import { style } from "@vanilla-extract/css";
 
 export const container = style({
@@ -16,9 +16,8 @@ export const toggleWrapper = style({
 });
 
 export const toggleLabel = style({
-	fontSize: "16px",
-	fontWeight: "600",
-	color: "#333",
+	...themeVars.fonts.t4_1,
+	color: colors.grayscale[700],
 });
 
 export const switchRoot = style({
@@ -55,21 +54,15 @@ export const sortWrapper = style({
 	display: "flex",
 	alignItems: "center",
 	gap: "8px",
-	fontSize: "14px",
-	color: "#9CA3AF",
 });
 
 export const sortItem = style({
 	cursor: "pointer",
+	...themeVars.fonts.b4_1,
+	color: colors.grayscale[300],
 	selectors: {
 		"&.active": {
-			color: "#111",
-			fontWeight: "600",
-		},
-		"&:hover": {
-			textDecoration: "underline",
-			textUnderlineOffset: "1.2px",
-			fontWeight: "600",
+			color: colors.grayscale[700],
 		},
 	},
 });
@@ -77,5 +70,6 @@ export const sortItem = style({
 export const divider = style({
 	width: "1px",
 	height: "12px",
-	backgroundColor: "#E5E7EB",
+	backgroundColor: colors.grayscale[200],
+	borderRadius: "999px",
 });
