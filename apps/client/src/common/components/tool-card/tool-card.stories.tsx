@@ -18,6 +18,7 @@ const meta = {
 			control: "radio",
 			options: ["free", "paid", "partial"],
 		},
+		badgeType: { control: "radio", options: ["hot", "new"] },
 	},
 } satisfies Meta<typeof ToolCard>;
 
@@ -36,6 +37,7 @@ const defaultArgs = {
 	thumbnailUrl: "/globe.svg",
 	tags: tags.slice(0, 2),
 	priceType: "partial" as const,
+	badgeType: undefined,
 };
 
 export const Horizontal: Story = {
@@ -84,7 +86,7 @@ export const Hot: Story = {
 		...defaultArgs,
 		title: "Cursor",
 		thumbnailUrl: "/next.svg",
-		isHot: true,
+		badgeType: "hot",
 		variant: "vertical",
 	},
 	decorators: Vertical.decorators,
@@ -96,7 +98,7 @@ export const New: Story = {
 		title: "Gamma",
 		thumbnailUrl: "/vercel.svg",
 		priceType: "free",
-		isNew: true,
+		badgeType: "new",
 		variant: "vertical",
 	},
 	decorators: Vertical.decorators,

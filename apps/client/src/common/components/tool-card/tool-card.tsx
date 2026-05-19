@@ -7,6 +7,7 @@ import * as styles from "./tool-card.css";
 
 type ToolCardVariant = "horizontal" | "vertical";
 type PriceType = "free" | "paid" | "partial";
+type BadgeType = "hot" | "new";
 
 type ToolTag = {
 	id: string;
@@ -20,8 +21,7 @@ type Props = {
 	tags?: ToolTag[];
 	priceType?: PriceType;
 	isBookmarked?: boolean;
-	isHot?: boolean;
-	isNew?: boolean;
+	badgeType?: BadgeType;
 	variant?: ToolCardVariant;
 	href?: string;
 	onBookmarkClick?: () => void;
@@ -40,8 +40,7 @@ export default function ToolCard({
 	tags = [],
 	priceType,
 	isBookmarked = false,
-	isHot = false,
-	isNew = false,
+	badgeType,
 	variant = "horizontal",
 	href,
 	onBookmarkClick,
@@ -67,12 +66,12 @@ export default function ToolCard({
 				/>
 			</button>
 			<div className={styles.thumbnailSection}>
-				{isHot && (
+				{badgeType === "hot" && (
 					<div className={styles.hotBadge}>
 						<Image src="/icons/ic_hot_24_red.svg" alt="Hot" width={24} height={24} />
 					</div>
 				)}
-				{isNew && !isHot && <div className={styles.newBadge}>New</div>}
+				{badgeType === "new" && <div className={styles.newBadge}>New</div>}
 
 				<div className={cx(styles.thumbnail, styles.thumbnailVariant[variant])}>
 					{thumbnailUrl && (
