@@ -3,35 +3,24 @@
 import { cx } from "@repo/ui";
 import Image from "next/image";
 import Link from "next/link";
+import { PRICE_LABEL, type PriceType } from "@/common/constants/price";
 import BookmarkIcon from "../icons/bookmark";
 import * as styles from "./tool-card.css";
 
 type ToolCardVariant = "horizontal" | "vertical";
-type PriceType = "free" | "paid" | "partial";
 type BadgeType = "hot" | "new";
-
-type ToolTag = {
-	id: string;
-	label: string;
-};
 
 type Props = {
 	title: string;
 	description?: string;
 	thumbnailUrl?: string;
-	tags?: ToolTag[];
+	tags?: string[];
 	priceType?: PriceType;
 	isBookmarked?: boolean;
 	badgeType?: BadgeType;
 	variant?: ToolCardVariant;
 	href?: string;
 	onBookmarkClick?: () => void;
-};
-
-const PRICE_LABEL: Record<PriceType, string> = {
-	free: "무료",
-	paid: "유료",
-	partial: "부분 유료",
 };
 
 export default function ToolCard({
@@ -61,6 +50,7 @@ export default function ToolCard({
 			>
 				<BookmarkIcon isBookmarked={isBookmarked} />
 			</button>
+
 			<div className={styles.thumbnailSection}>
 				{badgeType === "hot" && (
 					<div className={styles.hotBadge}>
@@ -87,8 +77,8 @@ export default function ToolCard({
 				<div className={styles.bottomRow}>
 					<div className={styles.tagList}>
 						{tags.slice(0, 2).map((tag) => (
-							<span key={tag.id} className={styles.tag}>
-								{tag.label}
+							<span key={tag} className={styles.tag}>
+								{tag}
 							</span>
 						))}
 						{priceType && (
