@@ -45,13 +45,7 @@ export const Horizontal: Story = {
 		...defaultArgs,
 		variant: "horizontal",
 	},
-	decorators: [
-		(Story) => (
-			<div style={{ width: 360 }}>
-				<Story />
-			</div>
-		),
-	],
+	decorators: [(Story) => <Story />],
 };
 
 export const HorizontalBookmarked: Story = {
@@ -72,13 +66,7 @@ export const Vertical: Story = {
 		...defaultArgs,
 		variant: "vertical",
 	},
-	decorators: [
-		(Story) => (
-			<div style={{ width: 188 }}>
-				<Story />
-			</div>
-		),
-	],
+	decorators: [(Story) => <Story />],
 };
 
 export const Hot: Story = {

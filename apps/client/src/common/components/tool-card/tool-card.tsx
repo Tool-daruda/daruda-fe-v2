@@ -3,6 +3,7 @@
 import { cx } from "@repo/ui";
 import Image from "next/image";
 import Link from "next/link";
+import BookmarkIcon from "../icons/bookmark";
 import * as styles from "./tool-card.css";
 
 type ToolCardVariant = "horizontal" | "vertical";
@@ -58,12 +59,7 @@ export default function ToolCard({
 					onBookmarkClick?.();
 				}}
 			>
-				<Image
-					src={isBookmarked ? "/icons/ic_bookmark_28.svg" : "/icons/ic_bookmark_28.svg"}
-					alt="bookmark"
-					width={24}
-					height={24}
-				/>
+				<BookmarkIcon isBookmarked={isBookmarked} />
 			</button>
 			<div className={styles.thumbnailSection}>
 				{badgeType === "hot" && (
