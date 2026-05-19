@@ -5,6 +5,17 @@ const withVanillaExtract = createVanillaExtractPlugin();
 
 const nextConfig: NextConfig = {
 	transpilePackages: ["@repo/ui"],
+
+	images: {
+		remotePatterns: [
+			{
+				protocol: "https",
+				hostname: "daruda.s3.ap-northeast-2.amazonaws.com",
+				port: "",
+				pathname: "/**",
+			},
+		],
+	},
 };
 
 export default withVanillaExtract(nextConfig);

@@ -28,11 +28,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const tags = [
-	{ id: "productivity", label: "생산성" },
-	{ id: "ai", label: "AI" },
-	{ id: "design", label: "디자인" },
-];
+const tags = ["생산성", "AI", "디자인"];
 
 const defaultArgs = {
 	title: "Notion AI",

@@ -26,7 +26,6 @@ export const variant = styleVariants({
 		height: "126px",
 		padding: "14px",
 		gap: "12px",
-		alignItems: "center",
 	},
 });
 
