@@ -8,11 +8,11 @@ import type { ApiResponse } from "./models/api-response.model";
 
 const SPRING_API_URL = process.env.API_BASE_URL;
 
-if (!SPRING_API_URL) {
-	throw new Error("API_BASE_URL is not configured");
-}
-
 export async function fetchServer<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
+	if (!SPRING_API_URL) {
+		throw new Error("API_BASE_URL is not configured");
+	}
+
 	const cookieStore = await cookies();
 	const token = cookieStore.get("access_token")?.value;
 
