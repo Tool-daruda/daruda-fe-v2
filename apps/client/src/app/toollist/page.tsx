@@ -1,4 +1,6 @@
 import { ToolApi } from "@/common/api/tool-api";
+import ToolCard from "@/common/components/tool-card/tool-card";
+import { LICENSE_MAP } from "@/common/constants/price";
 import { FilterBar } from "./_components/filter-bar";
 import { SearchBar } from "./_components/search-bar";
 import { SidebarWrapper } from "./_components/sidebar-wrapper";
@@ -44,18 +46,17 @@ export default async function ToolListPage({ searchParams }: Props) {
 								<p>해당 카테고리의 툴이 없습니다.</p>
 							) : (
 								toolList.map((tool) => (
-									<div
+									<ToolCard
 										key={tool.toolId}
-										style={{
-											border: "1px solid #eee",
-											padding: "20px",
-											borderRadius: "12px",
-											backgroundColor: "#fff",
-										}}
-									>
-										<h3>{tool.toolName}</h3>
-										<p>{tool.description}</p>
-									</div>
+										title={tool.toolName}
+										thumbnailUrl={tool.toolLogo}
+										description={tool.description}
+										priceType={LICENSE_MAP[tool.license]}
+										isBookmarked={tool.isScrapped}
+										tags={tool.keywords}
+										variant="horizontal"
+										href={`/toollist/${tool.toolId}`}
+									/>
 								))
 							)}
 						</div>

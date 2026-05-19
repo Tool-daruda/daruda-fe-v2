@@ -1,9 +1,12 @@
+import type { ApiLicenseType } from "@/common/constants/price";
+
 export interface ToolSummary {
 	toolId: number;
 	toolName: string;
 	toolLogo: string;
 	description: string;
-	license: "부분 유료" | "무료" | "유료";
+	license: ApiLicenseType;
+	keywords: string[];
 	isScrapped: boolean;
 }
 

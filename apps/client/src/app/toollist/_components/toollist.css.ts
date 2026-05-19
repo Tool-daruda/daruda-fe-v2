@@ -17,7 +17,7 @@ export const content = style({
 
 export const grid = style({
 	display: "grid",
-	gridTemplateColumns: "repeat(3, 1fr)",
-	gap: "24px",
+	gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+	gap: "12px",
 	marginTop: "20px",
 });
