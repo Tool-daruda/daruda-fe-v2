@@ -18,7 +18,10 @@ const meta = {
 			control: "radio",
 			options: ["free", "paid", "partial"],
 		},
-		badgeType: { control: "radio", options: ["hot", "new"] },
+		badgeType: {
+			control: "radio",
+			options: ["hot", "new", "none"],
+		},
 	},
 } satisfies Meta<typeof ToolCard>;
 
@@ -37,7 +40,23 @@ const defaultArgs = {
 	thumbnailUrl: "/globe.svg",
 	tags: tags.slice(0, 2),
 	priceType: "partial" as const,
-	badgeType: undefined,
+};
+
+const decorators = {
+	horizontal: [
+		(Story: React.ElementType) => (
+			<div style={{ maxWidth: 360, width: "100%" }}>
+				<Story />
+			</div>
+		),
+	],
+	vertical: [
+		(Story: React.ElementType) => (
+			<div style={{ maxWidth: 188, width: "100%" }}>
+				<Story />
+			</div>
+		),
+	],
 };
 
 export const Horizontal: Story = {
@@ -45,7 +64,7 @@ export const Horizontal: Story = {
 		...defaultArgs,
 		variant: "horizontal",
 	},
-	decorators: [(Story) => <Story />],
+	decorators: decorators.horizontal,
 };
 
 export const HorizontalBookmarked: Story = {
@@ -58,7 +77,18 @@ export const HorizontalBookmarked: Story = {
 		isBookmarked: true,
 		variant: "horizontal",
 	},
-	decorators: Horizontal.decorators,
+	decorators: decorators.horizontal,
+};
+
+export const LongText: Story = {
+	args: {
+		...defaultArgs,
+		title: "Adobe Lightroom Classic Extended University Plan",
+		description: "사진 보정, 컬러 그레이딩, 프리셋 관리를 한 번에 처리하는 크리에이터용 워크플로우",
+		tags,
+		variant: "horizontal",
+	},
+	decorators: decorators.horizontal,
 };
 
 export const Vertical: Story = {
@@ -66,7 +96,7 @@ export const Vertical: Story = {
 		...defaultArgs,
 		variant: "vertical",
 	},
-	decorators: [(Story) => <Story />],
+	decorators: decorators.vertical,
 };
 
 export const Hot: Story = {
@@ -77,7 +107,7 @@ export const Hot: Story = {
 		badgeType: "hot",
 		variant: "vertical",
 	},
-	decorators: Vertical.decorators,
+	decorators: decorators.vertical,
 };
 
 export const New: Story = {
@@ -89,16 +119,5 @@ export const New: Story = {
 		badgeType: "new",
 		variant: "vertical",
 	},
-	decorators: Vertical.decorators,
-};
-
-export const LongText: Story = {
-	args: {
-		...defaultArgs,
-		title: "Adobe Lightroom Classic Extended University Plan",
-		description: "사진 보정, 컬러 그레이딩, 프리셋 관리를 한 번에 처리하는 크리에이터용 워크플로우",
-		tags,
-		variant: "horizontal",
-	},
-	decorators: Horizontal.decorators,
+	decorators: decorators.vertical,
 };
