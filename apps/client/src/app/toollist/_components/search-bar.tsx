@@ -4,6 +4,15 @@ import * as s from "./styles/search-bar.css";
 export const SearchBar = () => {
 	return (
 		<header className={s.container}>
+			<Image
+				src="/icons/img_bg_darudalogo_228.png"
+				alt="Decorative Image"
+				width={214}
+				height={228}
+				className={s.decorativeImage}
+				priority
+			/>
+
 			<h2 className={s.subTitle}>지금 내게 필요한 디지털 툴을 모아보다</h2>
 			<h1 className={s.title}>daruda 툴 리스트</h1>
 

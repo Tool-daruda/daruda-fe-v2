@@ -2,6 +2,7 @@ import { colors, themeVars } from "@repo/ui/foundations";
 import { style } from "@vanilla-extract/css";
 
 export const container = style({
+	position: "relative",
 	display: "flex",
 	flexDirection: "column",
 	alignItems: "center",
@@ -12,15 +13,23 @@ export const container = style({
 	background: colors.brand.iris[50],
 });
 
+export const decorativeImage = style({
+	position: "absolute",
+	right: "194px",
+	bottom: "0",
+});
+
 export const subTitle = style({
 	...themeVars.fonts.b1_1,
 	color: colors.brand.iris[400],
+	zIndex: 1,
 });
 
 export const title = style({
 	...themeVars.fonts.h2_1,
 	color: colors.brand.iris[500],
 	marginBottom: "24px",
+	zIndex: 1,
 });
 
 export const inputWrapper = style({
