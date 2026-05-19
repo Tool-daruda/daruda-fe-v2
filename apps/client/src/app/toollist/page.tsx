@@ -8,6 +8,7 @@ interface Props {
 	searchParams: Promise<{
 		category?: string;
 		criteria?: string;
+		isFree?: string;
 	}>;
 }
 
@@ -15,20 +16,19 @@ export default async function ToolListPage({ searchParams }: Props) {
 	const resolvedSearchParams = await searchParams;
 	const currentCategory = resolvedSearchParams.category || "ALL";
 	const currentCriteria = resolvedSearchParams.criteria || "popular";
+	const isFree = resolvedSearchParams.isFree === "true";
 
 	const [categoriesRes, initialToolsRes] = await Promise.all([
 		ToolApi.getCategories(),
 		ToolApi.getToolList({
 			category: currentCategory,
 			criteria: currentCriteria,
-			isFree: false,
+			isFree: isFree,
 		}),
 	]);
 
 	const categories = categoriesRes || [];
 	const toolList = initialToolsRes?.tools || [];
-
-	console.log("toolList:", toolList);
 
 	return (
 		<>

@@ -3,7 +3,7 @@ export interface ToolSummary {
 	toolName: string;
 	toolLogo: string;
 	description: string;
-	licnese: "부분 유료" | "무료" | "유료";
+	license: "부분 유료" | "무료" | "유료";
 	isScrapped: boolean;
 }
 

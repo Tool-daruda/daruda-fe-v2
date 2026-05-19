@@ -11,10 +11,10 @@ export const FilterBar = () => {
 	const isFreeOnly = searchParams.get("isFree") === "true";
 	const sortBy = searchParams.get("criteria") || "popular";
 
-	const updateQueryParams = (key: string, value: string) => {
+	const updateQueryParams = (key: string, value: string | null) => {
 		const params = new URLSearchParams(searchParams.toString());
 
-		if (value) {
+		if (value !== null && value !== "") {
 			params.set(key, value);
 		} else {
 			params.delete(key);
@@ -28,7 +28,7 @@ export const FilterBar = () => {
 			<button
 				type="button"
 				className={s.toggleWrapper}
-				onClick={() => updateQueryParams("isFree", (!isFreeOnly).toString())}
+				onClick={() => updateQueryParams("isFree", isFreeOnly ? null : "true")}
 				aria-pressed={isFreeOnly}
 			>
 				<span className={s.toggleLabel}>무료 툴만 모아보기</span>

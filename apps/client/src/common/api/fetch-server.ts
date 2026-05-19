@@ -8,6 +8,10 @@ import type { ApiResponse } from "./models/api-response.model";
 
 const SPRING_API_URL = process.env.API_BASE_URL;
 
+if (!SPRING_API_URL) {
+	throw new Error("API_BASE_URL is not configured");
+}
+
 export async function fetchServer<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
 	const cookieStore = await cookies();
 	const token = cookieStore.get("access_token")?.value;
@@ -17,15 +21,21 @@ export async function fetchServer<T>(endpoint: string, options: RequestInit = {}
 		...(token && { Authorization: `Bearer ${token}` }),
 	};
 
+	const mergedHeaders = new Headers(defaultHeaders);
+
+	if (options.headers) {
+		const customHeaders = new Headers(options.headers);
+		customHeaders.forEach((value, key) => {
+			mergedHeaders.set(key, value);
+		});
+	}
+
 	console.log(`\n[FETCH START] ${options.method || "GET"} -> ${SPRING_API_URL}${endpoint}`);
 
 	try {
 		const response = await fetch(`${SPRING_API_URL}${endpoint}`, {
 			...options,
-			headers: {
-				...defaultHeaders,
-				...options.headers,
-			},
+			headers: mergedHeaders,
 		});
 
 		console.log(`[FETCH SUCCESS] ${response.status} <- ${endpoint}`);
