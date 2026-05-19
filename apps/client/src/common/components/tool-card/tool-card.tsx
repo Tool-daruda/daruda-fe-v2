@@ -49,7 +49,7 @@ export default function ToolCard({
 	const isVertical = variant === "vertical";
 
 	const contentInner = (
-		<div>
+		<>
 			<button
 				type="button"
 				className={styles.bookmarkButton}
@@ -69,7 +69,7 @@ export default function ToolCard({
 			<div className={styles.thumbnailSection}>
 				{isHot && (
 					<div className={styles.hotBadge}>
-						<Image src="/icons/ic_hot_24_red.svg" alt="Hot" width={32} height={32} />
+						<Image src="/icons/ic_hot_24_red.svg" alt="Hot" width={24} height={24} />
 					</div>
 				)}
 				{isNew && !isHot && <div className={styles.newBadge}>New</div>}
@@ -83,8 +83,8 @@ export default function ToolCard({
 
 			<div className={styles.content}>
 				<div className={styles.topRow}>
-					<div className={styles.textBlock}>
-						<h3 className={styles.title}>{title}</h3>
+					<div className={cx(styles.textBlock, styles.textBlockVariant[variant])}>
+						<h3 className={cx(styles.title, styles.titleVariant[variant])}>{title}</h3>
 						{!isVertical && description && <p className={styles.description}>{description}</p>}
 					</div>
 				</div>
@@ -104,7 +104,7 @@ export default function ToolCard({
 					</div>
 				</div>
 			</div>
-		</div>
+		</>
 	);
 
 	const className = cx(styles.card, styles.variant[variant]);

@@ -1,0 +1,114 @@
+import type { Meta, StoryObj } from "@storybook/react";
+import { fn } from "@storybook/test";
+import ToolCard from "./tool-card";
+
+const meta = {
+	title: "Client/Components/ToolCard",
+	component: ToolCard,
+	tags: ["autodocs"],
+	args: {
+		onBookmarkClick: fn(),
+	},
+	argTypes: {
+		variant: {
+			control: "radio",
+			options: ["horizontal", "vertical"],
+		},
+		priceType: {
+			control: "radio",
+			options: ["free", "paid", "partial"],
+		},
+	},
+} satisfies Meta<typeof ToolCard>;
+
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+const tags = [
+	{ id: "productivity", label: "생산성" },
+	{ id: "ai", label: "AI" },
+	{ id: "design", label: "디자인" },
+];
+
+const defaultArgs = {
+	title: "Notion AI",
+	description: "문서 작성과 요약, 아이디어 정리에 유용한 도구",
+	thumbnailUrl: "/globe.svg",
+	tags: tags.slice(0, 2),
+	priceType: "partial" as const,
+};
+
+export const Horizontal: Story = {
+	args: {
+		...defaultArgs,
+		variant: "horizontal",
+	},
+	decorators: [
+		(Story) => (
+			<div style={{ width: 360 }}>
+				<Story />
+			</div>
+		),
+	],
+};
+
+export const HorizontalBookmarked: Story = {
+	args: {
+		...defaultArgs,
+		title: "Figma",
+		description: "팀 기반 UI 디자인과 프로토타이핑 도구",
+		thumbnailUrl: "/window.svg",
+		priceType: "paid",
+		isBookmarked: true,
+		variant: "horizontal",
+	},
+	decorators: Horizontal.decorators,
+};
+
+export const Vertical: Story = {
+	args: {
+		...defaultArgs,
+		variant: "vertical",
+	},
+	decorators: [
+		(Story) => (
+			<div style={{ width: 188 }}>
+				<Story />
+			</div>
+		),
+	],
+};
+
+export const Hot: Story = {
+	args: {
+		...defaultArgs,
+		title: "Cursor",
+		thumbnailUrl: "/next.svg",
+		isHot: true,
+		variant: "vertical",
+	},
+	decorators: Vertical.decorators,
+};
+
+export const New: Story = {
+	args: {
+		...defaultArgs,
+		title: "Gamma",
+		thumbnailUrl: "/vercel.svg",
+		priceType: "free",
+		isNew: true,
+		variant: "vertical",
+	},
+	decorators: Vertical.decorators,
+};
+
+export const LongText: Story = {
+	args: {
+		...defaultArgs,
+		title: "Adobe Lightroom Classic Extended University Plan",
+		description: "사진 보정, 컬러 그레이딩, 프리셋 관리를 한 번에 처리하는 크리에이터용 워크플로우",
+		tags,
+		variant: "horizontal",
+	},
+	decorators: Horizontal.decorators,
+};
