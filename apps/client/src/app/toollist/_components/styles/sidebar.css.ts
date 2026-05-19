@@ -5,7 +5,7 @@ export const sidebarContainer = style({
 	width: "236px",
 	height: "fit-content",
 	flexShrink: 0,
-	backgroundColor: "#fff",
+	backgroundColor: colors.grayscale[0],
 	borderRadius: "24px",
 	padding: "32px 24px",
 	border: `1px solid ${colors.grayscale[25]}`,
