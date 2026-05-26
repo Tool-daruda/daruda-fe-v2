@@ -67,4 +67,13 @@ export const UserApi = {
 			cache: "no-store",
 		});
 	},
+
+	/**
+	 * @description 회원 탈퇴
+	 */
+	withdrawUser: async () => {
+		return fetchServer<void>("/api/v1/auth/withdraw", {
+			method: "DELETE",
+		});
+	},
 };

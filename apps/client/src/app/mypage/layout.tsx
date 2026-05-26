@@ -1,38 +1,25 @@
-"use client";
-
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { redirect } from "next/navigation";
+import { UserApi } from "@/common/api/user-api";
+import MyPageNav from "./_components/mypage-nav";
 import * as styles from "./mypage.css";
 
-export default function MyPageLayout({ children }: { children: React.ReactNode }) {
-	const pathname = usePathname();
+export default async function MyPageLayout({ children }: { children: React.ReactNode }) {
+	try {
+		const initialProfile = await UserApi.getUserProfile();
 
-	const tabs = [
-		{ name: "프로필", path: "/mypage/user" },
-		{ name: "관심있는 툴", path: "/mypage/favorite-tools" },
-		{ name: "커뮤니티", path: "/mypage/community" },
-		{ name: "계정", path: "/mypage/account" },
-	];
+		if (!initialProfile) {
+			redirect("/login");
+		}
+	} catch (error) {
+		console.error("마이페이지 인증 실패:", error);
+		redirect("/login");
+	}
 
 	return (
 		<div className={styles.pageWrapper}>
 			<h1 className={styles.pageTitle}>마이페이지</h1>
 
-			<nav className={styles.tabContainer}>
-				{tabs.map((tab) => {
-					const isActive = pathname.startsWith(tab.path);
-
-					return (
-						<Link
-							key={tab.path}
-							href={tab.path}
-							className={isActive ? styles.activeTabItem : styles.tabItem}
-						>
-							{tab.name}
-						</Link>
-					);
-				})}
-			</nav>
+			<MyPageNav />
 
 			<main>{children}</main>
 		</div>
