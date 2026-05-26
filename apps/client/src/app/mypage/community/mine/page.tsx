@@ -1,25 +1,34 @@
-import type { PostType } from "@/common/components/post-item/post-item";
+import { UserApi } from "@/common/api/user-api";
 import PostItem from "@/common/components/post-item/post-item";
+import { formatDate } from "@/common/utils";
 import * as styles from "../community.css";
 
-const MY_POSTS: PostType[] = Array.from({ length: 2 }).map((_, i) => ({
-	id: i,
-	tool: "Figma",
-	author: "또이",
-	date: "2025.01.05",
-	title: "내가 쓴 피그마 꿀팁 대방출",
-	content:
-		"이 글은 내가 직접 쓴 글이에요. 피그마 단축키와 오토레이아웃 활용법을 정리해 보았습니다...",
-	comments: 5,
-	bookmarks: 12,
-}));
+export default async function MyPostsPage() {
+	// TODO: 페이지네이션 구현 시 page와 size를 동적으로 받아오도록 수정 필요
+	const boardData = await UserApi.getUserBoards({ page: 1, size: 5 });
+	const boardList = boardData?.boardList || [];
 
-export default function MyPostsPage() {
+	if (boardList.length === 0) {
+		return <div>작성한 게시글이 없습니다.</div>;
+	}
+
 	return (
 		<div className={styles.postList}>
-			{MY_POSTS.map((post) => (
-				<PostItem key={post.id} post={post} />
-			))}
+			{boardList.map((board) => {
+				const formattedPost = {
+					id: board.boardId,
+					tool: board.toolName,
+					author: board.author,
+					date: formatDate(board.updatedAt),
+					title: board.title,
+					content: board.content,
+					comments: board.commentCount,
+					// TODO: 스크랩 수 필요
+					bookmarks: board.isScraped ? 1 : 0,
+				};
+
+				return <PostItem key={board.boardId} post={formattedPost} />;
+			})}
 		</div>
 	);
 }

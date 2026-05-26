@@ -1,6 +1,6 @@
 import { fetchServer } from "./fetch-server";
 import type { UserProfileData } from "./models/auth.model";
-import type { FavoriteToolsRes } from "./models/tool.model";
+import type { FavoriteToolsRes, MyBoardsRes } from "./models/tool.model";
 
 /**
  * @description /api/v1/user 엔드포인트와 통신하는 API 서비스입니다.
@@ -31,6 +31,22 @@ export const UserApi = {
 	 */
 	getFavoriteTools: async () => {
 		return fetchServer<FavoriteToolsRes>("/api/v1/user/scrap-tools", {
+			method: "GET",
+			cache: "no-store",
+		});
+	},
+
+	/**
+	 * @description 사용자가 작성한 게시글 목록 조회
+	 */
+	getUserBoards: async (params?: { page?: number; size?: number; criteria?: string }) => {
+		const query = new URLSearchParams({
+			page: String(params?.page || 1),
+			size: String(params?.size || 5),
+			criteria: params?.criteria || "createdAt",
+		}).toString();
+
+		return fetchServer<MyBoardsRes>(`/api/v1/user/boards?${query}`, {
 			method: "GET",
 			cache: "no-store",
 		});
