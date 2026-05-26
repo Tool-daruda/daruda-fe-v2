@@ -26,3 +26,17 @@ export interface ToolScrapRes {
 	toolId: number;
 	scrap: boolean;
 }
+
+export type FavoriteTool = {
+	toolId: number;
+	toolName: string;
+	toolLogo: string;
+	description: string;
+	license: ApiLicenseType;
+	keywords: string[];
+	isScraped: boolean;
+};
+
+export interface FavoriteToolsRes {
+	toolList: FavoriteTool[];
+}

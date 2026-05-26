@@ -1,39 +1,32 @@
 import { postToolScrapAction } from "@/app/toollist/_actions/tool-actions";
+import { UserApi } from "@/common/api/user-api";
 import ToolCard from "@/common/components/tool-card/tool-card";
-import type { PriceType } from "@/common/constants/price";
+import { LICENSE_MAP } from "@/common/constants/price";
 import * as styles from "./favoriteTools.css";
 
-const DUMMY_TOOLS = Array.from({ length: 15 }).map((_, idx) => {
-	const types: PriceType[] = ["paid", "free", "partial"];
-	const type = types[idx % 3];
+export default async function FavoriteToolsPage() {
+	const favoriteData = await UserApi.getFavoriteTools();
+	const tools = favoriteData?.toolList || [];
 
-	return {
-		id: idx,
-		title: idx % 2 === 0 ? "Adobe Lightroom Classic" : "Obsidian",
-		description: "문서 작성과 요약, 아이디어 정리에 유용한 디지털 툴입니다.",
-		thumbnailUrl: "/icons/img_bg_darudalogo_228.png",
-		tags: ["데이터", "생산성"],
-		priceType: type,
-		isBookmarked: true,
-		badgeType: idx % 5 === 0 ? ("hot" as const) : idx % 5 === 1 ? ("new" as const) : undefined,
-	};
-});
+	if (tools.length === 0) {
+		return <div>찜한 툴이 없습니다.</div>;
+	}
 
-export default function FavoriteToolsPage() {
+	console.log("찜한 툴 데이터:", tools); // 디버깅용 로그
 	return (
 		<div className={styles.gridContainer}>
-			{DUMMY_TOOLS.map((tool) => (
+			{tools.map((tool) => (
 				<ToolCard
-					key={tool.id}
-					title={tool.title}
+					key={tool.toolId}
+					title={tool.toolName}
 					description={tool.description}
-					thumbnailUrl={tool.thumbnailUrl}
-					tags={tool.tags}
-					priceType={tool.priceType}
-					isBookmarked={tool.isBookmarked}
-					badgeType={tool.badgeType}
+					thumbnailUrl={tool.toolLogo}
+					tags={tool.keywords}
+					priceType={LICENSE_MAP[tool.license]}
+					isBookmarked={tool.isScraped}
+					badgeType={undefined}
 					variant="horizontal"
-					onBookmarkClick={postToolScrapAction.bind(null, tool.id)}
+					onBookmarkClick={postToolScrapAction.bind(null, tool.toolId)}
 				/>
 			))}
 		</div>
