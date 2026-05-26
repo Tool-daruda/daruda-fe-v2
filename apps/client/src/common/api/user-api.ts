@@ -51,4 +51,20 @@ export const UserApi = {
 			cache: "no-store",
 		});
 	},
+
+	/**
+	 * @description 사용자가 스크랩(좋아요)한 게시글 목록 조회
+	 */
+	getScrapBoards: async (params?: { page?: number; size?: number; criteria?: string }) => {
+		const query = new URLSearchParams({
+			page: String(params?.page || 1),
+			size: String(params?.size || 5),
+			criteria: params?.criteria || "createdAt",
+		}).toString();
+
+		return fetchServer<MyBoardsRes>(`/api/v1/user/scrap-boards?${query}`, {
+			method: "GET",
+			cache: "no-store",
+		});
+	},
 };
