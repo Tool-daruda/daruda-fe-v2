@@ -87,15 +87,17 @@ export default function UserProfileClient({ initialData }: Props) {
 			return;
 		}
 
-		const result = await updateUserProfileAction(payload);
-
-		if (!result.success) {
-			alert(result.error || "정보 변경에 실패했습니다. 다시 시도해 주세요.");
-			return;
+		try {
+			const result = await updateUserProfileAction(payload);
+			if (!result.success) {
+				alert(result.error || "정보 변경에 실패했습니다. 다시 시도해 주세요.");
+				return;
+			}
+			alert("정보가 성공적으로 변경되었습니다.");
+			setIsEditing(false);
+		} catch {
+			alert("정보 변경 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
 		}
-
-		alert("정보가 성공적으로 변경되었습니다.");
-		setIsEditing(false);
 	};
 
 	const handleLogout = async () => {

@@ -50,15 +50,22 @@ export async function fetchServer<T>(endpoint: string, options: RequestInit = {}
 	mergedHeaders.forEach((value, key) => {
 		headersObj[key] = value;
 	});
-	console.log(`▶ HEADERS:`, headersObj);
+	const redactedHeaders = {
+		...headersObj,
+		cookie: headersObj.cookie ? "[REDACTED]" : undefined,
+		authorization: headersObj.authorization ? "[REDACTED]" : undefined,
+	};
+	console.log(`▶ HEADERS:`, redactedHeaders);
 
-	if (options.body) {
+	if (options.body && !endpoint.startsWith("/api/v1/auth")) {
 		try {
 			const parsedBody = JSON.parse(options.body as string);
 			console.log(`▶ PAYLOAD:\n`, JSON.stringify(parsedBody, null, 2));
 		} catch {
 			console.log(`▶ PAYLOAD:`, options.body);
 		}
+	} else if (options.body) {
+		console.log(`▶ PAYLOAD: [REDACTED]`);
 	} else {
 		console.log(`▶ PAYLOAD: None`);
 	}

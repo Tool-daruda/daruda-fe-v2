@@ -12,13 +12,21 @@ export default function CommunityLayout({ children }: { children: React.ReactNod
 			<div className={styles.subTabContainer}>
 				<Link
 					href="/mypage/community/saved"
-					className={pathname.includes("/saved") ? styles.activeSubTab : styles.inactiveSubTab}
+					className={
+						pathname.startsWith("/mypage/community/saved")
+							? styles.activeSubTab
+							: styles.inactiveSubTab
+					}
 				>
 					저장한 글
 				</Link>
 				<Link
 					href="/mypage/community/mine"
-					className={pathname.includes("/mine") ? styles.activeSubTab : styles.inactiveSubTab}
+					className={
+						pathname.startsWith("/mypage/community/mine")
+							? styles.activeSubTab
+							: styles.inactiveSubTab
+					}
 				>
 					내가 쓴 글
 				</Link>

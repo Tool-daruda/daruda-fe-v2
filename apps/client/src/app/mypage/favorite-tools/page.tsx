@@ -12,7 +12,6 @@ export default async function FavoriteToolsPage() {
 		return <div>찜한 툴이 없습니다.</div>;
 	}
 
-	console.log("찜한 툴 데이터:", tools); // 디버깅용 로그
 	return (
 		<div className={styles.gridContainer}>
 			{tools.map((tool) => (

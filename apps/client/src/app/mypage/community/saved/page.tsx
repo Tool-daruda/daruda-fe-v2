@@ -11,8 +11,6 @@ export default async function SavedPostsPage() {
 		return <div>스크랩한 게시글이 없습니다.</div>;
 	}
 
-	console.log("스크랩한 게시글 데이터:", boardList);
-
 	return (
 		<div className={styles.postList}>
 			{boardList.map((board) => {

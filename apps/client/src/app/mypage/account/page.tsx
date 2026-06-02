@@ -1,23 +1,31 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { withdrawUserAction } from "@/app/mypage/_actions/user.actions"; // 2단계 서버액션 임포트
 import * as styles from "./account.css";
 
 export default function AccountPage() {
+	const router = useRouter();
+
 	const handleWithdraw = async () => {
 		const isConfirmed = window.confirm("정말로 탈퇴하시겠습니까? 이 작업은 되돌릴 수 없습니다.");
 		if (!isConfirmed) return;
 
-		const result = await withdrawUserAction(undefined);
+		try {
+			const result = await withdrawUserAction(undefined);
 
-		if (!result.success) {
-			alert(result.error || "회원 탈퇴 처리 중 오류가 발생했습니다.");
-			return;
+			if (!result.success) {
+				alert(result.error || "회원 탈퇴 처리 중 오류가 발생했습니다.");
+				return;
+			}
+
+			alert("회원 탈퇴가 완료되었습니다. 그동안 이용해 주셔서 감사합니다.");
+
+			router.push("/");
+		} catch (error) {
+			alert("회원 탈퇴 처리 중 오류가 발생했습니다.");
+			console.error("Withdrawal error:", error);
 		}
-
-		alert("회원 탈퇴가 완료되었습니다. 그동안 이용해 주셔서 감사합니다.");
-
-		window.location.href = "/";
 	};
 
 	return (
