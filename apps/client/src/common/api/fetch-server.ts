@@ -14,11 +14,18 @@ export async function fetchServer<T>(endpoint: string, options: RequestInit = {}
 	}
 
 	const cookieStore = await cookies();
-	const token = cookieStore.get("access_token")?.value;
+	const accessToken = cookieStore.get("accessToken")?.value;
+	const refreshToken = cookieStore.get("refreshToken")?.value;
+	const cookieHeader = [
+		accessToken && `accessToken=${accessToken}`,
+		refreshToken && `refreshToken=${refreshToken}`,
+	]
+		.filter(Boolean)
+		.join("; ");
 
 	const defaultHeaders: Record<string, string> = {
 		"Content-Type": "application/json",
-		...(token && { Authorization: `Bearer ${token}` }),
+		...(cookieHeader && { Cookie: cookieHeader }),
 	};
 
 	const mergedHeaders = new Headers(defaultHeaders);
@@ -31,6 +38,38 @@ export async function fetchServer<T>(endpoint: string, options: RequestInit = {}
 	}
 
 	console.log(`\n[FETCH START] ${options.method || "GET"} -> ${SPRING_API_URL}${endpoint}`);
+	console.log("[FETCH COOKIE]", {
+		hasAccessToken: Boolean(accessToken),
+		hasRefreshToken: Boolean(refreshToken),
+	});
+
+	console.log(`\n=================== [FETCH REQUEST] ===================`);
+	console.log(`▶ URL    : [${options.method || "GET"}] ${SPRING_API_URL}${endpoint}`);
+
+	const headersObj: Record<string, string> = {};
+	mergedHeaders.forEach((value, key) => {
+		headersObj[key] = value;
+	});
+	const redactedHeaders = {
+		...headersObj,
+		cookie: headersObj.cookie ? "[REDACTED]" : undefined,
+		authorization: headersObj.authorization ? "[REDACTED]" : undefined,
+	};
+	console.log(`▶ HEADERS:`, redactedHeaders);
+
+	if (options.body && !endpoint.startsWith("/api/v1/auth")) {
+		try {
+			const parsedBody = JSON.parse(options.body as string);
+			console.log(`▶ PAYLOAD:\n`, JSON.stringify(parsedBody, null, 2));
+		} catch {
+			console.log(`▶ PAYLOAD:`, options.body);
+		}
+	} else if (options.body) {
+		console.log(`▶ PAYLOAD: [REDACTED]`);
+	} else {
+		console.log(`▶ PAYLOAD: None`);
+	}
+	console.log(`=======================================================\n`);
 
 	try {
 		const response = await fetch(`${SPRING_API_URL}${endpoint}`, {
@@ -38,13 +77,14 @@ export async function fetchServer<T>(endpoint: string, options: RequestInit = {}
 			headers: mergedHeaders,
 		});
 
-		console.log(`[FETCH SUCCESS] ${response.status} <- ${endpoint}`);
-
 		if (!response.ok) {
 			const errorResponse = await response.json().catch(() => ({}));
 			console.error(`[FETCH ERROR] ${response.status} <- ${endpoint}`);
+			console.error("[FETCH ERROR BODY]", errorResponse);
 			throw new Error(errorResponse.message || `API Error: ${response.status}`);
 		}
+
+		console.log(`[FETCH SUCCESS] ${response.status} <- ${endpoint}`);
 
 		const result: ApiResponse<T> = await response.json();
 

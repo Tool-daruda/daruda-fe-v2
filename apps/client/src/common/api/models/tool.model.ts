@@ -26,3 +26,43 @@ export interface ToolScrapRes {
 	toolId: number;
 	scrap: boolean;
 }
+
+export type FavoriteTool = {
+	toolId: number;
+	toolName: string;
+	toolLogo: string;
+	description: string;
+	license: ApiLicenseType;
+	keywords: string[];
+	isScraped: boolean;
+};
+
+export interface FavoriteToolsRes {
+	toolList: FavoriteTool[];
+}
+
+export type MyBoardItem = {
+	boardId: number;
+	toolName: string;
+	toolLogo: string;
+	author: string;
+	title: string;
+	content: string;
+	images: string[];
+	isScraped: boolean;
+	toolId: number;
+	updatedAt: string;
+	commentCount: number;
+};
+
+export type PageInfo = {
+	pageNo: number;
+	size: number;
+	totalPages: number;
+};
+
+export interface MyBoardsRes {
+	boardList: MyBoardItem[];
+	userId: number;
+	pageInfo: PageInfo;
+}
