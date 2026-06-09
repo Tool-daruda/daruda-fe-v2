@@ -1,4 +1,3 @@
-import type { ToolDetail } from "../_types";
 import * as styles from "./styles/tool-detail-page.css";
 import { ToolFeatureGrid } from "./tool-feature-grid";
 import { ToolFeedbackSection } from "./tool-feedback-section";
@@ -12,33 +11,27 @@ import { ToolUseCaseSection } from "./tool-use-case-section";
 import { ToolVideoSection } from "./tool-video-section";
 
 type Props = {
-	toolDetail: ToolDetail;
+	toolId: number;
 };
 
-export const ToolDetailPage = ({ toolDetail }: Props) => {
-	console.log("툴 상세 페이지 데이터:", toolDetail);
-
+export const ToolDetailPage = ({ toolId }: Props) => {
 	return (
 		<div className={styles.page}>
-			<ToolHero toolDetail={toolDetail} />
-			<ToolMetaBar toolDetail={toolDetail} />
+			<ToolHero toolId={toolId} />
+			<ToolMetaBar toolId={toolId} />
 
 			<div className={styles.contentLayout}>
 				<aside className={styles.sidebarArea}>
-					<ToolSidebar relatedTools={toolDetail.relatedTools} />
+					<ToolSidebar toolId={toolId} />
 				</aside>
 
 				<main className={styles.mainArea}>
-					<ToolIntroSection
-						title={toolDetail.name}
-						description={toolDetail.description}
-						introImages={toolDetail.introImages}
-					/>
-					<ToolFeatureGrid features={toolDetail.features} />
-					<ToolVideoSection items={toolDetail.recommendedVideos} />
-					<ToolPricingSection plans={toolDetail.pricingPlans} />
-					<ToolUseCaseSection useCases={toolDetail.useCases} />
-					<ToolRelatedPostSection posts={toolDetail.relatedPosts} />
+					<ToolIntroSection toolId={toolId} />
+					<ToolFeatureGrid toolId={toolId} />
+					<ToolVideoSection toolId={toolId} />
+					<ToolPricingSection toolId={toolId} />
+					<ToolUseCaseSection toolId={toolId} />
+					<ToolRelatedPostSection toolId={toolId} />
 					<ToolFeedbackSection />
 				</main>
 			</div>

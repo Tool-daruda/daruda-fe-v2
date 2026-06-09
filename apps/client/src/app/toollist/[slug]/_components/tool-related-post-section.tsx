@@ -1,12 +1,18 @@
 import Image from "next/image";
-import type { RelatedPost } from "../_types";
+import { BoardApi } from "@/common/api/board-api";
 import * as styles from "./styles/tool-related-post-section.css";
 
 type Props = {
-	posts: RelatedPost[];
+	toolId: number;
 };
 
-export const ToolRelatedPostSection = ({ posts }: Props) => {
+export const ToolRelatedPostSection = async ({ toolId }: Props) => {
+	const boardData = await BoardApi.getBoardList({
+		toolId,
+		noTopic: false,
+		size: 3,
+	}).catch(() => null);
+
 	return (
 		<section className={styles.container}>
 			<div className={styles.header}>
@@ -17,28 +23,28 @@ export const ToolRelatedPostSection = ({ posts }: Props) => {
 			</div>
 
 			<div className={styles.list}>
-				{posts.map((post) => (
-					<article key={post.id} className={styles.card}>
+				{boardData?.contents.map((post) => (
+					<article key={post.boardId} className={styles.card}>
 						<div className={styles.meta}>
-							<span>{post.category}</span>
+							<span>{post.toolName}</span>
 							<span>{post.author}</span>
-							<span>{post.date}</span>
+							<span>{post.updatedAt}</span>
 						</div>
 
 						<div className={styles.body}>
 							<div className={styles.textBlock}>
 								<h3 className={styles.cardTitle}>{post.title}</h3>
-								<p className={styles.summary}>{post.summary}</p>
+								<p className={styles.summary}>{post.content}</p>
 
 								<div className={styles.reactionRow}>
-									<span>♡ {post.likeCount}</span>
+									<span>♡ {post.author}</span>
 									<span>댓글 {post.commentCount}</span>
 								</div>
 							</div>
 
 							<div className={styles.thumbnail}>
 								<Image
-									src={post.thumbnailUrl}
+									src={post.images[0] ? post.images[0] : "/placeholder-thumbnail.png"}
 									alt={post.title}
 									fill
 									className={styles.thumbnailImage}

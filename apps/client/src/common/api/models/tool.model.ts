@@ -88,12 +88,17 @@ export interface ToolDetailRes {
 	isScrapped: boolean;
 }
 
-export interface ToolPlanRes {
+export interface ToolPlanItem {
 	planId: number;
 	planName: string;
 	priceAnnual: number;
 	priceMonthly: number;
 	description: string;
+}
+
+export interface ToolPlanRes {
+	planLink: string;
+	toolPlans: ToolPlanItem[];
 }
 
 export interface ToolCoreFeature {

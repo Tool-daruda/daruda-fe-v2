@@ -1,0 +1,30 @@
+import { fetchServer } from "./fetch-server";
+import type { BoardListRes, GetBoardListParams } from "./models/board.model";
+
+/**
+ * @description /api/v1/board 엔드포인트와 통신하는 API 서비스입니다.
+ */
+export const BoardApi = {
+	/**
+	 * @description 게시글 리스트 조회 (자유게시판, 툴별게시판, 페이지네이션 완전 지원)
+	 */
+	getBoardList: async (params: GetBoardListParams = {}) => {
+		const { noTopic, toolId, size = 10, lastBoardId } = params;
+
+		const queryParams = new URLSearchParams({
+			size: String(size),
+		});
+
+		if (noTopic !== undefined) queryParams.append("noTopic", String(noTopic));
+		if (toolId !== undefined) queryParams.append("toolId", String(toolId));
+		if (lastBoardId !== undefined) queryParams.append("lastBoardId", String(lastBoardId));
+
+		const query = queryParams.toString();
+
+		const cacheTags = toolId ? [`tool-${toolId}-boards`] : ["all-boards"];
+
+		return fetchServer<BoardListRes>(`/api/v1/board?${query}`, {
+			next: { tags: cacheTags },
+		});
+	},
+};

@@ -1,12 +1,21 @@
 import Image from "next/image";
-import type { UseCaseCard } from "../_types";
+import { ToolApi } from "@/common/api/tool-api";
 import * as styles from "./styles/tool-use-case-section.css";
 
 type Props = {
-	useCases: UseCaseCard[];
+	toolId: number;
 };
 
-export const ToolUseCaseSection = ({ useCases }: Props) => {
+export const ToolUseCaseSection = async ({ toolId }: Props) => {
+	const [info, blogsData] = await Promise.all([
+		ToolApi.getToolDetail(toolId),
+		ToolApi.getToolBlogs(toolId).catch(() => null),
+	]);
+
+	const blogs = blogsData?.toolBlogs ?? [];
+
+	if (blogs.length === 0) return null;
+
 	return (
 		<section className={styles.container}>
 			<div className={styles.header}>
@@ -14,24 +23,38 @@ export const ToolUseCaseSection = ({ useCases }: Props) => {
 			</div>
 
 			<div className={styles.grid}>
-				{useCases.map((useCase) => (
-					<article key={useCase.id} className={styles.card}>
-						<div className={styles.thumbnail}>
-							<Image
-								src={useCase.thumbnailUrl}
-								alt={useCase.title}
-								fill
-								className={styles.thumbnailImage}
-							/>
-						</div>
+				{blogs.map((blog) => {
+					return (
+						<article key={blog.blogId} className={styles.card}>
+							<div className={styles.thumbnail}>
+								<Image
+									src={info.toolLogo}
+									alt={`${info.toolMainName} 활용법`}
+									fill
+									sizes="(max-width: 768px) 100vw, 33vw"
+									className={styles.thumbnailImage}
+									style={{ objectFit: "contain", padding: "12px" }}
+								/>
+							</div>
 
-						<div className={styles.content}>
-							<h3 className={styles.cardTitle}>{useCase.title}</h3>
-							<p className={styles.summary}>{useCase.summary}</p>
-							<p className={styles.author}>{useCase.author}</p>
-						</div>
-					</article>
-				))}
+							<div className={styles.content}>
+								<h3 className={styles.cardTitle}>
+									<a
+										href={blog.blogUrl}
+										target="_blank"
+										rel="noopener noreferrer"
+										style={{ textDecoration: "none", color: "inherit" }}
+									>
+										{info.toolMainName} 활용 가이드
+									</a>
+								</h3>
+								{/* 링크 주소를 요약 정보처럼 깔끔하게 노출 */}
+								<p className={styles.summary}>{blog.blogUrl}</p>
+								<p className={styles.author}>공식 블로그</p>
+							</div>
+						</article>
+					);
+				})}
 			</div>
 		</section>
 	);
