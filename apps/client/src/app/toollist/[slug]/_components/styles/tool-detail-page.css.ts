@@ -3,10 +3,15 @@ import { style } from "@vanilla-extract/css";
 
 export const page = style({
 	width: "100%",
-	maxWidth: "1200px",
-	margin: "0 auto",
-	padding: "40px 24px 120px",
 	background: colors.grayscale[25],
+});
+
+export const header = style({
+	display: "flex",
+	flexDirection: "column",
+	gap: "24px",
+	background: colors.grayscale[0],
+	margin: "0 auto",
 });
 
 export const contentLayout = style({
@@ -14,6 +19,9 @@ export const contentLayout = style({
 	gridTemplateColumns: "260px minmax(0, 1fr)",
 	gap: "24px",
 	marginTop: "24px",
+	maxWidth: "1200px",
+	margin: "0 auto",
+	padding: "40px 24px 120px",
 });
 
 export const sidebarArea = style({
