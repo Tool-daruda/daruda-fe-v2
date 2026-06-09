@@ -126,16 +126,22 @@ export async function loader({ params }: LoaderFunctionArgs) {
 	}
 }
 
-async function handleFileUploads(toolData: ToolSubmit): Promise<ToolSubmit> {
+async function handleFileUploads(
+	toolData: ToolSubmit,
+	toolId: string | undefined
+): Promise<ToolSubmit> {
+	const currentToolId = toolId && toolId !== "new" ? toolId : "new";
+	const toolPrefix = `tool/${currentToolId}`;
+
 	const toolLogoUrl =
 		toolData.toolLogo instanceof File
-			? await uploadFileAndGetUrl(toolData.toolLogo)
+			? await uploadFileAndGetUrl({ file: toolData.toolLogo, prefix: toolPrefix })
 			: toolData.toolLogo;
 
 	const imageUrls = await Promise.all(
 		(toolData.images || []).map(async (img) => {
 			if (img instanceof File) {
-				return uploadFileAndGetUrl(img);
+				return uploadFileAndGetUrl({ file: img, prefix: toolPrefix });
 			}
 			return img;
 		})
@@ -200,7 +206,7 @@ export async function submitTool({ request, params }: ActionFunctionArgs) {
 		return { ok: true };
 	} else if (intent === "publish") {
 		try {
-			const toolDataWithUrls = await handleFileUploads(formDataObject);
+			const toolDataWithUrls = await handleFileUploads(formDataObject, toolId);
 			const createRequest = await transformToCreateRequest(toolDataWithUrls);
 
 			if (toolId && toolId !== "new") {
