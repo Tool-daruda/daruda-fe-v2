@@ -13,14 +13,20 @@ export const ToolVideoSection = ({ items }: Props) => {
 
 			<div className={styles.grid}>
 				{items.map((item) => (
-					<div key={item.id} className={styles.card}>
+					<a
+						key={item.id}
+						href={item.videoUrl ?? item.imageUrl}
+						target="_blank"
+						rel="noopener noreferrer"
+						className={styles.card}
+					>
 						<Image
 							src={item.imageUrl}
 							alt={item.title ?? `추천 영상 ${item.id}`}
 							fill
 							className={styles.image}
 						/>
-					</div>
+					</a>
 				))}
 			</div>
 		</section>

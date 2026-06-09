@@ -15,6 +15,7 @@ export type ToolMedia = {
 	id: number;
 	title?: string;
 	imageUrl: string;
+	videoUrl?: string;
 };
 
 export type PricingPlan = {
@@ -50,7 +51,7 @@ export type RelatedTool = {
 	id: number;
 	name: string;
 	category: string;
-	subCategory: string;
+	subCategory?: string;
 	priceType: string;
 	thumbnailUrl: string;
 };
@@ -64,7 +65,7 @@ export type ToolDetail = {
 	category: ToolCategory;
 	priceLabel: string;
 	platforms: ToolPlatform[];
-	support: number;
+	support: string;
 	heroImageUrl: string;
 	introImages: string[];
 	features: ToolFeature[];

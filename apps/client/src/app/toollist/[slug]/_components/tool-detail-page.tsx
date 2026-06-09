@@ -16,6 +16,8 @@ type Props = {
 };
 
 export const ToolDetailPage = ({ toolDetail }: Props) => {
+	console.log("툴 상세 페이지 데이터:", toolDetail);
+
 	return (
 		<div className={styles.page}>
 			<ToolHero toolDetail={toolDetail} />
