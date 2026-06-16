@@ -1,7 +1,12 @@
 import Image from "next/image";
+import { ToolApi } from "@/common/api/tool-api";
 import * as styles from "./styles/tool-feedback-section.css";
 
-export const ToolFeedbackSection = () => {
+type Props = {
+	toolId: number;
+};
+export const ToolFeedbackSection = async ({ toolId }: Props) => {
+	const info = await ToolApi.getToolDetail(toolId);
 	return (
 		<section className={styles.container}>
 			<h2 className={styles.title}>내용이 도움이 되었나요?</h2>
@@ -14,7 +19,7 @@ export const ToolFeedbackSection = () => {
 					<Image src="/icons/ic_heart_iris500_20.svg" width={20} height={20} alt="하트 아이콘" />
 					<span>도움이 되었어요</span>
 				</div>
-				<span className={styles.count}>1</span>
+				<span className={styles.count}>{info.likeCount}</span>
 			</button>
 		</section>
 	);

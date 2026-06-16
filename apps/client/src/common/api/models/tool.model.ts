@@ -86,6 +86,8 @@ export interface ToolDetailRes {
 	images: string[];
 	updatedAt: string;
 	isScrapped: boolean;
+	isLiked: boolean;
+	likeCount: number;
 }
 
 export interface ToolPlanItem {

@@ -34,7 +34,7 @@ export const ToolDetailPage = ({ toolId }: Props) => {
 					<ToolPricingSection toolId={toolId} />
 					<ToolUseCaseSection toolId={toolId} />
 					<ToolRelatedPostSection toolId={toolId} />
-					<ToolFeedbackSection />
+					<ToolFeedbackSection toolId={toolId} />
 				</main>
 			</div>
 		</div>
