@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import { ApiError } from "./errors/api-error";
 import type { ApiResponse } from "./models/api-response.model";
 
 /**
@@ -78,10 +79,27 @@ export async function fetchServer<T>(endpoint: string, options: RequestInit = {}
 		});
 
 		if (!response.ok) {
-			const errorResponse = await response.json().catch(() => ({}));
-			console.error(`[FETCH ERROR] ${response.status} <- ${endpoint}`);
-			console.error("[FETCH ERROR BODY]", errorResponse);
-			throw new Error(errorResponse.message || `API Error: ${response.status}`);
+			let errorMessage = `API Error: ${response.status}`;
+			let errorBody: unknown = null;
+
+			try {
+				const responseText = await response.text();
+
+				if (responseText) {
+					const parsed: unknown = JSON.parse(responseText);
+					errorBody = parsed;
+
+					if (parsed && typeof parsed === "object") {
+						const obj = parsed as Record<string, unknown>;
+						if (typeof obj.message === "string") errorMessage = obj.message;
+						else if (typeof obj.error === "string") errorMessage = obj.error;
+					}
+				}
+			} catch {
+				errorMessage = `API Error: ${response.status} (Failed to parse error response)`;
+			}
+
+			throw new ApiError(errorMessage, response.status, errorBody);
 		}
 
 		console.log(`[FETCH SUCCESS] ${response.status} <- ${endpoint}`);
@@ -90,7 +108,9 @@ export async function fetchServer<T>(endpoint: string, options: RequestInit = {}
 
 		return result.data;
 	} catch (error) {
-		console.error(`[fetchServer Error] ${endpoint}:`, error);
+		if (!(error instanceof ApiError)) {
+			console.error(`[fetchServer Network Error] ${endpoint}:`, error);
+		}
 		throw error;
 	}
 }
