@@ -128,10 +128,16 @@ export async function loader({ params }: LoaderFunctionArgs) {
 
 async function handleFileUploads(
 	toolData: ToolSubmit,
-	toolId: string | undefined
+	toolName: string | undefined
 ): Promise<ToolSubmit> {
-	const currentToolId = toolId && toolId !== "new" ? toolId : "new";
-	const toolPrefix = `tool/${currentToolId}`;
+	const cleanedName = toolName
+		? toolName
+				.trim()
+				.replace(/\s+/g, "-")
+				.replace(/[^a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ가-힣-_]/g, "")
+		: "tool";
+	const encodedName = encodeURIComponent(cleanedName);
+	const toolPrefix = `tool/${encodedName}`;
 
 	const toolLogoUrl =
 		toolData.toolLogo instanceof File
@@ -206,7 +212,8 @@ export async function submitTool({ request, params }: ActionFunctionArgs) {
 		return { ok: true };
 	} else if (intent === "publish") {
 		try {
-			const toolDataWithUrls = await handleFileUploads(formDataObject, toolId);
+			const toolName = formDataObject.toolMainName;
+			const toolDataWithUrls = await handleFileUploads(formDataObject, toolName);
 			const createRequest = await transformToCreateRequest(toolDataWithUrls);
 
 			if (toolId && toolId !== "new") {
