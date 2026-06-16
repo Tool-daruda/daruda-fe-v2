@@ -11,7 +11,11 @@ export const uploadFileAndGetUrl = async ({ file, prefix }: UploadOptions): Prom
 	}
 
 	try {
-		const fileExtension = file.name.substring(file.name.lastIndexOf(".")).toLowerCase();
+		const lastDotIndex = file.name.lastIndexOf(".");
+		if (lastDotIndex === -1 || lastDotIndex === file.name.length - 1) {
+			throw new Error("파일 확장자를 찾을 수 없습니다. 확장자가 있는 파일을 업로드해주세요.");
+		}
+		const fileExtension = file.name.substring(lastDotIndex).toLowerCase();
 
 		const { presignedUrl, publicUrl } = await getPresignedUrls({
 			prefix,

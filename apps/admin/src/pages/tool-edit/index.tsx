@@ -134,8 +134,12 @@ async function handleFileUploads(
 		? toolName
 				.trim()
 				.replace(/\s+/g, "-")
-				.replace(/[^a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ가-힣-_]/g, "")
+				.replace(/[^a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ가-힣_-]/g, "")
 		: "tool";
+
+	if (!cleanedName || cleanedName.length === 0) {
+		throw new Error("유효한 툴 이름을 입력해주세요.");
+	}
 	const encodedName = encodeURIComponent(cleanedName);
 	const toolPrefix = `tool/${encodedName}`;
 
@@ -213,6 +217,12 @@ export async function submitTool({ request, params }: ActionFunctionArgs) {
 	} else if (intent === "publish") {
 		try {
 			const toolName = formDataObject.toolMainName;
+			if (!toolName || toolName.trim().length === 0) {
+				return {
+					ok: false,
+					message: "툴 이름은 필수 항목입니다.",
+				};
+			}
 			const toolDataWithUrls = await handleFileUploads(formDataObject, toolName);
 			const createRequest = await transformToCreateRequest(toolDataWithUrls);
 
