@@ -1,26 +1,47 @@
 "use client";
 
 import { colors } from "@repo/ui/foundations";
-import { useState } from "react";
+import { useState, useTransition } from "react";
+import { postBoardScrapAction } from "../../_actions/board-actions";
 import * as s from "./styles/post-bookmark-button.css";
 
 interface PostBookmarkButtonProps {
+	boardId: number;
 	initialScrapped: boolean;
 }
 
-// TODO(api): 클릭 시 BoardApi의 스크랩 토글(POST /api/v1/board/{board-id}/scrap) 엔드포인트로 교체됩니다.
 // TODO(api): 게시글 상세 응답(BoardRes)에 스크랩 수 필드가 없어 카운트는 0(또는 1)에서 로컬로만 증감합니다.
-export const PostBookmarkButton = ({ initialScrapped }: PostBookmarkButtonProps) => {
+export const PostBookmarkButton = ({ boardId, initialScrapped }: PostBookmarkButtonProps) => {
 	const [isScrapped, setIsScrapped] = useState(initialScrapped);
 	const [count, setCount] = useState(initialScrapped ? 1 : 0);
+	const [isPending, startTransition] = useTransition();
 
 	const handleClick = () => {
-		setIsScrapped((prev) => !prev);
-		setCount((prev) => (isScrapped ? prev - 1 : prev + 1));
+		const next = !isScrapped;
+		setIsScrapped(next);
+		setCount((prev) => (next ? prev + 1 : prev - 1));
+
+		startTransition(async () => {
+			const result = await postBoardScrapAction(boardId);
+
+			if (!result.success) {
+				setIsScrapped(!next);
+				setCount((prev) => (next ? prev - 1 : prev + 1));
+				return;
+			}
+
+			setIsScrapped(result.data.scrap);
+		});
 	};
 
 	return (
-		<button type="button" className={s.button} onClick={handleClick} aria-pressed={isScrapped}>
+		<button
+			type="button"
+			className={s.button}
+			onClick={handleClick}
+			disabled={isPending}
+			aria-pressed={isScrapped}
+		>
 			<BookmarkGlyph filled={isScrapped} />
 			<span className={s.count}>{count}</span>
 		</button>

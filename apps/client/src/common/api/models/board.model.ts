@@ -31,3 +31,8 @@ export interface BoardListRes {
 	};
 	nextScrapCount: number;
 }
+
+export interface BoardScrapRes {
+	boardId: number;
+	scrap: boolean;
+}
