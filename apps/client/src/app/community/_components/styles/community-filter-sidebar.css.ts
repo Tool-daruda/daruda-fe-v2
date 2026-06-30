@@ -7,6 +7,7 @@ export const root = style({
 	flexShrink: 0,
 	width: "192px",
 	alignSelf: "flex-start",
+	zIndex: 1,
 });
 
 export const card = style({
@@ -17,7 +18,6 @@ export const card = style({
 	backgroundColor: colors.grayscale[0],
 	border: `1px solid ${colors.grayscale[50]}`,
 	borderRadius: "16px",
-	overflow: "hidden",
 });
 
 export const head = style({
@@ -29,7 +29,6 @@ export const head = style({
 });
 
 export const titleRow = style({
-	position: "relative",
 	display: "flex",
 	alignItems: "center",
 	gap: "2px",
@@ -40,6 +39,11 @@ export const title = style({
 	color: colors.grayscale[900],
 });
 
+export const infoWrapper = style({
+	position: "relative",
+	display: "flex",
+});
+
 export const infoButton = style({
 	display: "flex",
 	background: "none",
@@ -48,18 +52,34 @@ export const infoButton = style({
 	cursor: "pointer",
 });
 
-export const tooltip = style({
+const tooltipColor = "rgba(22, 22, 22, 0.7)";
+
+export const tooltipWrapper = style({
 	position: "absolute",
-	left: "calc(100% + 8px)",
-	top: "-8px",
+	left: "calc(100% + 6px)",
+	top: "50%",
+	transform: "translateY(-50%)",
+	display: "flex",
+	alignItems: "center",
+	zIndex: 30,
+});
+
+export const tooltipTail = style({
+	flexShrink: 0,
+	width: 0,
+	height: 0,
+	borderTop: "9px solid transparent",
+	borderBottom: "9px solid transparent",
+	borderRight: `9px solid ${tooltipColor}`,
+});
+
+export const tooltipBubble = style({
 	width: "220px",
-	padding: "12px",
-	borderRadius: "8px",
-	backgroundColor: colors.grayscale[800],
+	padding: "12px 19px 12px 20px",
+	borderRadius: "10px",
+	backgroundColor: tooltipColor,
 	color: colors.grayscale[0],
-	...themeVars.fonts.caption2_2,
-	zIndex: 10,
-	boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+	...themeVars.fonts.b4_2,
 });
 
 export const emptyLabel = style({
@@ -76,31 +96,48 @@ export const emptyLabel = style({
 
 export const chipList = style({
 	display: "flex",
-	flexWrap: "wrap",
+	flexDirection: "column",
 	gap: "6px",
 });
 
 export const chip = style({
 	display: "flex",
 	alignItems: "center",
-	gap: "4px",
-	padding: "4px 6px 4px 8px",
-	borderRadius: "999px",
-	backgroundColor: colors.brand.iris[50],
-	color: colors.brand.iris[600],
+	gap: "5px",
+	padding: "4px 6px 4px 4px",
+	borderRadius: "8px",
+	backgroundColor: colors.grayscale[25],
+	width: "fit-content",
+	maxWidth: "100%",
+});
+
+export const chipLogo = style({
+	flexShrink: 0,
+	width: "20px",
+	height: "20px",
+	borderRadius: "4px",
+	backgroundColor: colors.grayscale[100],
+});
+
+export const chipName = style({
 	...themeVars.fonts.b5_2,
+	color: colors.grayscale[700],
+	overflow: "hidden",
+	textOverflow: "ellipsis",
 	whiteSpace: "nowrap",
 });
 
 export const chipRemove = style({
+	flexShrink: 0,
 	display: "flex",
 	alignItems: "center",
 	justifyContent: "center",
+	width: "20px",
+	height: "20px",
 	background: "none",
 	border: "none",
 	padding: 0,
 	cursor: "pointer",
-	color: colors.brand.iris[400],
 });
 
 export const searchSection = style({
@@ -144,8 +181,11 @@ export const searchInput = style({
 export const listSection = style({
 	flex: 1,
 	overflowY: "auto",
+	overflowX: "hidden",
 	display: "flex",
 	flexDirection: "column",
+	borderBottomLeftRadius: "16px",
+	borderBottomRightRadius: "16px",
 });
 
 export const freeRow = style({

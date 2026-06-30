@@ -16,7 +16,7 @@ export const CommunityFilterSidebar = ({ categories }: CommunityFilterSidebarPro
 	const [isSearchActive, setIsSearchActive] = useState(false);
 	const [activeCategory, setActiveCategory] = useState<CommunityFilterCategory | null>(null);
 	const [isFreeOnly, setIsFreeOnly] = useState(false);
-	const [selectedTools, setSelectedTools] = useState<CommunityFilterTool[]>([]);
+	const [selectedTool, setSelectedTool] = useState<CommunityFilterTool | null>(null);
 
 	const trimmedKeyword = keyword.trim().toLowerCase();
 	const isSearching = trimmedKeyword.length > 0;
@@ -33,21 +33,8 @@ export const CommunityFilterSidebar = ({ categories }: CommunityFilterSidebarPro
 		return searchScopeTools.filter((tool) => tool.toolName.toLowerCase().includes(trimmedKeyword));
 	}, [isSearching, searchScopeTools, trimmedKeyword]);
 
-	const selectedToolIds = useMemo(
-		() => new Set(selectedTools.map((tool) => tool.toolId)),
-		[selectedTools]
-	);
-
-	const toggleTool = (tool: CommunityFilterTool) => {
-		setSelectedTools((prev) =>
-			prev.some((item) => item.toolId === tool.toolId)
-				? prev.filter((item) => item.toolId !== tool.toolId)
-				: [...prev, tool]
-		);
-	};
-
-	const removeTool = (toolId: number) => {
-		setSelectedTools((prev) => prev.filter((tool) => tool.toolId !== toolId));
+	const selectTool = (tool: CommunityFilterTool) => {
+		setSelectedTool((prev) => (prev?.toolId === tool.toolId ? null : tool));
 	};
 
 	const handleBackToCategories = () => {
@@ -55,7 +42,7 @@ export const CommunityFilterSidebar = ({ categories }: CommunityFilterSidebarPro
 		setKeyword("");
 	};
 
-	const hasSelection = isFreeOnly || selectedTools.length > 0;
+	const hasSelection = isFreeOnly || selectedTool !== null;
 
 	return (
 		<aside className={s.root}>
@@ -63,52 +50,58 @@ export const CommunityFilterSidebar = ({ categories }: CommunityFilterSidebarPro
 				<div className={s.head}>
 					<div className={s.titleRow}>
 						<span className={s.title}>필터링 옵션</span>
-						<button
-							type="button"
-							className={s.infoButton}
-							onMouseEnter={() => setIsInfoOpen(true)}
-							onMouseLeave={() => setIsInfoOpen(false)}
-							onClick={() => setIsInfoOpen((prev) => !prev)}
-							aria-label="필터링 옵션 설명 보기"
-						>
-							<Image src="/icons/community/ic_info_12.svg" alt="" width={14} height={14} />
-						</button>
-						{isInfoOpen && (
-							<div className={s.tooltip} role="tooltip">
-								필터링을 통해 특정 툴과 관련된 글만 모아보실 수 있습니다. 아래 '검색 기능'과
-								'카테고리 기능'을 활용해보세요.
-							</div>
-						)}
+						<div className={s.infoWrapper}>
+							<button
+								type="button"
+								className={s.infoButton}
+								onMouseEnter={() => setIsInfoOpen(true)}
+								onMouseLeave={() => setIsInfoOpen(false)}
+								onClick={() => setIsInfoOpen((prev) => !prev)}
+								aria-label="필터링 옵션 설명 보기"
+							>
+								<Image src="/icons/community/ic_info_12.svg" alt="" width={14} height={14} />
+							</button>
+							{isInfoOpen && (
+								<div className={s.tooltipWrapper}>
+									<div className={s.tooltipTail} />
+									<div className={s.tooltipBubble} role="tooltip">
+										필터링을 통해 특정 툴과 관련된 글만 모아보실 수 있습니다. 아래 '검색 기능'과
+										'카테고리 기능'을 활용해보세요.
+									</div>
+								</div>
+							)}
+						</div>
 					</div>
 
 					{hasSelection ? (
 						<div className={s.chipList}>
 							{isFreeOnly && (
-								<span className={s.chip}>
-									자유
+								<div className={s.chip}>
+									<span className={s.chipName}>자유</span>
 									<button
 										type="button"
 										className={s.chipRemove}
 										onClick={() => setIsFreeOnly(false)}
 										aria-label="자유 필터 해제"
 									>
-										×
+										<Image src="/icons/community/ic_cross_20.svg" alt="" width={10} height={10} />
 									</button>
-								</span>
+								</div>
 							)}
-							{selectedTools.map((tool) => (
-								<span key={tool.toolId} className={s.chip}>
-									{tool.toolName}
+							{selectedTool && (
+								<div className={s.chip}>
+									<span className={s.chipLogo} />
+									<span className={s.chipName}>{selectedTool.toolName}</span>
 									<button
 										type="button"
 										className={s.chipRemove}
-										onClick={() => removeTool(tool.toolId)}
-										aria-label={`${tool.toolName} 필터 해제`}
+										onClick={() => setSelectedTool(null)}
+										aria-label={`${selectedTool.toolName} 필터 해제`}
 									>
-										×
+										<Image src="/icons/community/ic_cross_20.svg" alt="" width={10} height={10} />
 									</button>
-								</span>
-							))}
+								</div>
+							)}
 						</div>
 					) : (
 						<span className={s.emptyLabel}>비어있음</span>
@@ -139,8 +132,8 @@ export const CommunityFilterSidebar = ({ categories }: CommunityFilterSidebarPro
 								<ToolRow
 									key={tool.toolId}
 									tool={tool}
-									selected={selectedToolIds.has(tool.toolId)}
-									onToggle={() => toggleTool(tool)}
+									selected={selectedTool?.toolId === tool.toolId}
+									onSelect={() => selectTool(tool)}
 								/>
 							))
 						)
@@ -156,8 +149,8 @@ export const CommunityFilterSidebar = ({ categories }: CommunityFilterSidebarPro
 								<ToolRow
 									key={tool.toolId}
 									tool={tool}
-									selected={selectedToolIds.has(tool.toolId)}
-									onToggle={() => toggleTool(tool)}
+									selected={selectedTool?.toolId === tool.toolId}
+									onSelect={() => selectTool(tool)}
 								/>
 							))}
 						</>
@@ -200,21 +193,18 @@ export const CommunityFilterSidebar = ({ categories }: CommunityFilterSidebarPro
 interface ToolRowProps {
 	tool: CommunityFilterTool;
 	selected: boolean;
-	onToggle: () => void;
+	onSelect: () => void;
 }
 
-const ToolRow = ({ tool, selected, onToggle }: ToolRowProps) => {
+const ToolRow = ({ tool, selected, onSelect }: ToolRowProps) => {
 	return (
-		<button type="button" className={s.toolRow} onClick={onToggle}>
+		<button type="button" className={s.toolRow} onClick={onSelect}>
 			<span
 				className={cx(s.toolRowInner, !selected && s.toolRowInnerHover)}
 				data-selected={selected ? "true" : "false"}
 			>
 				<span className={s.toolLogo} />
 				<span className={s.toolName}>{tool.toolName}</span>
-			</span>
-			<span className={s.checkboxBox} data-checked={selected ? "true" : "false"}>
-				{selected && <CheckIcon />}
 			</span>
 		</button>
 	);
