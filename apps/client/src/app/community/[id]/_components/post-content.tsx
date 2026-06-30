@@ -2,16 +2,15 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import type { PostDetailImage } from "../_types";
 import * as s from "./styles/post-content.css";
 
 interface PostContentProps {
 	content: string;
-	images: PostDetailImage[];
+	images: string[];
 }
 
 export const PostContent = ({ content, images }: PostContentProps) => {
-	const [selectedImage, setSelectedImage] = useState<PostDetailImage | null>(null);
+	const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
 	useEffect(() => {
 		if (!selectedImage) return;
@@ -33,24 +32,23 @@ export const PostContent = ({ content, images }: PostContentProps) => {
 		<div className={s.wrapper}>
 			<p className={s.bodyText}>{content}</p>
 
-			{images.map((image) => (
+			{images.map((image, index) => (
 				<button
-					key={image.id}
+					// biome-ignore lint/suspicious/noArrayIndexKey: 이미지 URL이 중복될 수 있어 인덱스를 보조 키로 사용합니다.
+					key={`${image}-${index}`}
 					type="button"
 					className={s.imageButton}
 					onClick={() => setSelectedImage(image)}
 					aria-label="이미지 크게 보기"
 				>
-					{image.url && (
-						<Image
-							src={image.url}
-							alt=""
-							width={768}
-							height={432}
-							className={s.image}
-							style={{ width: "100%", height: "100%" }}
-						/>
-					)}
+					<Image
+						src={image}
+						alt=""
+						width={768}
+						height={432}
+						className={s.image}
+						style={{ width: "100%", height: "100%" }}
+					/>
 				</button>
 			))}
 
@@ -72,15 +70,13 @@ export const PostContent = ({ content, images }: PostContentProps) => {
 							<Image src="/icons/community/ic_cross_36.svg" alt="" width={22} height={22} />
 						</button>
 						<div className={s.lightboxImageWrapper}>
-							{selectedImage.url && (
-								<Image
-									src={selectedImage.url}
-									alt=""
-									fill
-									className={s.image}
-									style={{ objectFit: "cover" }}
-								/>
-							)}
+							<Image
+								src={selectedImage}
+								alt=""
+								fill
+								className={s.image}
+								style={{ objectFit: "cover" }}
+							/>
 						</div>
 					</div>
 				</div>

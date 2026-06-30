@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
+import { BoardApi } from "@/common/api/board-api";
+import { CommentApi } from "@/common/api/comment-api";
 import { PostDetailPage } from "./_components/post-detail-page";
-import { getMockPostDetail, MOCK_COMMENTS } from "./_mocks/post-detail-mock";
 
 interface Props {
 	params: Promise<{
@@ -8,14 +9,20 @@ interface Props {
 	}>;
 }
 
-// TODO(api): BoardApi.getBoardDetail / getComments 연동 시 목데이터를 실제 데이터로 교체합니다.
+const COMMENT_LIST_SIZE = 50;
+
 export default async function CommunityPostDetailRoute({ params }: Props) {
 	const { id } = await params;
 	const boardId = Number(id);
 
 	if (Number.isNaN(boardId)) notFound();
 
-	const post = getMockPostDetail(boardId);
+	const [post, commentsRes] = await Promise.all([
+		BoardApi.getBoardDetail(boardId).catch(() => null),
+		CommentApi.getComments({ boardId, size: COMMENT_LIST_SIZE }).catch(() => null),
+	]);
 
-	return <PostDetailPage post={post} comments={MOCK_COMMENTS} />;
+	if (!post) notFound();
+
+	return <PostDetailPage post={post} comments={commentsRes?.commentList || []} />;
 }

@@ -1,20 +1,29 @@
 import Image from "next/image";
-import type { PostDetail } from "../_types";
+import type { BoardItem } from "@/common/api/models/board.model";
+import { formatDate } from "@/common/utils";
 import * as s from "./styles/post-header.css";
 
 interface PostHeaderProps {
-	post: PostDetail;
+	post: BoardItem;
 }
 
 export const PostHeader = ({ post }: PostHeaderProps) => {
 	return (
 		<div className={s.wrapper}>
-			<div className={s.toolBadge}>
-				<div className={s.toolLogo} />
-				<span className={s.toolName}>{post.tool.toolName}</span>
-			</div>
+			{post.toolName && (
+				<>
+					<div className={s.toolBadge}>
+						<div className={s.toolLogo}>
+							{post.toolLogo && (
+								<Image src={post.toolLogo} alt="" fill style={{ objectFit: "cover" }} />
+							)}
+						</div>
+						<span className={s.toolName}>{post.toolName}</span>
+					</div>
 
-			<div className={s.divider} />
+					<div className={s.divider} />
+				</>
+			)}
 
 			<div className={s.titleRow}>
 				<div className={s.titleBlock}>
@@ -22,7 +31,7 @@ export const PostHeader = ({ post }: PostHeaderProps) => {
 					<div className={s.metaRow}>
 						<span className={s.author}>{post.author}</span>
 						<div className={s.metaDivider} />
-						<span className={s.date}>{post.date}</span>
+						<span className={s.date}>{formatDate(post.updatedAt)}</span>
 					</div>
 				</div>
 				<button type="button" className={s.etcButton} aria-label="더보기">

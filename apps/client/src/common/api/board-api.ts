@@ -1,5 +1,5 @@
 import { fetchServer } from "./fetch-server";
-import type { BoardListRes, GetBoardListParams } from "./models/board.model";
+import type { BoardItem, BoardListRes, GetBoardListParams } from "./models/board.model";
 
 /**
  * @description /api/v1/board 엔드포인트와 통신하는 API 서비스입니다.
@@ -27,6 +27,15 @@ export const BoardApi = {
 
 		return fetchServer<BoardListRes>(`/api/v1/board?${query}`, {
 			next: { tags: cacheTags },
+		});
+	},
+
+	/**
+	 * @description 게시글 상세 조회
+	 */
+	getBoardDetail: async (boardId: number) => {
+		return fetchServer<BoardItem>(`/api/v1/board/${boardId}`, {
+			next: { tags: [`board-${boardId}`] },
 		});
 	},
 };

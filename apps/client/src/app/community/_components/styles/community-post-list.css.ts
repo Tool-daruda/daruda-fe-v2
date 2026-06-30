@@ -83,11 +83,13 @@ export const toolChip = style({
 });
 
 export const toolLogo = style({
+	position: "relative",
 	flexShrink: 0,
 	width: "20px",
 	height: "20px",
 	borderRadius: "4px",
 	backgroundColor: colors.grayscale[100],
+	overflow: "hidden",
 });
 
 export const toolName = style({
@@ -169,12 +171,6 @@ export const statItem = style({
 	gap: "4px",
 	...themeVars.fonts.caption2_1,
 	color: colors.grayscale[300],
-});
-
-export const statDivider = style({
-	width: "1px",
-	height: "10px",
-	backgroundColor: colors.grayscale[200],
 });
 
 export const thumbnail = style({

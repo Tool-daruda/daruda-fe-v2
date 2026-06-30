@@ -2,26 +2,34 @@
 
 import { cx } from "@repo/ui";
 import Image from "next/image";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import type { CommunityFilterCategory, CommunityFilterTool } from "../_types";
 import * as s from "./styles/community-filter-sidebar.css";
 
 interface CommunityFilterSidebarProps {
 	categories: CommunityFilterCategory[];
+	selectedToolId?: number;
+	isFreeOnly: boolean;
 }
 
-export const CommunityFilterSidebar = ({ categories }: CommunityFilterSidebarProps) => {
+export const CommunityFilterSidebar = ({
+	categories,
+	selectedToolId,
+	isFreeOnly,
+}: CommunityFilterSidebarProps) => {
+	const router = useRouter();
+	const pathname = usePathname();
+	const searchParams = useSearchParams();
+
 	const [isInfoOpen, setIsInfoOpen] = useState(false);
 	const [keyword, setKeyword] = useState("");
 	const [isSearchActive, setIsSearchActive] = useState(false);
 	const [activeCategory, setActiveCategory] = useState<CommunityFilterCategory | null>(null);
-	const [isFreeOnly, setIsFreeOnly] = useState(false);
-	const [selectedTool, setSelectedTool] = useState<CommunityFilterTool | null>(null);
 
 	const trimmedKeyword = keyword.trim().toLowerCase();
 	const isSearching = trimmedKeyword.length > 0;
 
-	// TODO(api): 키워드 검색은 현재 로컬 목데이터 기준으로 동작합니다. 다음 스텝에서 툴 검색 API로 교체됩니다.
 	const searchScopeTools = useMemo(
 		() =>
 			activeCategory ? activeCategory.tools : categories.flatMap((category) => category.tools),
@@ -33,8 +41,40 @@ export const CommunityFilterSidebar = ({ categories }: CommunityFilterSidebarPro
 		return searchScopeTools.filter((tool) => tool.toolName.toLowerCase().includes(trimmedKeyword));
 	}, [isSearching, searchScopeTools, trimmedKeyword]);
 
+	const selectedTool = useMemo(() => {
+		if (selectedToolId === undefined) return null;
+		for (const category of categories) {
+			const found = category.tools.find((tool) => tool.toolId === selectedToolId);
+			if (found) return found;
+		}
+		return null;
+	}, [categories, selectedToolId]);
+
+	const updateFilterParams = (next: { toolId?: number | null; noTopic?: boolean | null }) => {
+		const params = new URLSearchParams(searchParams.toString());
+
+		if ("toolId" in next) {
+			if (next.toolId == null) params.delete("toolId");
+			else params.set("toolId", String(next.toolId));
+		}
+		if ("noTopic" in next) {
+			if (!next.noTopic) params.delete("noTopic");
+			else params.set("noTopic", "true");
+		}
+
+		router.push(`${pathname}?${params.toString()}`, { scroll: false });
+	};
+
 	const selectTool = (tool: CommunityFilterTool) => {
-		setSelectedTool((prev) => (prev?.toolId === tool.toolId ? null : tool));
+		if (selectedToolId === tool.toolId) {
+			updateFilterParams({ toolId: null });
+		} else {
+			updateFilterParams({ toolId: tool.toolId, noTopic: false });
+		}
+	};
+
+	const toggleFree = () => {
+		updateFilterParams({ noTopic: !isFreeOnly, toolId: isFreeOnly ? undefined : null });
 	};
 
 	const handleBackToCategories = () => {
@@ -81,7 +121,7 @@ export const CommunityFilterSidebar = ({ categories }: CommunityFilterSidebarPro
 									<button
 										type="button"
 										className={s.chipRemove}
-										onClick={() => setIsFreeOnly(false)}
+										onClick={() => updateFilterParams({ noTopic: false })}
 										aria-label="자유 필터 해제"
 									>
 										<Image src="/icons/community/ic_cross_20.svg" alt="" width={10} height={10} />
@@ -90,12 +130,23 @@ export const CommunityFilterSidebar = ({ categories }: CommunityFilterSidebarPro
 							)}
 							{selectedTool && (
 								<div className={s.chip}>
-									<span className={s.chipLogo} />
+									{selectedTool.toolLogo ? (
+										<span className={s.chipLogo}>
+											<Image
+												src={selectedTool.toolLogo}
+												alt=""
+												fill
+												style={{ objectFit: "cover" }}
+											/>
+										</span>
+									) : (
+										<span className={s.chipLogo} />
+									)}
 									<span className={s.chipName}>{selectedTool.toolName}</span>
 									<button
 										type="button"
 										className={s.chipRemove}
-										onClick={() => setSelectedTool(null)}
+										onClick={() => updateFilterParams({ toolId: null })}
 										aria-label={`${selectedTool.toolName} 필터 해제`}
 									>
 										<Image src="/icons/community/ic_cross_20.svg" alt="" width={10} height={10} />
@@ -132,7 +183,7 @@ export const CommunityFilterSidebar = ({ categories }: CommunityFilterSidebarPro
 								<ToolRow
 									key={tool.toolId}
 									tool={tool}
-									selected={selectedTool?.toolId === tool.toolId}
+									selected={selectedToolId === tool.toolId}
 									onSelect={() => selectTool(tool)}
 								/>
 							))
@@ -145,22 +196,22 @@ export const CommunityFilterSidebar = ({ categories }: CommunityFilterSidebarPro
 								</span>
 								<Image src="/icons/community/ic_chevron_down_14.svg" alt="" width={14} height={7} />
 							</button>
-							{activeCategory.tools.map((tool) => (
-								<ToolRow
-									key={tool.toolId}
-									tool={tool}
-									selected={selectedTool?.toolId === tool.toolId}
-									onSelect={() => selectTool(tool)}
-								/>
-							))}
+							{activeCategory.tools.length === 0 ? (
+								<p className={s.emptyResult}>등록된 툴이 없어요.</p>
+							) : (
+								activeCategory.tools.map((tool) => (
+									<ToolRow
+										key={tool.toolId}
+										tool={tool}
+										selected={selectedToolId === tool.toolId}
+										onSelect={() => selectTool(tool)}
+									/>
+								))
+							)}
 						</>
 					) : (
 						<>
-							<button
-								type="button"
-								className={s.freeRow}
-								onClick={() => setIsFreeOnly((prev) => !prev)}
-							>
+							<button type="button" className={s.freeRow} onClick={toggleFree}>
 								<span className={s.freeLabel}>자유</span>
 								<span className={s.checkboxBox} data-checked={isFreeOnly ? "true" : "false"}>
 									{isFreeOnly && <CheckIcon />}
@@ -203,7 +254,13 @@ const ToolRow = ({ tool, selected, onSelect }: ToolRowProps) => {
 				className={cx(s.toolRowInner, !selected && s.toolRowInnerHover)}
 				data-selected={selected ? "true" : "false"}
 			>
-				<span className={s.toolLogo} />
+				{tool.toolLogo ? (
+					<span className={s.toolLogo}>
+						<Image src={tool.toolLogo} alt="" fill style={{ objectFit: "cover" }} />
+					</span>
+				) : (
+					<span className={s.toolLogo} />
+				)}
 				<span className={s.toolName}>{tool.toolName}</span>
 			</span>
 		</button>

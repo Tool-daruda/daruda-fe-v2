@@ -112,11 +112,13 @@ export const chip = style({
 });
 
 export const chipLogo = style({
+	position: "relative",
 	flexShrink: 0,
 	width: "20px",
 	height: "20px",
 	borderRadius: "4px",
 	backgroundColor: colors.grayscale[100],
+	overflow: "hidden",
 });
 
 export const chipName = style({
@@ -273,11 +275,13 @@ export const toolRowInnerHover = style({
 });
 
 export const toolLogo = style({
+	position: "relative",
 	flexShrink: 0,
 	width: "20px",
 	height: "20px",
 	borderRadius: "4px",
 	backgroundColor: colors.grayscale[100],
+	overflow: "hidden",
 });
 
 export const toolName = style({

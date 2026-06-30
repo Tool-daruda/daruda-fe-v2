@@ -19,11 +19,13 @@ export const toolBadge = style({
 });
 
 export const toolLogo = style({
+	position: "relative",
 	flexShrink: 0,
 	width: "24px",
 	height: "24px",
 	borderRadius: "4px",
 	backgroundColor: colors.grayscale[100],
+	overflow: "hidden",
 });
 
 export const toolName = style({

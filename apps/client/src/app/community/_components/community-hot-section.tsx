@@ -1,14 +1,18 @@
 import Image from "next/image";
 import Link from "next/link";
-import type { CommunityHotPost } from "../_types";
+import type { BoardItem } from "@/common/api/models/board.model";
+import { formatDate } from "@/common/utils";
 import * as s from "./styles/community-hot-section.css";
 
+const HOT_HASHTAGS = ["#사용법", "#궁금증", "#오류해결", "#추천", "#단축키"];
+
 interface CommunityHotSectionProps {
-	hashtags: string[];
-	posts: CommunityHotPost[];
+	posts: BoardItem[];
 }
 
-export const CommunityHotSection = ({ hashtags, posts }: CommunityHotSectionProps) => {
+export const CommunityHotSection = ({ posts }: CommunityHotSectionProps) => {
+	if (posts.length === 0) return null;
+
 	return (
 		<section className={s.section}>
 			<div className={s.headRow}>
@@ -17,7 +21,7 @@ export const CommunityHotSection = ({ hashtags, posts }: CommunityHotSectionProp
 					<h2 className={s.title}>지금 가장 핫한 게시글</h2>
 				</div>
 				<div className={s.hashtagList}>
-					{hashtags.map((tag) => (
+					{HOT_HASHTAGS.map((tag) => (
 						<span key={tag}>{tag}</span>
 					))}
 				</div>
@@ -27,13 +31,8 @@ export const CommunityHotSection = ({ hashtags, posts }: CommunityHotSectionProp
 				{posts.map((post) => (
 					<Link key={post.boardId} href={`/community/${post.boardId}`} className={s.card}>
 						<div className={s.thumbnailWrapper}>
-							{post.thumbnailUrl && (
-								<Image
-									src={post.thumbnailUrl}
-									alt={post.title}
-									fill
-									style={{ objectFit: "cover" }}
-								/>
+							{post.images[0] && (
+								<Image src={post.images[0]} alt={post.title} fill style={{ objectFit: "cover" }} />
 							)}
 							<div className={s.badge} />
 						</div>
@@ -42,7 +41,7 @@ export const CommunityHotSection = ({ hashtags, posts }: CommunityHotSectionProp
 							<div className={s.metaRow}>
 								<span>{post.author}</span>
 								<div className={s.metaDivider} />
-								<span>{post.date}</span>
+								<span>{formatDate(post.updatedAt)}</span>
 							</div>
 						</div>
 					</Link>

@@ -1,10 +1,11 @@
 import Image from "next/image";
-import type { PostComment } from "../_types";
+import type { CommentItem } from "@/common/api/models/comment.model";
+import { formatDate, formatTime } from "@/common/utils";
 import * as s from "./styles/comment-section.css";
 
 interface CommentSectionProps {
 	commentCount: number;
-	comments: PostComment[];
+	comments: CommentItem[];
 }
 
 export const CommentSection = ({ commentCount, comments }: CommentSectionProps) => {
@@ -21,22 +22,22 @@ export const CommentSection = ({ commentCount, comments }: CommentSectionProps) 
 
 			<div className={s.list}>
 				{comments.map((comment) => (
-					<CommentItem key={comment.commentId} comment={comment} />
+					<CommentRow key={comment.commentId} comment={comment} />
 				))}
 			</div>
 		</div>
 	);
 };
 
-const CommentItem = ({ comment }: { comment: PostComment }) => {
+const CommentRow = ({ comment }: { comment: CommentItem }) => {
 	return (
 		<div className={s.item}>
 			<div className={s.itemHead}>
 				<div className={s.itemHeadLeft}>
-					<span className={s.author}>{comment.author}</span>
+					<span className={s.author}>{comment.nickname}</span>
 					<div className={s.metaDivider} />
-					<span className={s.meta}>{comment.date}</span>
-					<span className={s.meta}>{comment.time}</span>
+					<span className={s.meta}>{formatDate(comment.updatedAt)}</span>
+					<span className={s.meta}>{formatTime(comment.updatedAt)}</span>
 				</div>
 				<button type="button" className={s.etcButton} aria-label="더보기">
 					<Image src="/icons/community/ic_etc_24.svg" alt="" width={18} height={4} />
@@ -45,7 +46,11 @@ const CommentItem = ({ comment }: { comment: PostComment }) => {
 
 			<p className={s.content}>{comment.content}</p>
 
-			{comment.imageUrl && <div className={s.image} />}
+			{comment.image && (
+				<div className={s.image}>
+					<Image src={comment.image} alt="" fill style={{ objectFit: "cover" }} />
+				</div>
+			)}
 		</div>
 	);
 };

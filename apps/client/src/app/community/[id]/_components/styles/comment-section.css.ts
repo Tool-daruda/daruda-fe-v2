@@ -93,8 +93,10 @@ export const content = style({
 });
 
 export const image = style({
+	position: "relative",
 	width: "240px",
 	height: "135px",
 	borderRadius: "6.5px",
 	backgroundColor: colors.grayscale[100],
+	overflow: "hidden",
 });

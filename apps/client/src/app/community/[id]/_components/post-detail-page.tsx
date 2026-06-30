@@ -1,4 +1,5 @@
-import type { PostComment, PostDetail } from "../_types";
+import type { BoardItem } from "@/common/api/models/board.model";
+import type { CommentItem } from "@/common/api/models/comment.model";
 import { CommentInput } from "./comment-input";
 import { CommentSection } from "./comment-section";
 import { PostBookmarkButton } from "./post-bookmark-button";
@@ -7,8 +8,8 @@ import { PostHeader } from "./post-header";
 import * as s from "./styles/post-detail-page.css";
 
 interface PostDetailPageProps {
-	post: PostDetail;
-	comments: PostComment[];
+	post: BoardItem;
+	comments: CommentItem[];
 }
 
 export const PostDetailPage = ({ post, comments }: PostDetailPageProps) => {
@@ -20,7 +21,7 @@ export const PostDetailPage = ({ post, comments }: PostDetailPageProps) => {
 			</div>
 
 			<div className={s.actionsArea}>
-				<PostBookmarkButton initialCount={post.scrapCount} initialScrapped={post.isScrapped} />
+				<PostBookmarkButton initialScrapped={post.isScraped} />
 				<CommentInput />
 			</div>
 

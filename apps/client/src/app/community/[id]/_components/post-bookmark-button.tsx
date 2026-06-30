@@ -5,14 +5,14 @@ import { useState } from "react";
 import * as s from "./styles/post-bookmark-button.css";
 
 interface PostBookmarkButtonProps {
-	initialCount: number;
 	initialScrapped: boolean;
 }
 
-// TODO(api): 클릭 시 ToolApi/BoardApi 스크랩 토글 엔드포인트로 교체됩니다. 현재는 로컬 상태만 변경합니다.
-export const PostBookmarkButton = ({ initialCount, initialScrapped }: PostBookmarkButtonProps) => {
+// TODO(api): 클릭 시 BoardApi의 스크랩 토글(POST /api/v1/board/{board-id}/scrap) 엔드포인트로 교체됩니다.
+// TODO(api): 게시글 상세 응답(BoardRes)에 스크랩 수 필드가 없어 카운트는 0(또는 1)에서 로컬로만 증감합니다.
+export const PostBookmarkButton = ({ initialScrapped }: PostBookmarkButtonProps) => {
 	const [isScrapped, setIsScrapped] = useState(initialScrapped);
-	const [count, setCount] = useState(initialCount);
+	const [count, setCount] = useState(initialScrapped ? 1 : 0);
 
 	const handleClick = () => {
 		setIsScrapped((prev) => !prev);
