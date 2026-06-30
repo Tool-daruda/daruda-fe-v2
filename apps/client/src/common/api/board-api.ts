@@ -9,7 +9,7 @@ export const BoardApi = {
 	 * @description 게시글 리스트 조회 (자유게시판, 툴별게시판, 페이지네이션 완전 지원)
 	 */
 	getBoardList: async (params: GetBoardListParams = {}) => {
-		const { noTopic, toolId, size = 10, lastBoardId } = params;
+		const { noTopic, toolId, size = 10, lastBoardId, sortBy, lastScrapCount } = params;
 
 		const queryParams = new URLSearchParams({
 			size: String(size),
@@ -18,6 +18,8 @@ export const BoardApi = {
 		if (noTopic !== undefined) queryParams.append("noTopic", String(noTopic));
 		if (toolId !== undefined) queryParams.append("toolId", String(toolId));
 		if (lastBoardId !== undefined) queryParams.append("lastBoardId", String(lastBoardId));
+		if (sortBy !== undefined) queryParams.append("sortBy", sortBy);
+		if (lastScrapCount !== undefined) queryParams.append("lastScrapCount", String(lastScrapCount));
 
 		const query = queryParams.toString();
 
