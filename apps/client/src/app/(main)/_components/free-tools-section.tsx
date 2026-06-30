@@ -19,7 +19,7 @@ export const FreeToolsSection = async () => {
 	return (
 		<section className={s.section}>
 			<SectionHeader
-				icon="🆓"
+				iconSrc="/icons/main/ic_main_free_24.svg"
 				title="무료로 사용할 수 있는 툴만 모아봤어요"
 				moreHref="/toollist?isFree=true"
 			/>

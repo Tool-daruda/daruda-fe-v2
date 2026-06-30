@@ -17,7 +17,11 @@ export const PopularPostsSection = async () => {
 
 	return (
 		<section className={s.section}>
-			<SectionHeader icon="📌" title="대학생들이 가장 많이 저장한 글이에요" moreHref="/community" />
+			<SectionHeader
+				iconSrc="/icons/main/ic_main__community_24.svg"
+				title="대학생들이 가장 많이 저장한 글이에요"
+				moreHref="/community"
+			/>
 
 			<div className={s.grid}>
 				{posts.map((post) => (

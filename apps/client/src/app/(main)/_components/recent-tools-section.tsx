@@ -19,7 +19,7 @@ export const RecentToolsSection = async () => {
 	return (
 		<section className={s.section}>
 			<SectionHeader
-				icon="🆕"
+				iconSrc="/icons/main/ic_main_new_24.svg"
 				title="최근 daruda에 추가된 툴 정보"
 				moreHref="/toollist?criteria=createdAt"
 			/>

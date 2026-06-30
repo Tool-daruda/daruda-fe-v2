@@ -1,17 +1,18 @@
+import Image from "next/image";
 import Link from "next/link";
 import * as s from "./section-header.css";
 
 type Props = {
-	icon: string;
+	iconSrc: string;
 	title: string;
 	moreHref: string;
 };
 
-export const SectionHeader = ({ icon, title, moreHref }: Props) => {
+export const SectionHeader = ({ iconSrc, title, moreHref }: Props) => {
 	return (
 		<div className={s.container}>
 			<h2 className={s.title}>
-				<span>{icon}</span>
+				<Image src={iconSrc} alt="" width={24} height={24} />
 				{title}
 			</h2>
 			<Link href={moreHref} className={s.moreLink}>

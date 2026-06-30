@@ -19,7 +19,7 @@ export const PopularToolsSection = async () => {
 	return (
 		<section className={s.section}>
 			<SectionHeader
-				icon="🔥"
+				iconSrc="/icons/main/ic_main_hot_24_blue.svg"
 				title="대학생들 사이에서 가장 인기있는 툴이에요"
 				moreHref="/toollist"
 			/>
