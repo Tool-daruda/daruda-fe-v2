@@ -20,6 +20,13 @@ export const imagePreview = style({
 	height: "80px",
 	borderRadius: "8px",
 	backgroundColor: colors.grayscale[100],
+	overflow: "hidden",
+});
+
+export const imagePreviewImg = style({
+	width: "100%",
+	height: "100%",
+	objectFit: "cover",
 });
 
 export const imageRemoveButton = style({
@@ -80,10 +87,19 @@ export const imageButton = style({
 	justifyContent: "center",
 	width: "24px",
 	height: "24px",
-	background: "none",
-	border: "none",
-	padding: 0,
 	cursor: "pointer",
+});
+
+export const hiddenFileInput = style({
+	position: "absolute",
+	width: 1,
+	height: 1,
+	padding: 0,
+	margin: -1,
+	overflow: "hidden",
+	clip: "rect(0, 0, 0, 0)",
+	whiteSpace: "nowrap",
+	border: 0,
 });
 
 export const warningText = style({
