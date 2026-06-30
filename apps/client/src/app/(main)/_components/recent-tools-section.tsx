@@ -31,7 +31,7 @@ export const RecentToolsSection = async () => {
 						title={tool.toolName}
 						thumbnailUrl={tool.toolLogo}
 						priceType={LICENSE_MAP[tool.license]}
-						isBookmarked={tool.isScrapped}
+						isBookmarked={tool.isScraped}
 						tags={tool.keywords}
 						badgeType="new"
 						variant="vertical"

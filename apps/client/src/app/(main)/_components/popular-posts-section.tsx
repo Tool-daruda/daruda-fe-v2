@@ -5,7 +5,11 @@ import * as s from "./popular-posts-section.css";
 import { SectionHeader } from "./section-header";
 
 export const PopularPostsSection = async () => {
-	const boardListRes = await BoardApi.getBoardList({ noTopic: true, size: 6 }).catch(() => null);
+	const boardListRes = await BoardApi.getBoardList({
+		noTopic: true,
+		size: 6,
+		sortBy: "SCRAP",
+	}).catch(() => null);
 
 	const posts = boardListRes?.contents || [];
 
