@@ -1,8 +1,12 @@
+export type BoardSortBy = "LATEST" | "SCRAP";
+
 export interface GetBoardListParams {
 	noTopic?: boolean;
 	toolId?: number;
 	size?: number;
 	lastBoardId?: number;
+	sortBy?: BoardSortBy;
+	lastScrapCount?: number;
 }
 
 export interface BoardItem {
@@ -25,4 +29,5 @@ export interface BoardListRes {
 		totalElements: number;
 		nextCursor: number;
 	};
+	nextScrapCount: number;
 }

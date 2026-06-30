@@ -7,12 +7,15 @@ export interface ToolSummary {
 	description: string;
 	license: ApiLicenseType;
 	keywords: string[];
-	isScrapped: boolean;
+	isScraped: boolean;
 }
 
 export interface ToolListRes {
 	tools: ToolSummary[];
-	hasNext: boolean;
+	scrollPaginationDto: {
+		totalElements: number;
+		nextCursor: number;
+	};
 }
 
 export interface CategoryRes {
