@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import type { BoardItem, BoardSortBy } from "@/common/api/models/board.model";
