@@ -22,7 +22,7 @@ export const PostDetailPage = ({ post, comments }: PostDetailPageProps) => {
 
 			<div className={s.actionsArea}>
 				<PostBookmarkButton boardId={post.boardId} initialScrapped={post.isScraped} />
-				<CommentInput />
+				<CommentInput boardId={post.boardId} />
 			</div>
 
 			<CommentSection commentCount={post.commentCount} comments={comments} />

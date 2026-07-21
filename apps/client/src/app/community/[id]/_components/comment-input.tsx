@@ -1,20 +1,26 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { type ChangeEvent, useEffect, useRef, useState } from "react";
+import { getPresignedUrlAction } from "@/common/api/actions/image.actions";
+import { getFileExtension, uploadToS3 } from "@/common/utils/upload-to-s3";
+import { postCommentAction } from "../../_actions/comment-actions";
 import * as s from "./styles/comment-input.css";
 
 const MAX_IMAGE_SIZE_MB = 10;
 
-// TODO(api): 등록 클릭 시 댓글 작성 API로 교체됩니다. 첨부 이미지는 실제 업로드 연동이 필요합니다.
-export const CommentInput = () => {
+export const CommentInput = ({ boardId }: { boardId: number }) => {
+	const router = useRouter();
 	const [text, setText] = useState("");
 	const [image, setImage] = useState<File | null>(null);
 	const [imageError, setImageError] = useState<string | null>(null);
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [submitError, setSubmitError] = useState<string | null>(null);
 	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	const previewUrl = useImageObjectUrl(image);
-	const canSubmit = text.trim().length > 0 || image !== null;
+	const canSubmit = text.trim().length > 0;
 
 	const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const file = e.target.files?.[0];
@@ -36,10 +42,41 @@ export const CommentInput = () => {
 		if (fileInputRef.current) fileInputRef.current.value = "";
 	};
 
-	const handleSubmit = () => {
-		if (!canSubmit) return;
-		setText("");
-		removeImage();
+	const handleSubmit = async () => {
+		if (!canSubmit || isSubmitting) return;
+		setIsSubmitting(true);
+
+		try {
+			let imageUrl: string | null = null;
+			if (image) {
+				const urlResult = await getPresignedUrlAction({
+					prefix: "board",
+					extension: getFileExtension(image),
+				});
+				if (!urlResult.success) throw new Error(urlResult.error);
+				await uploadToS3(urlResult.data.presignedUrl, image);
+				imageUrl = urlResult.data.publicUrl;
+			}
+
+			const result = await postCommentAction({
+				boardId,
+				payload: {
+					content: text,
+					...(imageUrl && { photoUrl: imageUrl }),
+				},
+			});
+
+			if (!result.success) throw new Error(result.error);
+
+			setText("");
+			removeImage();
+			setSubmitError(null);
+			router.refresh();
+		} catch (err) {
+			setSubmitError(err instanceof Error ? err.message : "오류가 발생했습니다.");
+		} finally {
+			setIsSubmitting(false);
+		}
 	};
 
 	return (
@@ -90,14 +127,15 @@ export const CommentInput = () => {
 					<button
 						type="button"
 						className={s.submitButton}
-						data-active={canSubmit ? "true" : "false"}
-						disabled={!canSubmit}
+						data-active={canSubmit && !isSubmitting ? "true" : "false"}
+						disabled={!canSubmit || isSubmitting}
 						onClick={handleSubmit}
 					>
 						등록
 					</button>
 				</div>
 			</div>
+			{submitError && <p className={s.warningText}>{submitError}</p>}
 		</div>
 	);
 };

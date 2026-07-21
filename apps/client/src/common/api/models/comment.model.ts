@@ -19,3 +19,12 @@ export interface GetCommentRetrieveResponse {
 		nextCursor: number;
 	};
 }
+
+export interface CreateCommentReq {
+	content: string;
+	photoUrl?: string;
+}
+
+export interface CreateCommentRes {
+	commentId: number;
+}
