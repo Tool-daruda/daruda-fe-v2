@@ -1,6 +1,10 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { type ClipboardEvent, useState } from "react";
+import { getPresignedUrlAction } from "@/common/api/actions/image.actions";
+import { getFileExtension, uploadToS3 } from "@/common/utils/upload-to-s3";
+import { createBoardAction, updateBoardAction } from "../../_actions/board-actions";
 import type { CommunityFilterTool } from "../../_types";
 import { PostImageUploader } from "./post-image-uploader";
 import { PostTagSelector } from "./post-tag-selector";
@@ -22,6 +26,9 @@ export const PostForm = ({ mode, tools, initialValues }: PostFormProps) => {
 		() => initialValues?.images.map((url): ImageSlot => ({ kind: "existing", url })) ?? []
 	);
 	const [imageError, setImageError] = useState<string | null>(null);
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [submitError, setSubmitError] = useState<string | null>(null);
+	const router = useRouter();
 
 	const canSubmit = title.trim().length > 0 && content.trim().length > 0;
 
@@ -72,10 +79,47 @@ export const PostForm = ({ mode, tools, initialValues }: PostFormProps) => {
 		addFiles(files);
 	};
 
-	// TODO(api): 글 작성(POST /api/v1/board) / 수정(PATCH /api/v1/board/{board-id}) 연동이 필요합니다.
-	// 이미지는 presigned URL 발급 → S3 업로드 → imageList에 publicUrl을 채우는 흐름으로 연동합니다.
-	const handleSubmit = () => {
-		if (!canSubmit) return;
+	const handleSubmit = async () => {
+		if (!canSubmit || isSubmitting) return;
+		setIsSubmitting(true);
+		setSubmitError(null);
+
+		try {
+			const imageUrls: string[] = [];
+			for (const slot of images) {
+				if (slot.kind === "existing") {
+					imageUrls.push(slot.url);
+				} else {
+					const urlResult = await getPresignedUrlAction({
+						prefix: "board",
+						extension: getFileExtension(slot.file),
+					});
+					if (!urlResult.success) throw new Error(urlResult.error);
+
+					await uploadToS3(urlResult.data.presignedUrl, slot.file);
+					imageUrls.push(urlResult.data.publicUrl);
+				}
+			}
+
+			const payload = {
+				title,
+				content,
+				imageList: imageUrls,
+				...(selectedTool ? { toolId: selectedTool.toolId, noTopic: false } : { noTopic: true }),
+			};
+
+			const result =
+				mode === "edit" && initialValues?.boardId
+					? await updateBoardAction({ boardId: initialValues.boardId, payload })
+					: await createBoardAction(payload);
+
+			if (!result.success) throw new Error(result.error);
+
+			router.push(`/community/${result.data.boardId}`);
+		} catch (err) {
+			setSubmitError(err instanceof Error ? err.message : "오류가 발생했습니다.");
+			setIsSubmitting(false);
+		}
 	};
 
 	return (
@@ -121,15 +165,18 @@ export const PostForm = ({ mode, tools, initialValues }: PostFormProps) => {
 					</li>
 				</ul>
 
-				<button
-					type="button"
-					className={s.submitButton}
-					data-active={canSubmit ? "true" : "false"}
-					disabled={!canSubmit}
-					onClick={handleSubmit}
-				>
-					{mode === "edit" ? "글 수정하기" : "글 작성하기"}
-				</button>
+				<div className={s.submitArea}>
+					{submitError && <p className={s.submitError}>{submitError}</p>}
+					<button
+						type="button"
+						className={s.submitButton}
+						data-active={canSubmit && !isSubmitting ? "true" : "false"}
+						disabled={!canSubmit || isSubmitting}
+						onClick={handleSubmit}
+					>
+						{isSubmitting ? "저장 중..." : mode === "edit" ? "글 수정하기" : "글 작성하기"}
+					</button>
+				</div>
 			</div>
 		</div>
 	);

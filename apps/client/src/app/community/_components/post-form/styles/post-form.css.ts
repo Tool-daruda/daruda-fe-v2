@@ -79,6 +79,19 @@ export const helperList = style({
 	color: colors.grayscale[200],
 });
 
+export const submitArea = style({
+	flexShrink: 0,
+	display: "flex",
+	flexDirection: "column",
+	alignItems: "flex-end",
+	gap: "8px",
+});
+
+export const submitError = style({
+	...themeVars.fonts.caption2_1,
+	color: colors.system.red.lt,
+});
+
 export const submitButton = style({
 	flexShrink: 0,
 	display: "flex",

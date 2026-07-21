@@ -36,3 +36,15 @@ export interface BoardScrapRes {
 	boardId: number;
 	scrap: boolean;
 }
+
+export interface BoardWriteReq {
+	title: string;
+	content: string;
+	imageList: string[];
+	toolId?: number;
+	noTopic: boolean;
+}
+
+export interface BoardWriteRes {
+	boardId: number;
+}
