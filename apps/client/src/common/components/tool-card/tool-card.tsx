@@ -76,7 +76,7 @@ export default function ToolCard({
 
 				<div className={styles.bottomRow}>
 					<div className={styles.tagList}>
-						{tags.slice(0, 2).map((tag) => (
+						{[...new Set(tags)].slice(0, 2).map((tag) => (
 							<span key={tag} className={styles.tag}>
 								{tag}
 							</span>
