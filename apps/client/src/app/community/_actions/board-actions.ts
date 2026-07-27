@@ -40,3 +40,10 @@ export const updateBoardAction = createSafeAction(
 		return data;
 	}
 );
+
+export const deleteBoardAction = createSafeAction(async (boardId: number) => {
+	await fetchServer(`/api/v1/board/${boardId}`, { method: "DELETE" });
+	revalidateTag(`board-${boardId}`, "default");
+	revalidateTag("all-boards", "default");
+	return {};
+});

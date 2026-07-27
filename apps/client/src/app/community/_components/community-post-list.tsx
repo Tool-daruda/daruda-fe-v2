@@ -2,8 +2,12 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import type { BoardItem, BoardSortBy } from "@/common/api/models/board.model";
+import { MoreMenu, type MoreMenuItem } from "@/common/components/more-menu/more-menu";
+import { useMoreMenu } from "@/common/hooks/use-more-menu";
 import { formatDate } from "@/common/utils";
+import { deleteBoardAction, postBoardScrapAction } from "../_actions/board-actions";
 import { CommunitySortTabs } from "./community-sort-tabs";
 import * as s from "./styles/community-post-list.css";
 
@@ -34,58 +38,102 @@ export const CommunityPostList = ({ posts, sortBy }: CommunityPostListProps) => 
 };
 
 const PostCard = ({ post }: { post: BoardItem }) => {
+	const router = useRouter();
+	const { isOpen, toggle, close, containerRef } = useMoreMenu();
+
+	const ownerItems: MoreMenuItem[] = [
+		{
+			label: "수정하기",
+			iconSrc: "/icons/community/ic_edit_20.svg",
+			onClick: () => router.push(`/community/${post.boardId}/edit`),
+		},
+		{
+			label: "삭제하기",
+			iconSrc: "/icons/community/ic_delete_20.svg",
+			onClick: async () => {
+				await deleteBoardAction(post.boardId);
+				router.refresh();
+			},
+		},
+	];
+
+	const otherItems: MoreMenuItem[] = [
+		{
+			label: "저장하기",
+			iconSrc: "/icons/community/ic_bookmark_20.svg",
+			onClick: async () => {
+				await postBoardScrapAction(post.boardId);
+				router.refresh();
+			},
+		},
+		{
+			label: "신고하기",
+			iconSrc: "/icons/community/ic_report_20.svg",
+			onClick: () => {},
+		},
+	];
+
 	return (
-		<Link href={`/community/${post.boardId}`} className={s.card}>
-			<div className={s.cardHead}>
-				<div className={s.cardHeadLeft}>
-					{post.toolName && (
-						<div className={s.toolChip}>
-							<div className={s.toolLogo}>
-								{post.toolLogo && (
-									<Image src={post.toolLogo} alt="" fill style={{ objectFit: "cover" }} />
-								)}
+		<div ref={containerRef} className={s.cardWrapper}>
+			<Link href={`/community/${post.boardId}`} className={s.card}>
+				<div className={s.cardHead}>
+					<div className={s.cardHeadLeft}>
+						{post.toolName && (
+							<div className={s.toolChip}>
+								<div className={s.toolLogo}>
+									{post.toolLogo && (
+										<Image src={post.toolLogo} alt="" fill style={{ objectFit: "cover" }} />
+									)}
+								</div>
+								<span className={s.toolName}>{post.toolName}</span>
 							</div>
-							<span className={s.toolName}>{post.toolName}</span>
+						)}
+						<div className={s.metaRow}>
+							<span>{post.author}</span>
+							<div className={s.metaDivider} />
+							<span>{formatDate(post.updatedAt)}</span>
+						</div>
+					</div>
+					<button
+						type="button"
+						className={s.etcButton}
+						onClick={toggle}
+						aria-label="더보기"
+						aria-expanded={isOpen}
+						aria-haspopup="menu"
+					>
+						<Image src="/icons/community/ic_etc_20.svg" alt="" width={20} height={4} />
+					</button>
+				</div>
+
+				<div className={s.cardBody}>
+					<div className={s.cardBodyLeft}>
+						<div className={s.textBlock}>
+							<p className={s.cardTitle}>{post.title}</p>
+							<p className={s.cardContent}>{post.content}</p>
+						</div>
+						<div className={s.statsRow}>
+							<span className={s.statItem}>
+								<Image src="/svg/post/ic_comment_16.svg" alt="" width={16} height={16} />
+								{post.commentCount}개
+							</span>
+						</div>
+					</div>
+					{post.images[0] && (
+						<div className={s.thumbnail}>
+							<Image src={post.images[0]} alt={post.title} fill style={{ objectFit: "cover" }} />
 						</div>
 					)}
-					<div className={s.metaRow}>
-						<span>{post.author}</span>
-						<div className={s.metaDivider} />
-						<span>{formatDate(post.updatedAt)}</span>
-					</div>
 				</div>
-				<button
-					type="button"
-					className={s.etcButton}
-					onClick={(e) => {
-						e.preventDefault();
-						e.stopPropagation();
-					}}
-					aria-label="더보기"
-				>
-					<Image src="/icons/community/ic_etc_20.svg" alt="" width={20} height={4} />
-				</button>
-			</div>
+			</Link>
 
-			<div className={s.cardBody}>
-				<div className={s.cardBodyLeft}>
-					<div className={s.textBlock}>
-						<p className={s.cardTitle}>{post.title}</p>
-						<p className={s.cardContent}>{post.content}</p>
-					</div>
-					<div className={s.statsRow}>
-						<span className={s.statItem}>
-							<Image src="/svg/post/ic_comment_16.svg" alt="" width={16} height={16} />
-							{post.commentCount}개
-						</span>
-					</div>
-				</div>
-				{post.images[0] && (
-					<div className={s.thumbnail}>
-						<Image src={post.images[0]} alt={post.title} fill style={{ objectFit: "cover" }} />
-					</div>
-				)}
-			</div>
-		</Link>
+			{isOpen && (
+				<MoreMenu
+					items={post.isOwner ? ownerItems : otherItems}
+					onClose={close}
+					className={s.dropdownCard}
+				/>
+			)}
+		</div>
 	);
 };

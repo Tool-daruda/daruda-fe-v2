@@ -18,6 +18,7 @@ export interface BoardItem {
 	content: string;
 	images: string[];
 	isScraped: boolean;
+	isOwner?: boolean;
 	toolId: number;
 	updatedAt: string;
 	commentCount: number;

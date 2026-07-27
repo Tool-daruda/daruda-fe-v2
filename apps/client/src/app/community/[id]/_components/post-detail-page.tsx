@@ -25,7 +25,7 @@ export const PostDetailPage = ({ post, comments }: PostDetailPageProps) => {
 				<CommentInput boardId={post.boardId} />
 			</div>
 
-			<CommentSection commentCount={post.commentCount} comments={comments} />
+			<CommentSection boardId={post.boardId} commentCount={post.commentCount} comments={comments} />
 		</div>
 	);
 };

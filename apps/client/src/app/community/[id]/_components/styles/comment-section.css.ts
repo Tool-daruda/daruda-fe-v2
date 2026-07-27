@@ -83,6 +83,16 @@ export const etcButton = style({
 	cursor: "pointer",
 });
 
+export const menuWrapper = style({
+	position: "relative",
+	flexShrink: 0,
+});
+
+export const dropdown = style({
+	left: 0,
+	top: "calc(100% + 4px)",
+});
+
 export const content = style({
 	margin: 0,
 	width: "100%",

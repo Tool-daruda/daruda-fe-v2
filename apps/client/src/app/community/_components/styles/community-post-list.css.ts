@@ -49,6 +49,11 @@ export const itemDivider = style({
 	backgroundColor: colors.grayscale[50],
 });
 
+export const cardWrapper = style({
+	position: "relative",
+	width: "100%",
+});
+
 export const card = style({
 	display: "flex",
 	flexDirection: "column",
@@ -58,6 +63,11 @@ export const card = style({
 	borderRadius: "16px",
 	backgroundColor: colors.grayscale[0],
 	textDecoration: "none",
+});
+
+export const dropdownCard = style({
+	right: "12px",
+	top: "38px",
 });
 
 export const cardHead = style({

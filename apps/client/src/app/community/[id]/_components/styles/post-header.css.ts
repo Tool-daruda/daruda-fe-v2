@@ -96,3 +96,13 @@ export const etcButton = style({
 	padding: 0,
 	cursor: "pointer",
 });
+
+export const menuWrapper = style({
+	position: "relative",
+	flexShrink: 0,
+});
+
+export const dropdown = style({
+	left: 0,
+	top: "calc(100% + 6px)",
+});

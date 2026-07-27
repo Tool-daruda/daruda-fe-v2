@@ -9,6 +9,7 @@ export interface CommentItem {
 	content: string;
 	nickname: string;
 	image?: string;
+	isOwner?: boolean;
 	updatedAt: string;
 }
 
