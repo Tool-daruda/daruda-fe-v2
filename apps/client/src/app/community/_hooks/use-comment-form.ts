@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { type ChangeEvent, useRef, useState } from "react";
+import { useCurrentUser } from "@/common/context/user-context";
 import { useImageObjectUrl } from "@/common/hooks/use-image-object-url";
 import { uploadImage } from "@/common/utils/upload-image";
 import { postCommentAction } from "../_actions/comment-actions";
@@ -10,6 +11,7 @@ const MAX_IMAGE_SIZE_MB = 10;
 
 export const useCommentForm = (boardId: number) => {
 	const router = useRouter();
+	const currentUser = useCurrentUser();
 	const [text, setText] = useState("");
 	const [image, setImage] = useState<File | null>(null);
 	const [imageError, setImageError] = useState<string | null>(null);
@@ -39,6 +41,10 @@ export const useCommentForm = (boardId: number) => {
 	};
 
 	const handleSubmit = async () => {
+		if (!currentUser) {
+			router.push("/login");
+			return;
+		}
 		if (!canSubmit || isSubmitting) return;
 		setIsSubmitting(true);
 		try {

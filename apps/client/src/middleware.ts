@@ -1,37 +1,33 @@
 import { type NextRequest, NextResponse } from "next/server";
 
+const PROTECTED_ROUTES = ["/community/write", "/mypage"];
+
+function isProtected(pathname: string) {
+	if (PROTECTED_ROUTES.some((route) => pathname.startsWith(route))) return true;
+	// /community/:id/edit
+	if (/^\/community\/\d+\/edit/.test(pathname)) return true;
+	return false;
+}
+
 export async function middleware(request: NextRequest) {
-	// const accessToken = request.cookies.get("accessToken")?.value;
-	const API_URL = process.env.API_BASE_URL;
+	const { pathname } = request.nextUrl;
+	const accessToken = request.cookies.get("accessToken")?.value;
 
-	const isTokenExpired = false;
-
-	if (isTokenExpired && API_URL) {
-		try {
-			const response = await fetch(`${API_URL}/api/v1/auth/reissue`, {
-				method: "POST",
-				headers: {},
-			});
-
-			if (response.ok) {
-				const resData = await response.json();
-				const nextResponse = NextResponse.next();
-
-				nextResponse.cookies.set("accessToken", resData.data.accessToken, {
-					httpOnly: true,
-					path: "/",
-				});
-				return nextResponse;
-			}
-		} catch (error) {
-			console.error("미들웨어 토큰 재발급 실패:", error);
-			return NextResponse.redirect(new URL("/login", request.url));
-		}
+	if (isProtected(pathname) && !accessToken) {
+		const loginUrl = new URL("/login", request.url);
+		loginUrl.searchParams.set("next", pathname);
+		return NextResponse.redirect(loginUrl);
 	}
 
 	return NextResponse.next();
 }
 
 export const config = {
-	matcher: ["/toollist/:path*", "/favoriteTools/:path*"],
+	matcher: [
+		"/community/write",
+		"/community/:id/edit",
+		"/mypage/:path*",
+		"/toollist/:path*",
+		"/favoriteTools/:path*",
+	],
 };
