@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import type { BoardItem } from "@/common/api/models/board.model";
 import { MoreMenu, type MoreMenuItem } from "@/common/components/more-menu/more-menu";
+import { useCurrentUser } from "@/common/context/user-context";
 import { useMoreMenu } from "@/common/hooks/use-more-menu";
 import { formatDate } from "@/common/utils";
 import { deleteBoardAction } from "../../_actions/board-actions";
@@ -15,7 +16,9 @@ interface PostHeaderProps {
 
 export const PostHeader = ({ post }: PostHeaderProps) => {
 	const router = useRouter();
+	const currentUser = useCurrentUser();
 	const { isOpen, toggle, close, containerRef } = useMoreMenu();
+	const isOwner = !!currentUser && post.author === currentUser.nickname;
 
 	const ownerItems: MoreMenuItem[] = [
 		{
@@ -81,7 +84,7 @@ export const PostHeader = ({ post }: PostHeaderProps) => {
 					</button>
 					{isOpen && (
 						<MoreMenu
-							items={post.isOwner ? ownerItems : otherItems}
+							items={isOwner ? ownerItems : otherItems}
 							onClose={close}
 							className={s.dropdown}
 						/>

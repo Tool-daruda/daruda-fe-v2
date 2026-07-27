@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import type { CommentItem } from "@/common/api/models/comment.model";
 import { MoreMenu, type MoreMenuItem } from "@/common/components/more-menu/more-menu";
+import { useCurrentUser } from "@/common/context/user-context";
 import { useMoreMenu } from "@/common/hooks/use-more-menu";
 import { formatDate, formatTime } from "@/common/utils";
 import { deleteCommentAction } from "../../_actions/comment-actions";
@@ -38,7 +39,9 @@ export const CommentSection = ({ boardId, commentCount, comments }: CommentSecti
 
 const CommentRow = ({ comment, boardId }: { comment: CommentItem; boardId: number }) => {
 	const router = useRouter();
+	const currentUser = useCurrentUser();
 	const { isOpen, toggle, close, containerRef } = useMoreMenu();
+	const isOwner = !!currentUser && comment.nickname === currentUser.nickname;
 
 	const ownerItems: MoreMenuItem[] = [
 		{
@@ -82,7 +85,7 @@ const CommentRow = ({ comment, boardId }: { comment: CommentItem; boardId: numbe
 					</button>
 					{isOpen && (
 						<MoreMenu
-							items={comment.isOwner ? ownerItems : otherItems}
+							items={isOwner ? ownerItems : otherItems}
 							onClose={close}
 							className={s.dropdown}
 						/>

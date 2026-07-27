@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { BoardItem, BoardSortBy } from "@/common/api/models/board.model";
 import { MoreMenu, type MoreMenuItem } from "@/common/components/more-menu/more-menu";
+import { useCurrentUser } from "@/common/context/user-context";
 import { useMoreMenu } from "@/common/hooks/use-more-menu";
 import { formatDate } from "@/common/utils";
 import { deleteBoardAction, postBoardScrapAction } from "../_actions/board-actions";
@@ -39,7 +40,9 @@ export const CommunityPostList = ({ posts, sortBy }: CommunityPostListProps) => 
 
 const PostCard = ({ post }: { post: BoardItem }) => {
 	const router = useRouter();
+	const currentUser = useCurrentUser();
 	const { isOpen, toggle, close, containerRef } = useMoreMenu();
+	const isOwner = !!currentUser && post.author === currentUser.nickname;
 
 	const ownerItems: MoreMenuItem[] = [
 		{
@@ -62,6 +65,10 @@ const PostCard = ({ post }: { post: BoardItem }) => {
 			label: "저장하기",
 			iconSrc: "/icons/community/ic_bookmark_20.svg",
 			onClick: async () => {
+				if (!currentUser) {
+					router.push("/login");
+					return;
+				}
 				await postBoardScrapAction(post.boardId);
 				router.refresh();
 			},
@@ -129,7 +136,7 @@ const PostCard = ({ post }: { post: BoardItem }) => {
 
 			{isOpen && (
 				<MoreMenu
-					items={post.isOwner ? ownerItems : otherItems}
+					items={isOwner ? ownerItems : otherItems}
 					onClose={close}
 					className={s.dropdownCard}
 				/>
