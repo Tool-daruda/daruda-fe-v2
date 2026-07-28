@@ -1,6 +1,8 @@
 import { colors, themeVars } from "@repo/ui/foundations";
 import { style } from "@vanilla-extract/css";
 
+export { menuWrapper } from "@/common/components/more-menu/dropdown-anchor.css";
+
 export const wrapper = style({
 	display: "flex",
 	flexDirection: "column",
@@ -81,11 +83,6 @@ export const etcButton = style({
 	border: "none",
 	padding: 0,
 	cursor: "pointer",
-});
-
-export const menuWrapper = style({
-	position: "relative",
-	flexShrink: 0,
 });
 
 export const dropdown = style({

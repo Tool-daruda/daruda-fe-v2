@@ -4,7 +4,7 @@ import * as s from "./more-menu.css";
 export interface MoreMenuItem {
 	label: string;
 	iconSrc: string;
-	onClick: () => void;
+	onClick: () => void | Promise<void>;
 }
 
 interface MoreMenuProps {
@@ -22,11 +22,14 @@ export const MoreMenu = ({ items, onClose, className }: MoreMenuProps) => {
 					type="button"
 					className={s.item}
 					role="menuitem"
-					onClick={(e) => {
+					onClick={async (e) => {
 						e.preventDefault();
 						e.stopPropagation();
-						item.onClick();
-						onClose();
+						try {
+							await item.onClick();
+						} finally {
+							onClose();
+						}
 					}}
 				>
 					<Image src={item.iconSrc} alt="" width={20} height={20} className={s.icon} />
