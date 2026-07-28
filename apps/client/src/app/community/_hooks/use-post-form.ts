@@ -82,10 +82,11 @@ export const usePostForm = ({ mode, initialValues }: UsePostFormProps) => {
 		setIsSubmitting(true);
 		setSubmitError(null);
 		try {
-			const imageUrls: string[] = [];
-			for (const slot of images) {
-				imageUrls.push(slot.kind === "existing" ? slot.url : await uploadImage(slot.file, "board"));
-			}
+			const imageUrls = await Promise.all(
+				images.map((slot) =>
+					slot.kind === "existing" ? slot.url : uploadImage(slot.file, "board")
+				)
+			);
 			const payload = {
 				title,
 				content,
@@ -94,7 +95,11 @@ export const usePostForm = ({ mode, initialValues }: UsePostFormProps) => {
 			};
 			const result =
 				mode === "edit" && initialValues?.boardId
-					? await updateBoardAction({ boardId: initialValues.boardId, payload })
+					? await updateBoardAction({
+							boardId: initialValues.boardId,
+							payload,
+							oldToolId: initialValues.tool?.toolId,
+						})
 					: await createBoardAction(payload);
 			if (!result.success) throw new Error(result.error);
 			router.push(`/community/${result.data.boardId}`);

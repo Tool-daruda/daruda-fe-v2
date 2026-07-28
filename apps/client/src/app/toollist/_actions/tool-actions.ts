@@ -1,6 +1,6 @@
 "use server";
 
-import { revalidateTag } from "next/cache";
+import { updateTag } from "next/cache";
 import { fetchServer } from "@/common/api/fetch-server";
 import type { ToolScrapRes } from "@/common/api/models/tool.model";
 import { createSafeAction } from "@/common/api/safe-action";
@@ -13,6 +13,6 @@ export const postToolScrapAction = createSafeAction(async (toolId: number) => {
 		method: "POST",
 	});
 
-	revalidateTag("tools", "default");
+	updateTag("tools");
 	return data;
 });

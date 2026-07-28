@@ -1,6 +1,10 @@
 import { fetchServer } from "./fetch-server";
 import type { BoardItem, BoardListRes, GetBoardListParams } from "./models/board.model";
 
+// TODO: fetch의 next: { tags } 방식은 Next.js 15/16에서 여전히 동작하지만,
+// 향후 "use cache" directive + cacheTag() + cacheLife()로 마이그레이션
+// 관련 액션(board-actions.ts, comment-actions.ts)의 updateTag()는 두 방식 모두 호환
+
 /**
  * @description /api/v1/board 엔드포인트와 통신하는 API 서비스입니다.
  */
