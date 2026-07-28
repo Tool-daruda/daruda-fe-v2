@@ -1,7 +1,7 @@
 "use client";
 
 import { Radio, RadioGroup } from "@repo/ui";
-import { useState } from "react";
+import { useId, useState } from "react";
 import { logoutAction } from "@/common/api/actions/auth.actions";
 import type { UserProfileData } from "@/common/api/models/auth.model";
 import { updateUserProfileAction } from "../_actions/user.actions";
@@ -39,6 +39,7 @@ const findPositionKeyByServerValue = (serverValue: string): string => {
 };
 
 export default function UserProfileClient({ initialData }: Props) {
+	const nicknameInputId = useId();
 	const [isEditing, setIsEditing] = useState(false);
 	const [nickname, setNickname] = useState(initialData?.nickname || "");
 	const [affiliation, setAffiliation] = useState(() =>
@@ -123,7 +124,11 @@ export default function UserProfileClient({ initialData }: Props) {
 				</div>
 
 				<div className={styles.actionButtonGroup}>
-					<button type="button" onClick={handleLogout} className={styles.textButtonOrange}>
+					<button
+						type="button"
+						onClick={() => void handleLogout()}
+						className={styles.textButtonOrange}
+					>
 						로그아웃
 					</button>
 					<button
@@ -143,12 +148,12 @@ export default function UserProfileClient({ initialData }: Props) {
 			<h2 className={styles.sectionTitle}>정보 변경하기</h2>
 
 			<section>
-				<label htmlFor="nicknameInput" className={styles.label}>
+				<label htmlFor={nicknameInputId} className={styles.label}>
 					닉네임
 				</label>
 				<input
 					type="text"
-					id="nicknameInput"
+					id={nicknameInputId}
 					value={nickname}
 					onChange={handleNicknameChange}
 					className={`${styles.inputField} ${
@@ -184,7 +189,7 @@ export default function UserProfileClient({ initialData }: Props) {
 				</div>
 			</section>
 
-			<button type="button" onClick={handleSave} className={styles.submitButton}>
+			<button type="button" onClick={() => void handleSave()} className={styles.submitButton}>
 				저장
 			</button>
 		</div>
