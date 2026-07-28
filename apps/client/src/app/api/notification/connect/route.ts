@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import type { NextRequest } from "next/server";
+import { createCookieHeader } from "@/common/api/cookie-utils";
 
 const API_BASE_URL = process.env.API_BASE_URL;
 
@@ -16,15 +17,11 @@ export async function GET(request: NextRequest) {
 		return new Response("Unauthorized", { status: 401 });
 	}
 
-	const lastEventId = request.headers.get("Last-Event-ID");
+	const lastEventId =
+		request.headers.get("Last-Event-ID") ?? request.nextUrl.searchParams.get("lastEventId");
 	const headers: Record<string, string> = {
 		Accept: "text/event-stream",
-		Cookie: [
-			accessToken && `accessToken=${accessToken}`,
-			refreshToken && `refreshToken=${refreshToken}`,
-		]
-			.filter(Boolean)
-			.join("; "),
+		Cookie: createCookieHeader(accessToken, refreshToken),
 	};
 
 	if (lastEventId) {

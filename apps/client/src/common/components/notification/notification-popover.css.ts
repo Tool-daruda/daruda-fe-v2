@@ -5,7 +5,7 @@ export const popoverContainer = style({
 	position: "absolute",
 	top: "calc(100% + 8px)",
 	right: 0,
-	width: "360px",
+	width: "min(360px, calc(100vw - 32px))",
 	maxHeight: "520px",
 	backgroundColor: colorTokens.grayscale[0],
 	borderRadius: "12px",

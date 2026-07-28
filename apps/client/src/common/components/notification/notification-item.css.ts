@@ -2,6 +2,11 @@ import { colorTokens, typographyTokens } from "@repo/ui/foundations";
 import { style } from "@vanilla-extract/css";
 
 export const itemWrapper = style({
+	appearance: "none",
+	border: 0,
+	font: "inherit",
+	textAlign: "left",
+	width: "100%",
 	display: "flex",
 	flexDirection: "column",
 	gap: "6px",
@@ -17,6 +22,10 @@ export const itemWrapper = style({
 		},
 		"&:last-child": {
 			borderBottom: "none",
+		},
+		"&:focus-visible": {
+			outline: `2px solid ${colorTokens.brand.orange[500]}`,
+			outlineOffset: "2px",
 		},
 	},
 });

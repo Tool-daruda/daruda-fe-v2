@@ -25,7 +25,7 @@ export function NotificationItem({ item, onItemClick }: Props) {
 		if (item.type === "COMMENT") {
 			if (item.boardId) {
 				router.push(`/community/${item.boardId}`);
-			} else if (item.url) {
+			} else if (item.url?.startsWith("/")) {
 				router.push(item.url);
 			}
 		} else if (item.type === "NOTICE") {

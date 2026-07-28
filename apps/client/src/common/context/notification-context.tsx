@@ -56,7 +56,9 @@ class SseConnectionManager {
 		this.isConnecting = true;
 
 		try {
-			const url = "/api/notification/connect";
+			const url = this.lastEventId
+				? `/api/notification/connect?lastEventId=${encodeURIComponent(this.lastEventId)}`
+				: "/api/notification/connect";
 			this.eventSource = new EventSource(url);
 
 			this.eventSource.onopen = () => {
@@ -89,12 +91,15 @@ class SseConnectionManager {
 				this.isConnecting = false;
 				this.disconnect();
 				if (this.listeners.size > 0 && !this.reconnectTimer) {
-					this.reconnectTimer = setTimeout(() => {
-						this.reconnectTimer = null;
-						if (this.listeners.size > 0) {
-							this.connect();
-						}
-					}, 5000);
+					this.reconnectTimer = setTimeout(
+						() => {
+							this.reconnectTimer = null;
+							if (this.listeners.size > 0) {
+								this.connect();
+							}
+						},
+						5000 + Math.random() * 2000
+					);
 				}
 			};
 		} catch {
@@ -171,7 +176,12 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
 		setNotifications((prev) =>
 			prev.map((item) => (item.id === id ? { ...item, isRead: true } : item))
 		);
-		void readNotificationAction(id);
+		const res = await readNotificationAction(id);
+		if (!res.success) {
+			setNotifications((prev) =>
+				prev.map((item) => (item.id === id ? { ...item, isRead: false } : item))
+			);
+		}
 	}, []);
 
 	const unreadCount = useMemo(() => {
