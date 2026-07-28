@@ -7,6 +7,11 @@ export interface SignupReq {
 	positions: string;
 }
 
+export interface SignupFormReq {
+	nickname: string;
+	positions: string;
+}
+
 export interface SignupData {
 	userId: number;
 	nickname: string;
