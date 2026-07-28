@@ -39,7 +39,7 @@ export const CommunityPostList = ({ posts, sortBy }: CommunityPostListProps) => 
 	);
 };
 
-const PostCard = ({ post }: { post: BoardItem }) => {
+export const PostCard = ({ post }: { post: BoardItem }) => {
 	const router = useRouter();
 	const { isOpen, toggle, close, containerRef, isOwner, currentUser } = useContentMenu(post.author);
 	const [reportOpen, setReportOpen] = useState(false);
@@ -123,7 +123,7 @@ const PostCard = ({ post }: { post: BoardItem }) => {
 							</span>
 						</div>
 					</div>
-					{post.images[0] && (
+					{post.images?.[0] && (
 						<div className={s.thumbnail}>
 							<Image src={post.images[0]} alt={post.title} fill style={{ objectFit: "cover" }} />
 						</div>

@@ -22,7 +22,8 @@ export const CommunityHero = ({ defaultKeyword }: CommunityHeroProps) => {
 				<h1 className={s.title}>daruda 커뮤니티</h1>
 			</div>
 
-			<form action="/community" method="GET" className={s.inputWrapper}>
+			<form action="/search" method="GET" className={s.inputWrapper}>
+				<input type="hidden" name="tab" value="community" />
 				<input
 					type="text"
 					name="keyword"
