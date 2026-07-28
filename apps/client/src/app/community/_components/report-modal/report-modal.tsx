@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import type { ReportType } from "@/common/api/models/report.model";
 import { createReportAction } from "../../_actions/report-actions";
 import * as s from "./report-modal.css";
@@ -35,6 +35,7 @@ interface ReportModalProps {
 }
 
 export const ReportModal = ({ isOpen, onClose, target, content }: ReportModalProps) => {
+	const detailId = useId();
 	const dialogRef = useRef<HTMLDialogElement>(null);
 	const [reportType, setReportType] = useState<ReportType | null>(null);
 	const [detail, setDetail] = useState("");
@@ -141,11 +142,11 @@ export const ReportModal = ({ isOpen, onClose, target, content }: ReportModalPro
 						</div>
 
 						<div className={s.section} style={{ marginTop: "16px" }}>
-							<label className={s.label} htmlFor="report-detail">
+							<label className={s.label} htmlFor={detailId}>
 								세부내역 작성 <span className={s.optional}>(선택)</span>
 							</label>
 							<textarea
-								id="report-detail"
+								id={detailId}
 								className={s.textarea}
 								value={detail}
 								onChange={(e) => setDetail(e.target.value)}

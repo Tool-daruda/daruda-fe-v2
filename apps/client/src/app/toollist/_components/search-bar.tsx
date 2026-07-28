@@ -17,6 +17,7 @@ export const SearchBar = () => {
 			<h1 className={s.title}>daruda 툴 리스트</h1>
 
 			<form action="/search" method="GET" className={s.inputWrapper}>
+				<input type="hidden" name="tab" value="tool" />
 				<input
 					type="text"
 					name="keyword"
