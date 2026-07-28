@@ -17,7 +17,7 @@ export default async function CommunityEditPage({ params }: Props) {
 
 	const [post, categories] = await Promise.all([
 		BoardApi.getBoardDetail(boardId).catch(() => null),
-		getCommunityFilterCategories(),
+		getCommunityFilterCategories().catch(() => []),
 	]);
 
 	if (!post) notFound();

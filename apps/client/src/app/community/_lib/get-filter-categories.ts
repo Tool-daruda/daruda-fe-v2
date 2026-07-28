@@ -8,7 +8,10 @@ const TOOLS_PER_CATEGORY_SIZE = 50;
  * 커뮤니티 목록 필터링 옵션, 글 작성/수정 폼의 툴 검색에서 공통으로 사용됩니다.
  */
 export const getCommunityFilterCategories = async (): Promise<CommunityFilterCategory[]> => {
-	const categoriesRes = await ToolApi.getCategories().catch(() => []);
+	const categoriesRes = await ToolApi.getCategories().catch((err) => {
+		console.error("[getCommunityFilterCategories] 카테고리 조회 실패", err);
+		return [];
+	});
 	const categories = (categoriesRes || []).filter((category) => category.name !== "ALL");
 
 	return Promise.all(
@@ -17,7 +20,10 @@ export const getCommunityFilterCategories = async (): Promise<CommunityFilterCat
 				category: category.name,
 				isFree: false,
 				size: TOOLS_PER_CATEGORY_SIZE,
-			}).catch(() => null);
+			}).catch((err) => {
+				console.error(`[getCommunityFilterCategories] 툴 목록 조회 실패 (${category.name})`, err);
+				return null;
+			});
 
 			return {
 				name: category.name,

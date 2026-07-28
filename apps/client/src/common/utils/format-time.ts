@@ -6,9 +6,12 @@ export const formatTime = (dateStr: string) => {
 			return dateStr;
 		}
 
-		const hh = String(date.getHours()).padStart(2, "0");
-		const mm = String(date.getMinutes()).padStart(2, "0");
-		return `${hh}:${mm}`;
+		return new Intl.DateTimeFormat("ko-KR", {
+			hour: "2-digit",
+			minute: "2-digit",
+			hour12: false,
+			timeZone: "Asia/Seoul",
+		}).format(date);
 	} catch {
 		return dateStr;
 	}
