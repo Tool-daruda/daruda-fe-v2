@@ -33,9 +33,10 @@ export default async function CommunityEditPage({ params }: Props) {
 				title: post.title,
 				content: post.content,
 				images: post.images,
-				tool: post.toolName
-					? { toolId: post.toolId, toolName: post.toolName, toolLogo: post.toolLogo }
-					: null,
+				tool:
+					post.toolId !== null && post.toolName
+						? { toolId: post.toolId, toolName: post.toolName, toolLogo: post.toolLogo }
+						: null,
 			}}
 		/>
 	);

@@ -18,8 +18,7 @@ export interface BoardItem {
 	content: string;
 	images: string[];
 	isScraped: boolean;
-	isOwner?: boolean;
-	toolId: number;
+	toolId: number | null;
 	updatedAt: string;
 	commentCount: number;
 }
@@ -43,7 +42,7 @@ export interface BoardWriteReq {
 	content: string;
 	imageList: string[];
 	toolId?: number;
-	noTopic: boolean;
+	isFree: boolean;
 }
 
 export interface BoardWriteRes {

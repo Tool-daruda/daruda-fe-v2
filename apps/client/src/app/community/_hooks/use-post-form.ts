@@ -91,7 +91,9 @@ export const usePostForm = ({ mode, initialValues }: UsePostFormProps) => {
 				title,
 				content,
 				imageList: imageUrls,
-				...(selectedTool ? { toolId: selectedTool.toolId, noTopic: false } : { noTopic: true }),
+				...(selectedTool?.toolId
+					? { toolId: selectedTool.toolId, isFree: false }
+					: { isFree: true }),
 			};
 			const result =
 				mode === "edit" && initialValues?.boardId
