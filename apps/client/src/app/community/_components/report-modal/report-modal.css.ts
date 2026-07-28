@@ -8,6 +8,11 @@ export const dialog = style({
 	width: "480px",
 	maxWidth: "calc(100vw - 32px)",
 	boxShadow: "0 8px 32px rgba(41, 41, 41, 0.24)",
+	position: "fixed",
+	top: "50%",
+	left: "50%",
+	transform: "translate(-50%, -50%)",
+	margin: 0,
 	selectors: {
 		"&::backdrop": {
 			background: "rgba(0, 0, 0, 0.4)",
