@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { type ClipboardEvent, useState } from "react";
+import { type ClipboardEvent, useEffect, useRef, useState } from "react";
 import { uploadImage } from "@/common/utils/upload-image";
 import { createBoardAction, updateBoardAction } from "../_actions/board-actions";
 import type { ImageSlot, PostFormInitialValues } from "../_components/post-form/types";
@@ -29,6 +29,17 @@ export const usePostForm = ({ mode, initialValues }: UsePostFormProps) => {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [submitError, setSubmitError] = useState<string | null>(null);
 
+	const imagesRef = useRef(images);
+	imagesRef.current = images;
+
+	useEffect(() => {
+		return () => {
+			for (const slot of imagesRef.current) {
+				if (slot.kind === "new") URL.revokeObjectURL(slot.previewUrl);
+			}
+		};
+	}, []);
+
 	const canSubmit = title.trim().length > 0 && content.trim().length > 0;
 
 	const addFiles = (files: File[]) => {
@@ -42,10 +53,13 @@ export const usePostForm = ({ mode, initialValues }: UsePostFormProps) => {
 		}
 
 		const validFiles = imageFiles.filter((f) => f.size <= MAX_IMAGE_SIZE_MB * 1024 * 1024);
+		const truncatedBySlot = validFiles.length > remainingSlots;
 		setImageError(
 			validFiles.length < imageFiles.length
 				? `이미지는 한 장당 ${MAX_IMAGE_SIZE_MB}MB를 초과할 수 없습니다.`
-				: null
+				: truncatedBySlot
+					? `이미지는 최대 ${MAX_IMAGE_COUNT}장까지 업로드할 수 있습니다.`
+					: null
 		);
 
 		const newSlots: ImageSlot[] = validFiles.slice(0, remainingSlots).map((f) => ({
