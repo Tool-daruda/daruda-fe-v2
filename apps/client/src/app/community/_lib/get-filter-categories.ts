@@ -1,6 +1,9 @@
 import { ToolApi } from "@/common/api/tool-api";
 import type { CommunityFilterCategory } from "../_types";
 
+// TODO: 카테고리별 툴이 50개를 초과하면 나머지가 조회되지 않음.
+// community-filter-sidebar, post-tag-selector에 클라이언트 사이드 무한스크롤 추가 필요.
+// ToolApi.getToolList는 lastToolId 커서 기반 페이지네이션 지원함.
 const TOOLS_PER_CATEGORY_SIZE = 50;
 
 /**
