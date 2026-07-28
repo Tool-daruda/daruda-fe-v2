@@ -1,3 +1,4 @@
+import { fetchPublic } from "./fetch-public";
 import { fetchServer } from "./fetch-server";
 import type {
 	CategoryRes,
@@ -31,7 +32,7 @@ export const ToolApi = {
 			...(params.lastToolId && { lastToolId: String(params.lastToolId) }),
 		}).toString();
 
-		return fetchServer<ToolListRes>(`/api/v1/tool?${query}`, {
+		return fetchPublic<ToolListRes>(`/api/v1/tool?${query}`, {
 			next: { tags: ["tools"] },
 		});
 	},
@@ -40,7 +41,7 @@ export const ToolApi = {
 	 * @description 카테고리 목록 조회
 	 */
 	getCategories: async () => {
-		return fetchServer<CategoryRes[]>("/api/v1/tool/category", {
+		return fetchPublic<CategoryRes[]>("/api/v1/tool/category", {
 			next: { revalidate: false },
 		});
 	},

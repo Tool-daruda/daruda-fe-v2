@@ -18,7 +18,7 @@ export interface BoardItem {
 	content: string;
 	images: string[];
 	isScraped: boolean;
-	toolId: number;
+	toolId: number | null;
 	updatedAt: string;
 	commentCount: number;
 }
@@ -30,4 +30,21 @@ export interface BoardListRes {
 		nextCursor: number;
 	};
 	nextScrapCount: number;
+}
+
+export interface BoardScrapRes {
+	boardId: number;
+	scrap: boolean;
+}
+
+export interface BoardWriteReq {
+	title: string;
+	content: string;
+	imageList: string[];
+	toolId?: number;
+	isFree: boolean;
+}
+
+export interface BoardWriteRes {
+	boardId: number;
 }

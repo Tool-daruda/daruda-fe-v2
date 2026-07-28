@@ -19,6 +19,11 @@ async function loginWithKakao(code: string) {
 		body: JSON.stringify({ socialType: "KAKAO" }),
 	});
 
+	// TODO: 로그인 이슈에서 처리
+	// 1. /login/callback 페이지에서 이 액션을 호출하도록 변경 (현재 미구현)
+	// 2. loginData를 userInfo 쿠키에 저장 → community/layout.tsx의 getUserProfile() 호출 제거
+	// 3. fetchServer가 Spring Boot Set-Cookie 헤더를 브라우저로 포워딩하도록 수정
+
 	return loginData;
 }
 

@@ -99,12 +99,17 @@ export async function fetchServer<T>(endpoint: string, options: RequestInit = {}
 				errorMessage = `API Error: ${response.status} (Failed to parse error response)`;
 			}
 
+			console.error(`[FETCH ERROR] ${response.status} <- ${endpoint}`, errorBody);
 			throw new ApiError(errorMessage, response.status, errorBody);
 		}
 
 		console.log(`[FETCH SUCCESS] ${response.status} <- ${endpoint}`);
 
 		const result: ApiResponse<T> = await response.json();
+
+		if (process.env.NODE_ENV === "development") {
+			console.log(`⬅️ RESPONSE:`, JSON.stringify(result.data, null, 2));
+		}
 
 		return result.data;
 	} catch (error) {

@@ -20,6 +20,12 @@ const nextConfig: NextConfig = {
 				port: "",
 				pathname: "/**",
 			},
+			{
+				protocol: "https",
+				hostname: "axwovz9tqddw.objectstorage.ap-chuncheon-1.oci.customer-oci.com",
+				port: "",
+				pathname: "/**",
+			},
 		],
 	},
 };
