@@ -14,6 +14,8 @@ function isValidNickname(nickname: string) {
 	return nickname.length > 0 && nickname.length <= 10 && /^[가-힣a-zA-Z0-9]+$/.test(nickname);
 }
 
+const ALLOWED_POSITIONS = new Set(["학생", "직장인", "일반인"]);
+
 async function getKakaoLoginUrl({ next }: { next?: string } = {}) {
 	const url = await fetchPublic<string>("/api/v1/auth/login-url?socialType=KAKAO", {
 		method: "GET",
@@ -46,6 +48,10 @@ async function signup(formData: SignupFormReq): Promise<SignupData> {
 
 	if (!isValidNickname(formData.nickname)) {
 		throw new ApiError("닉네임 형식이 올바르지 않아요.", 400);
+	}
+
+	if (!ALLOWED_POSITIONS.has(formData.positions)) {
+		throw new ApiError("올바르지 않은 소속 값이에요.", 400);
 	}
 
 	const cookieStore = await cookies();

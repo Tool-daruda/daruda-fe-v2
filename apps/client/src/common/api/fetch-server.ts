@@ -1,5 +1,10 @@
 import { cookies } from "next/headers";
-import { AUTH_COOKIE_OPTIONS, applySetCookieHeaders, getCookieFromSetCookie } from "./cookie-utils";
+import {
+	AUTH_COOKIE_OPTIONS,
+	applySetCookieHeaders,
+	createCookieHeader,
+	getCookieFromSetCookie,
+} from "./cookie-utils";
 import { ApiError } from "./errors/api-error";
 import type { ApiResponse } from "./models/api-response.model";
 import type { ReissueData } from "./models/auth.model";
@@ -12,15 +17,6 @@ import type { ReissueData } from "./models/auth.model";
 const SPRING_API_URL = process.env.API_BASE_URL;
 
 const AUTH_REISSUE_ENDPOINT = "/api/v1/auth/reissue";
-
-function createCookieHeader(accessToken?: string, refreshToken?: string) {
-	return [
-		accessToken && `accessToken=${accessToken}`,
-		refreshToken && `refreshToken=${refreshToken}`,
-	]
-		.filter(Boolean)
-		.join("; ");
-}
 
 function createHeaders(options: RequestInit, cookieHeader: string) {
 	const defaultHeaders: Record<string, string> = {

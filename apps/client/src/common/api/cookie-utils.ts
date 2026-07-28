@@ -1,4 +1,3 @@
-import type { ResponseCookies } from "next/dist/compiled/@edge-runtime/cookies";
 import type { NextResponse } from "next/server";
 
 export const AUTH_COOKIE_OPTIONS = {
@@ -8,45 +7,68 @@ export const AUTH_COOKIE_OPTIONS = {
 	path: "/",
 };
 
+interface CookieSetOptions {
+	httpOnly?: boolean;
+	secure?: boolean;
+	sameSite?: "lax" | "strict" | "none";
+	path?: string;
+	maxAge?: number;
+}
+
+type WritableCookieStore = {
+	set(name: string, value: string, options?: CookieSetOptions): unknown;
+};
+
 export function getSafeInternalPath(path?: string) {
 	if (!path || !path.startsWith("/") || path.startsWith("//")) return undefined;
 	return path;
 }
 
-function parseMaxAge(attrs: string[]) {
+export function createCookieHeader(accessToken?: string, refreshToken?: string) {
+	return [
+		accessToken && `accessToken=${accessToken}`,
+		refreshToken && `refreshToken=${refreshToken}`,
+	]
+		.filter(Boolean)
+		.join("; ");
+}
+
+interface ParsedSetCookie {
+	name: string;
+	value: string;
+	maxAge?: number;
+}
+
+function parseSetCookieHeader(header: string): ParsedSetCookie | null {
+	const eqIdx = header.indexOf("=");
+	if (eqIdx === -1) return null;
+
+	const name = header.slice(0, eqIdx).trim();
+	const rest = header.slice(eqIdx + 1);
+	const [value, ...attrs] = rest.split("; ");
+
 	const maxAgePart = attrs.find((a) => a.toLowerCase().startsWith("max-age="));
-	return maxAgePart ? parseInt(maxAgePart.split("=")[1], 10) : undefined;
+	const maxAge = maxAgePart ? parseInt(maxAgePart.split("=")[1], 10) : undefined;
+
+	return { name, value: value.trim(), maxAge };
 }
 
 export function getCookieFromSetCookie(setCookieHeaders: string[], targetName: string) {
 	for (const header of setCookieHeaders) {
-		const eqIdx = header.indexOf("=");
-		if (eqIdx === -1) continue;
-
-		const name = header.slice(0, eqIdx).trim();
-		if (name !== targetName) continue;
-
-		const rest = header.slice(eqIdx + 1);
-		const [value] = rest.split("; ");
-		return value.trim();
+		const parsed = parseSetCookieHeader(header);
+		if (parsed?.name === targetName) return parsed.value;
 	}
+	return undefined;
 }
-
-type WritableCookieStore = Pick<ResponseCookies, "set">;
 
 export function applySetCookieHeaders(store: WritableCookieStore, setCookieHeaders: string[]) {
 	for (const header of setCookieHeaders) {
-		const eqIdx = header.indexOf("=");
-		if (eqIdx === -1) continue;
+		const parsed = parseSetCookieHeader(header);
+		if (!parsed) continue;
 
-		const name = header.slice(0, eqIdx).trim();
-		const rest = header.slice(eqIdx + 1);
-		const [value, ...attrs] = rest.split("; ");
-		const maxAge = parseMaxAge(attrs);
-
-		store.set(name, value.trim(), {
+		store.set(parsed.name, parsed.value, {
 			...AUTH_COOKIE_OPTIONS,
-			...(maxAge !== undefined && { maxAge }),
+			...(parsed.maxAge !== undefined && { maxAge: parsed.maxAge }),
 		});
 	}
 }
