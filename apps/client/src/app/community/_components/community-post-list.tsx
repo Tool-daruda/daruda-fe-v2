@@ -27,7 +27,7 @@ export const CommunityPostList = ({ posts, sortBy }: CommunityPostListProps) => 
 			) : (
 				<div className={s.list}>
 					{posts.map((post, index) => (
-						<div key={post.boardId} className={s.list}>
+						<div key={post.boardId}>
 							{index > 0 && <div className={s.itemDivider} />}
 							<PostCard post={post} />
 						</div>
@@ -54,7 +54,7 @@ const PostCard = ({ post }: { post: BoardItem }) => {
 			label: "삭제하기",
 			iconSrc: "/icons/community/ic_delete_20.svg",
 			onClick: async () => {
-				await deleteBoardAction(post.boardId);
+				await deleteBoardAction({ boardId: post.boardId, toolId: post.toolId || undefined });
 				router.refresh();
 			},
 		},
@@ -101,16 +101,6 @@ const PostCard = ({ post }: { post: BoardItem }) => {
 							<span>{formatDate(post.updatedAt)}</span>
 						</div>
 					</div>
-					<button
-						type="button"
-						className={s.etcButton}
-						onClick={toggle}
-						aria-label="더보기"
-						aria-expanded={isOpen}
-						aria-haspopup="menu"
-					>
-						<Image src="/icons/community/ic_etc_20.svg" alt="" width={20} height={4} />
-					</button>
 				</div>
 
 				<div className={s.cardBody}>
@@ -133,6 +123,17 @@ const PostCard = ({ post }: { post: BoardItem }) => {
 					)}
 				</div>
 			</Link>
+
+			<button
+				type="button"
+				className={s.etcButton}
+				onClick={toggle}
+				aria-label="더보기"
+				aria-expanded={isOpen}
+				aria-haspopup="menu"
+			>
+				<Image src="/icons/community/ic_etc_20.svg" alt="" width={20} height={4} />
+			</button>
 
 			{isOpen && (
 				<MoreMenu

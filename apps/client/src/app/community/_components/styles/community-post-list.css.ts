@@ -124,6 +124,10 @@ export const metaDivider = style({
 });
 
 export const etcButton = style({
+	position: "absolute",
+	top: "12px",
+	right: "12px",
+	zIndex: 1,
 	display: "flex",
 	background: "none",
 	border: "none",

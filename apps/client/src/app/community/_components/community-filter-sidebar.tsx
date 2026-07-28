@@ -211,7 +211,12 @@ export const CommunityFilterSidebar = ({
 						</>
 					) : (
 						<>
-							<button type="button" className={s.freeRow} onClick={toggleFree}>
+							<button
+								type="button"
+								className={s.freeRow}
+								onClick={toggleFree}
+								aria-pressed={isFreeOnly}
+							>
 								<span className={s.freeLabel}>자유</span>
 								<span className={s.checkboxBox} data-checked={isFreeOnly ? "true" : "false"}>
 									{isFreeOnly && <CheckIcon />}

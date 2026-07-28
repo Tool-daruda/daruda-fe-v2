@@ -30,7 +30,10 @@ export const PostHeader = ({ post }: PostHeaderProps) => {
 			label: "삭제하기",
 			iconSrc: "/icons/community/ic_delete_20.svg",
 			onClick: async () => {
-				const result = await deleteBoardAction(post.boardId);
+				const result = await deleteBoardAction({
+					boardId: post.boardId,
+					toolId: post.toolId || undefined,
+				});
 				if (result.success) router.push("/community");
 			},
 		},

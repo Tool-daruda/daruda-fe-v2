@@ -2,7 +2,7 @@
 
 import { cx } from "@repo/ui";
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import type { CommunityFilterTool } from "../../_types";
 import * as s from "./styles/post-tag-selector.css";
 
@@ -18,6 +18,7 @@ export const PostTagSelector = ({ tools, selectedTool, onSelectTool }: PostTagSe
 	const [mode, setMode] = useState<TagMode>(selectedTool ? "TOOL" : "FREE");
 	const [keyword, setKeyword] = useState("");
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+	const searchAreaRef = useRef<HTMLDivElement>(null);
 
 	const trimmedKeyword = keyword.trim().toLowerCase();
 	const filteredTools = useMemo(() => {
@@ -57,7 +58,7 @@ export const PostTagSelector = ({ tools, selectedTool, onSelectTool }: PostTagSe
 
 			{mode === "TOOL" && (
 				<>
-					<div className={s.searchArea}>
+					<div ref={searchAreaRef} className={s.searchArea}>
 						<div className={s.searchInput} data-active={isDropdownOpen ? "true" : "false"}>
 							<Image
 								src={
@@ -74,7 +75,10 @@ export const PostTagSelector = ({ tools, selectedTool, onSelectTool }: PostTagSe
 								value={keyword}
 								onChange={(e) => setKeyword(e.target.value)}
 								onFocus={() => setIsDropdownOpen(true)}
-								onBlur={() => setIsDropdownOpen(false)}
+								onBlur={(e) => {
+									if (searchAreaRef.current?.contains(e.relatedTarget as Node)) return;
+									setIsDropdownOpen(false);
+								}}
 								placeholder={isDropdownOpen ? "키워드입력" : "툴 검색"}
 								className={s.searchInputField}
 							/>
