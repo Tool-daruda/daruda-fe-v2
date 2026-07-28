@@ -7,10 +7,9 @@ import * as s from "../styles/search-page.css";
 
 interface SearchHeaderProps {
 	initialKeyword: string;
-	activeTab: string;
 }
 
-export function SearchHeader({ initialKeyword, activeTab }: SearchHeaderProps) {
+export function SearchHeader({ initialKeyword }: SearchHeaderProps) {
 	const router = useRouter();
 	const searchParams = useSearchParams();
 	const [keyword, setKeyword] = useState(initialKeyword);
@@ -23,25 +22,17 @@ export function SearchHeader({ initialKeyword, activeTab }: SearchHeaderProps) {
 		} else {
 			params.delete("keyword");
 		}
-		if (activeTab) {
-			params.set("tab", activeTab);
-		}
 		router.push(`/search?${params.toString()}`);
 	};
 
 	return (
 		<header className={s.heroContainer}>
-			<Image
-				src="/icons/community/img_bg_darudalogo_278.svg"
-				alt=""
-				width={260}
-				height={278}
-				className={s.decorativeImage}
-				priority
-			/>
+			<div className={s.blurShape1} />
+			<div className={s.blurShape2} />
+			<div className={s.blurShape3} />
 
-			<p className={s.subTitle}>지금 내게 필요한 툴과 커뮤니티 정보</p>
-			<h1 className={s.title}>daruda 검색</h1>
+			<p className={s.subTitle}>지금 내게 필요한 디지털 툴을 모아보다</p>
+			<h1 className={s.title}>daruda 검색결과</h1>
 
 			<form onSubmit={handleSubmit} className={s.searchForm}>
 				<input

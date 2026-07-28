@@ -14,7 +14,7 @@ export const SearchApi = {
 		if (!keyword.trim()) return [];
 		const query = new URLSearchParams({ keyword: keyword.trim() }).toString();
 		return fetchServer<ToolSummary[] | ToolListRes>(`/api/v1/search/tool?${query}`, {
-			cache: "no-store",
+			next: { revalidate: 60, tags: ["search-tool"] },
 		});
 	},
 
@@ -41,7 +41,7 @@ export const SearchApi = {
 		}
 
 		return fetchServer<BoardListRes>(`/api/v1/search/board?${queryParams.toString()}`, {
-			cache: "no-store",
+			next: { revalidate: 60, tags: ["search-board"] },
 		});
 	},
 };

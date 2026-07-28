@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { PostCard } from "@/app/community/_components/community-post-list";
 import type { BoardItem } from "@/common/api/models/board.model";
@@ -11,42 +10,46 @@ import * as s from "../styles/search-page.css";
 interface BoardSearchResultsProps {
 	initialPosts: BoardItem[];
 	initialNextCursor: number | string | null;
+	totalCount?: number;
 	keyword: string;
 }
+
+const isValidCursor = (cursor: number | string | null | undefined): boolean => {
+	if (cursor === null || cursor === undefined || cursor === "") return false;
+	const num = Number(cursor);
+	return !Number.isNaN(num) && num > 0;
+};
 
 export function BoardSearchResults({
 	initialPosts,
 	initialNextCursor,
+	totalCount,
 	keyword,
 }: BoardSearchResultsProps) {
 	const [posts, setPosts] = useState<BoardItem[]>(initialPosts);
 	const [nextCursor, setNextCursor] = useState<number | string | null>(initialNextCursor);
-	const [hasMore, setHasMore] = useState<boolean>(
-		initialNextCursor !== null && initialNextCursor !== undefined && initialNextCursor !== 0
-	);
+	const [hasMore, setHasMore] = useState<boolean>(isValidCursor(initialNextCursor));
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 
 	const sentinelRef = useRef<HTMLDivElement>(null);
 
-	// Reset state when keyword or initialPosts change
+	// Reset state when initialPosts or initialNextCursor change
 	useEffect(() => {
 		setPosts(initialPosts);
 		setNextCursor(initialNextCursor);
-		setHasMore(
-			initialNextCursor !== null && initialNextCursor !== undefined && initialNextCursor !== 0
-		);
+		setHasMore(isValidCursor(initialNextCursor));
 		setIsLoading(false);
 	}, [initialPosts, initialNextCursor]);
 
 	const loadMore = useCallback(async () => {
-		if (isLoading || !hasMore || !nextCursor || !keyword.trim()) return;
+		if (isLoading || !hasMore || !isValidCursor(nextCursor) || !keyword.trim()) return;
 
 		setIsLoading(true);
 
 		try {
 			const res = await fetchMoreSearchBoardAction({
 				keyword: keyword.trim(),
-				nextCursor: nextCursor,
+				nextCursor: nextCursor ?? undefined,
 				size: 10,
 			});
 
@@ -55,19 +58,13 @@ export function BoardSearchResults({
 
 				if (contents.length > 0) {
 					setPosts((prev) => {
-						// Filter out duplicates by boardId
 						const existingIds = new Set(prev.map((item) => item.boardId));
 						const uniqueNewContents = contents.filter((item) => !existingIds.has(item.boardId));
 						return [...prev, ...uniqueNewContents];
 					});
 				}
 
-				if (
-					newCursor !== null &&
-					newCursor !== undefined &&
-					newCursor !== 0 &&
-					contents.length > 0
-				) {
+				if (isValidCursor(newCursor) && contents.length > 0) {
 					setNextCursor(newCursor);
 				} else {
 					setNextCursor(null);
@@ -105,56 +102,39 @@ export function BoardSearchResults({
 		};
 	}, [loadMore, hasMore]);
 
-	if (!keyword.trim()) {
-		return (
-			<div className={s.emptyState}>
-				<Image
-					src="/icons/ic_search_iris300_20.svg"
-					alt=""
-					width={48}
-					height={48}
-					className={s.emptyIcon}
-				/>
-				<p className={s.emptyTitle}>검색어를 입력해보세요</p>
-				<p className={s.emptyDescription}>커뮤니티에서 관심있는 툴 이야기나 글을 검색해보세요.</p>
-			</div>
-		);
-	}
+	if (!keyword.trim()) return null;
 
-	if (posts.length === 0 && !isLoading) {
-		return (
-			<div className={s.emptyState}>
-				<Image
-					src="/icons/ic_search_iris300_20.svg"
-					alt=""
-					width={48}
-					height={48}
-					className={s.emptyIcon}
-				/>
-				<p className={s.emptyTitle}>
-					&apos;{keyword}&apos;에 대한 커뮤니티 게시글 검색 결과가 없습니다
-				</p>
-				<p className={s.emptyDescription}>
-					단어의 철자가 정확한지 확인하거나 다른 검색어를 입력해보세요.
-				</p>
-			</div>
-		);
-	}
+	const displayCount = totalCount !== undefined ? totalCount : posts.length;
 
 	return (
-		<div className={s.boardList}>
-			{posts.map((post, index) => (
-				<div key={post.boardId}>
-					{index > 0 && <div className={s.boardItemDivider} />}
-					<PostCard post={post} />
-				</div>
-			))}
+		<section className={s.sectionContainer}>
+			<div className={s.sectionHeader}>
+				<h2 className={s.sectionTitle}>커뮤니티</h2>
+				<span className={s.sectionCountChip}>{displayCount}</span>
+			</div>
 
-			{hasMore && (
-				<div ref={sentinelRef} className={s.loadingTrigger}>
-					{isLoading && <div className={s.spinner} />}
+			{posts.length === 0 && !isLoading ? (
+				<div className={s.emptySection}>
+					<p className={s.emptyTitle}>
+						&apos;{keyword}&apos;에 대한 커뮤니티 게시글 검색 결과가 없습니다.
+					</p>
+				</div>
+			) : (
+				<div className={s.boardList}>
+					{posts.map((post, index) => (
+						<div key={post.boardId}>
+							{index > 0 && <div className={s.boardItemDivider} />}
+							<PostCard post={post} />
+						</div>
+					))}
+
+					{hasMore && (
+						<div ref={sentinelRef} className={s.loadingTrigger}>
+							{isLoading && <div className={s.spinner} />}
+						</div>
+					)}
 				</div>
 			)}
-		</div>
+		</section>
 	);
 }
