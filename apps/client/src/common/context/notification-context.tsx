@@ -192,10 +192,15 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
 	return <NotificationContext.Provider value={value}>{children}</NotificationContext.Provider>;
 }
 
+const defaultContextValue: NotificationContextValue = {
+	notifications: [],
+	unreadCount: 0,
+	isLoading: false,
+	markAsRead: async () => {},
+	refreshNotifications: async () => {},
+};
+
 export function useNotification() {
 	const context = useContext(NotificationContext);
-	if (!context) {
-		throw new Error("useNotification must be used within a NotificationProvider");
-	}
-	return context;
+	return context ?? defaultContextValue;
 }
