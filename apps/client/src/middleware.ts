@@ -5,7 +5,7 @@ import {
 	getCookieFromSetCookie,
 } from "@/common/api/cookie-utils";
 
-const AUTH_PROTECTED = ["/community/write", "/mypage"];
+const AUTH_PROTECTED = ["/community/write", "/mypage", "/notification"];
 const API_BASE_URL = process.env.API_BASE_URL;
 
 function isAuthProtected(pathname: string) {
@@ -160,6 +160,8 @@ export const config = {
 		"/community/write",
 		"/community/:id/edit",
 		"/mypage/:path*",
+		"/notification/:path*",
+		"/notification",
 		"/toollist/:path*",
 		"/favoriteTools/:path*",
 	],

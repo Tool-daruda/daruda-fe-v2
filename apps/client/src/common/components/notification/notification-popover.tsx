@@ -1,7 +1,7 @@
 "use client";
 
+import Link from "next/link";
 import { useNotification } from "@/common/context/notification-context";
-
 import { NotificationItem } from "./notification-item";
 import * as s from "./notification-popover.css";
 
@@ -29,6 +29,12 @@ export function NotificationPopover({ onClose }: Props) {
 						<NotificationItem key={item.id} item={item} onItemClick={onClose} />
 					))
 				)}
+			</div>
+
+			<div className={s.footer}>
+				<Link href="/notification" onClick={onClose} className={s.viewAllLink}>
+					전체 알림 보기
+				</Link>
 			</div>
 		</div>
 	);

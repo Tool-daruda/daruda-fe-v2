@@ -6,7 +6,7 @@ export const popoverContainer = style({
 	top: "calc(100% + 8px)",
 	right: 0,
 	width: "360px",
-	maxHeight: "480px",
+	maxHeight: "520px",
 	backgroundColor: colorTokens.grayscale[0],
 	borderRadius: "12px",
 	boxShadow: "0px 8px 24px rgba(0, 0, 0, 0.12)",
@@ -42,7 +42,7 @@ export const listScrollArea = style({
 	display: "flex",
 	flexDirection: "column",
 	overflowY: "auto",
-	maxHeight: "400px",
+	maxHeight: "360px",
 });
 
 export const emptyState = style({
@@ -53,4 +53,25 @@ export const emptyState = style({
 	padding: "40px 20px",
 	color: colorTokens.grayscale[400],
 	...typographyTokens.b4_2,
+});
+
+export const footer = style({
+	padding: "12px 16px",
+	borderTop: `1px solid ${colorTokens.grayscale[50]}`,
+	display: "flex",
+	justifyContent: "center",
+	alignItems: "center",
+	backgroundColor: colorTokens.grayscale[0],
+});
+
+export const viewAllLink = style({
+	...typographyTokens.b5_1,
+	color: colorTokens.grayscale[600],
+	textDecoration: "none",
+	transition: "color 0.2s ease",
+	selectors: {
+		"&:hover": {
+			color: colorTokens.brand.orange[500],
+		},
+	},
 });
