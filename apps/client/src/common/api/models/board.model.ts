@@ -41,7 +41,7 @@ export interface BoardWriteReq {
 	title: string;
 	content: string;
 	imageList: string[];
-	toolId: number | null;
+	toolId?: number;
 	isFree: boolean;
 }
 
