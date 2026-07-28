@@ -2,12 +2,13 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import type { CommentItem } from "@/common/api/models/comment.model";
 import { MoreMenu, type MoreMenuItem } from "@/common/components/more-menu/more-menu";
-import { useCurrentUser } from "@/common/context/user-context";
-import { useMoreMenu } from "@/common/hooks/use-more-menu";
+import { useContentMenu } from "@/common/hooks/use-content-menu";
 import { formatDate, formatTime } from "@/common/utils";
 import { deleteCommentAction } from "../../_actions/comment-actions";
+import { ReportModal } from "../../_components/report-modal/report-modal";
 import * as s from "./styles/comment-section.css";
 
 interface CommentSectionProps {
@@ -39,9 +40,8 @@ export const CommentSection = ({ boardId, commentCount, comments }: CommentSecti
 
 const CommentRow = ({ comment, boardId }: { comment: CommentItem; boardId: number }) => {
 	const router = useRouter();
-	const currentUser = useCurrentUser();
-	const { isOpen, toggle, close, containerRef } = useMoreMenu();
-	const isOwner = !!currentUser && comment.nickname === currentUser.nickname;
+	const { isOpen, toggle, close, containerRef, isOwner } = useContentMenu(comment.nickname);
+	const [reportOpen, setReportOpen] = useState(false);
 
 	const ownerItems: MoreMenuItem[] = [
 		{
@@ -50,6 +50,7 @@ const CommentRow = ({ comment, boardId }: { comment: CommentItem; boardId: numbe
 			onClick: async () => {
 				const result = await deleteCommentAction({ commentId: comment.commentId, boardId });
 				if (result.success) router.refresh();
+				else alert(result.error || "삭제에 실패했습니다."); // TODO: 토스트 머지 후 교체
 			},
 		},
 	];
@@ -58,7 +59,7 @@ const CommentRow = ({ comment, boardId }: { comment: CommentItem; boardId: numbe
 		{
 			label: "신고하기",
 			iconSrc: "/icons/community/ic_report_20.svg",
-			onClick: () => {},
+			onClick: () => setReportOpen(true),
 		},
 	];
 
@@ -100,6 +101,13 @@ const CommentRow = ({ comment, boardId }: { comment: CommentItem; boardId: numbe
 					<Image src={comment.image} alt="" fill style={{ objectFit: "cover" }} />
 				</div>
 			)}
+
+			<ReportModal
+				isOpen={reportOpen}
+				onClose={() => setReportOpen(false)}
+				target={{ boardId: null, commentId: comment.commentId }}
+				content={comment.content}
+			/>
 		</div>
 	);
 };

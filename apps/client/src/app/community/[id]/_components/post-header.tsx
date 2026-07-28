@@ -2,12 +2,13 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import type { BoardItem } from "@/common/api/models/board.model";
 import { MoreMenu, type MoreMenuItem } from "@/common/components/more-menu/more-menu";
-import { useCurrentUser } from "@/common/context/user-context";
-import { useMoreMenu } from "@/common/hooks/use-more-menu";
+import { useContentMenu } from "@/common/hooks/use-content-menu";
 import { formatDate } from "@/common/utils";
 import { deleteBoardAction } from "../../_actions/board-actions";
+import { ReportModal } from "../../_components/report-modal/report-modal";
 import * as s from "./styles/post-header.css";
 
 interface PostHeaderProps {
@@ -16,9 +17,8 @@ interface PostHeaderProps {
 
 export const PostHeader = ({ post }: PostHeaderProps) => {
 	const router = useRouter();
-	const currentUser = useCurrentUser();
-	const { isOpen, toggle, close, containerRef } = useMoreMenu();
-	const isOwner = !!currentUser && post.author === currentUser.nickname;
+	const { isOpen, toggle, close, containerRef, isOwner } = useContentMenu(post.author);
+	const [reportOpen, setReportOpen] = useState(false);
 
 	const ownerItems: MoreMenuItem[] = [
 		{
@@ -35,6 +35,7 @@ export const PostHeader = ({ post }: PostHeaderProps) => {
 					toolId: post.toolId || undefined,
 				});
 				if (result.success) router.push("/community");
+				else alert(result.error || "삭제에 실패했습니다."); // TODO: 토스트 머지 후 교체
 			},
 		},
 	];
@@ -43,7 +44,7 @@ export const PostHeader = ({ post }: PostHeaderProps) => {
 		{
 			label: "신고하기",
 			iconSrc: "/icons/community/ic_report_20.svg",
-			onClick: () => {},
+			onClick: () => setReportOpen(true),
 		},
 	];
 
@@ -96,6 +97,13 @@ export const PostHeader = ({ post }: PostHeaderProps) => {
 			</div>
 
 			<div className={s.divider} />
+
+			<ReportModal
+				isOpen={reportOpen}
+				onClose={() => setReportOpen(false)}
+				target={{ boardId: post.boardId, commentId: null }}
+				content={post.title}
+			/>
 		</div>
 	);
 };

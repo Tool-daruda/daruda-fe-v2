@@ -3,13 +3,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import type { BoardItem, BoardSortBy } from "@/common/api/models/board.model";
 import { MoreMenu, type MoreMenuItem } from "@/common/components/more-menu/more-menu";
-import { useCurrentUser } from "@/common/context/user-context";
-import { useMoreMenu } from "@/common/hooks/use-more-menu";
+import { useContentMenu } from "@/common/hooks/use-content-menu";
 import { formatDate } from "@/common/utils";
 import { deleteBoardAction, postBoardScrapAction } from "../_actions/board-actions";
 import { CommunitySortTabs } from "./community-sort-tabs";
+import { ReportModal } from "./report-modal/report-modal";
 import * as s from "./styles/community-post-list.css";
 
 interface CommunityPostListProps {
@@ -40,9 +41,8 @@ export const CommunityPostList = ({ posts, sortBy }: CommunityPostListProps) => 
 
 const PostCard = ({ post }: { post: BoardItem }) => {
 	const router = useRouter();
-	const currentUser = useCurrentUser();
-	const { isOpen, toggle, close, containerRef } = useMoreMenu();
-	const isOwner = !!currentUser && post.author === currentUser.nickname;
+	const { isOpen, toggle, close, containerRef, isOwner, currentUser } = useContentMenu(post.author);
+	const [reportOpen, setReportOpen] = useState(false);
 
 	const ownerItems: MoreMenuItem[] = [
 		{
@@ -54,8 +54,13 @@ const PostCard = ({ post }: { post: BoardItem }) => {
 			label: "삭제하기",
 			iconSrc: "/icons/community/ic_delete_20.svg",
 			onClick: async () => {
-				await deleteBoardAction({ boardId: post.boardId, toolId: post.toolId || undefined });
-				router.refresh();
+				// TODO: 토스트 머지 후 에러 피드백 교체
+				const result = await deleteBoardAction({
+					boardId: post.boardId,
+					toolId: post.toolId || undefined,
+				});
+				if (result.success) router.refresh();
+				else alert(result.error || "삭제에 실패했습니다.");
 			},
 		},
 	];
@@ -69,14 +74,16 @@ const PostCard = ({ post }: { post: BoardItem }) => {
 					router.push("/login");
 					return;
 				}
-				await postBoardScrapAction(post.boardId);
-				router.refresh();
+				// TODO: 토스트 머지 후 에러 피드백 교체
+				const result = await postBoardScrapAction(post.boardId);
+				if (result.success) router.refresh();
+				else alert(result.error || "저장에 실패했습니다.");
 			},
 		},
 		{
 			label: "신고하기",
 			iconSrc: "/icons/community/ic_report_20.svg",
-			onClick: () => {},
+			onClick: () => setReportOpen(true),
 		},
 	];
 
@@ -142,6 +149,13 @@ const PostCard = ({ post }: { post: BoardItem }) => {
 					className={s.dropdownCard}
 				/>
 			)}
+
+			<ReportModal
+				isOpen={reportOpen}
+				onClose={() => setReportOpen(false)}
+				target={{ boardId: post.boardId, commentId: null }}
+				content={post.title}
+			/>
 		</div>
 	);
 };
