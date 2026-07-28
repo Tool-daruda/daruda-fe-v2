@@ -46,34 +46,36 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 	}
 
 	return (
-		<main className={s.container}>
+		<>
 			<Suspense fallback={null}>
 				<SearchHeader initialKeyword={keyword} activeTab={activeTab} />
 			</Suspense>
 
-			<Suspense fallback={null}>
-				<SearchTabs activeTab={activeTab} toolCount={toolCount} communityCount={communityCount} />
-			</Suspense>
-
-			<section className={s.contentArea}>
-				<Suspense
-					fallback={
-						<div className={s.loadingTrigger}>
-							<div className={s.spinner} />
-						</div>
-					}
-				>
-					{activeTab === "tool" ? (
-						<ToolSearchResults tools={tools} keyword={keyword} />
-					) : (
-						<BoardSearchResults
-							initialPosts={boardContents}
-							initialNextCursor={boardNextCursor}
-							keyword={keyword}
-						/>
-					)}
+			<main className={s.container}>
+				<Suspense fallback={null}>
+					<SearchTabs activeTab={activeTab} toolCount={toolCount} communityCount={communityCount} />
 				</Suspense>
-			</section>
-		</main>
+
+				<section className={s.contentArea}>
+					<Suspense
+						fallback={
+							<div className={s.loadingTrigger}>
+								<div className={s.spinner} />
+							</div>
+						}
+					>
+						{activeTab === "tool" ? (
+							<ToolSearchResults tools={tools} keyword={keyword} />
+						) : (
+							<BoardSearchResults
+								initialPosts={boardContents}
+								initialNextCursor={boardNextCursor}
+								keyword={keyword}
+							/>
+						)}
+					</Suspense>
+				</section>
+			</main>
+		</>
 	);
 }
