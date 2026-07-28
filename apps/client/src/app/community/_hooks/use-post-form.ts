@@ -101,13 +101,13 @@ export const usePostForm = ({ mode, initialValues }: UsePostFormProps) => {
 					slot.kind === "existing" ? slot.url : uploadImage(slot.file, "board")
 				)
 			);
+			const toolId = selectedTool?.toolId ?? null;
 			const payload = {
 				title,
 				content,
 				imageList: imageUrls,
-				...(selectedTool?.toolId
-					? { toolId: selectedTool.toolId, isFree: false }
-					: { isFree: true }),
+				toolId,
+				isFree: toolId === null,
 			};
 			const result =
 				mode === "edit" && initialValues?.boardId
