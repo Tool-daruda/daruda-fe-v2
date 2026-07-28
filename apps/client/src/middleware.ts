@@ -126,9 +126,19 @@ export async function middleware(request: NextRequest) {
 				const reissueResult = await reissueAccessToken(refreshToken);
 				if (reissueResult) {
 					const requestHeaders = new Headers(request.headers);
+					const cookieMap = new Map(
+						(requestHeaders.get("cookie") ?? "")
+							.split("; ")
+							.filter(Boolean)
+							.map((c) => {
+								const eqIdx = c.indexOf("=");
+								return [c.slice(0, eqIdx).trim(), c.slice(eqIdx + 1)] as [string, string];
+							})
+					);
+					cookieMap.set("accessToken", reissueResult.accessToken);
 					requestHeaders.set(
 						"cookie",
-						`accessToken=${reissueResult.accessToken}; refreshToken=${refreshToken}`
+						[...cookieMap.entries()].map(([k, v]) => `${k}=${v}`).join("; ")
 					);
 
 					const response = NextResponse.next({
