@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
 
 		return response;
 	} catch (error) {
-		console.error("[login/callback] 처리 실패:", error);
+		console.error("[kakao/login-url] 처리 실패:", error);
 		return NextResponse.redirect(new URL("/login?error=server_error", request.url));
 	}
 }
