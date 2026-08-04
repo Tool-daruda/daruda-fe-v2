@@ -128,6 +128,10 @@ export const PostCard = ({ post }: { post: BoardItem }) => {
 								<Image src="/svg/post/ic_comment_16.svg" alt="" width={16} height={16} />
 								{post.commentCount}개
 							</span>
+							<span className={s.statItem}>
+								<Image src="/svg/post/ic_bookmark_16.svg" alt="" width={16} height={16} />
+								{post.scrapCount}개
+							</span>
 						</div>
 					</div>
 					{post.images?.[0] && (

@@ -11,7 +11,6 @@ interface PostBookmarkButtonProps {
 	initialScrapped: boolean;
 }
 
-// TODO(api): 게시글 상세 응답(BoardRes)에 스크랩 수 필드가 없어 카운트는 0(또는 1)에서 로컬로만 증감합니다.
 export const PostBookmarkButton = ({ boardId, initialScrapped }: PostBookmarkButtonProps) => {
 	const [isScrapped, setIsScrapped] = useState(initialScrapped);
 	const [count, setCount] = useState(initialScrapped ? 1 : 0);

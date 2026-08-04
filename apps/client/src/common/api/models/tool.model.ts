@@ -54,6 +54,7 @@ export type MyBoardItem = {
 	toolId: number;
 	updatedAt: string;
 	commentCount: number;
+	scrapCount: number;
 };
 
 export type PageInfo = {

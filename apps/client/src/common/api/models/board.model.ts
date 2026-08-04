@@ -21,6 +21,7 @@ export interface BoardItem {
 	toolId: number | null;
 	updatedAt: string;
 	commentCount: number;
+	scrapCount: number;
 }
 
 export interface BoardListRes {
