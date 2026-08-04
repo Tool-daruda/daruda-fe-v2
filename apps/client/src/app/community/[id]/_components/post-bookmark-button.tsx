@@ -2,6 +2,7 @@
 
 import { colors } from "@repo/ui/foundations";
 import { useState, useTransition } from "react";
+import { toast } from "@/common/components/toast";
 import { postBoardScrapAction } from "../../_actions/board-actions";
 import * as s from "./styles/post-bookmark-button.css";
 
@@ -27,6 +28,7 @@ export const PostBookmarkButton = ({ boardId, initialScrapped }: PostBookmarkBut
 			if (!result.success) {
 				setIsScrapped(!next);
 				setCount((prev) => (next ? prev - 1 : prev + 1));
+				toast(result.error || "저장에 실패했어요. 다시 시도해 주세요.");
 				return;
 			}
 
