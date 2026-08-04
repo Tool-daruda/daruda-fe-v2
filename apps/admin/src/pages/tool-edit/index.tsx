@@ -126,16 +126,32 @@ export async function loader({ params }: LoaderFunctionArgs) {
 	}
 }
 
-async function handleFileUploads(toolData: ToolSubmit): Promise<ToolSubmit> {
+async function handleFileUploads(
+	toolData: ToolSubmit,
+	toolName: string | undefined
+): Promise<ToolSubmit> {
+	const cleanedName = toolName
+		? toolName
+				.trim()
+				.replace(/\s+/g, "-")
+				.replace(/[^a-zA-Z0-9ㄱ-ㅎㅏ-ㅣ가-힣_-]/g, "")
+		: "tool";
+
+	if (!cleanedName || cleanedName.length === 0) {
+		throw new Error("유효한 툴 이름을 입력해주세요.");
+	}
+	const encodedName = encodeURIComponent(cleanedName);
+	const toolPrefix = `tool/${encodedName}`;
+
 	const toolLogoUrl =
 		toolData.toolLogo instanceof File
-			? await uploadFileAndGetUrl(toolData.toolLogo)
+			? await uploadFileAndGetUrl({ file: toolData.toolLogo, prefix: toolPrefix })
 			: toolData.toolLogo;
 
 	const imageUrls = await Promise.all(
 		(toolData.images || []).map(async (img) => {
 			if (img instanceof File) {
-				return uploadFileAndGetUrl(img);
+				return uploadFileAndGetUrl({ file: img, prefix: toolPrefix });
 			}
 			return img;
 		})
@@ -200,7 +216,14 @@ export async function submitTool({ request, params }: ActionFunctionArgs) {
 		return { ok: true };
 	} else if (intent === "publish") {
 		try {
-			const toolDataWithUrls = await handleFileUploads(formDataObject);
+			const toolName = formDataObject.toolMainName;
+			if (!toolName || toolName.trim().length === 0) {
+				return {
+					ok: false,
+					message: "툴 이름은 필수 항목입니다.",
+				};
+			}
+			const toolDataWithUrls = await handleFileUploads(formDataObject, toolName);
 			const createRequest = await transformToCreateRequest(toolDataWithUrls);
 
 			if (toolId && toolId !== "new") {

@@ -1,18 +1,30 @@
 import { getPresignedUrls, putFileToS3 } from "../api/file-api";
 
-export const uploadFileAndGetUrl = async (file: File): Promise<string> => {
+interface UploadOptions {
+	file: File;
+	prefix: "profile" | "board" | "tool" | string;
+}
+
+export const uploadFileAndGetUrl = async ({ file, prefix }: UploadOptions): Promise<string> => {
 	if (!(file instanceof File)) {
 		throw new Error("유효하지 않은 파일 객체입니다.");
 	}
 
 	try {
-		const signedUrl = await getPresignedUrls(file.name);
+		const lastDotIndex = file.name.lastIndexOf(".");
+		if (lastDotIndex === -1 || lastDotIndex === file.name.length - 1) {
+			throw new Error("파일 확장자를 찾을 수 없습니다. 확장자가 있는 파일을 업로드해주세요.");
+		}
+		const fileExtension = file.name.substring(lastDotIndex).toLowerCase();
 
-		await putFileToS3({ file, signedUrl });
+		const { presignedUrl, publicUrl } = await getPresignedUrls({
+			prefix,
+			extension: fileExtension,
+		});
 
-		const imageUrl = signedUrl.split("?")[0];
+		await putFileToS3({ file, signedUrl: presignedUrl });
 
-		return imageUrl;
+		return publicUrl;
 	} catch (error) {
 		console.error("파일 업로드 통합 프로세스 실패:", error);
 		throw new Error(

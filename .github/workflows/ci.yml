@@ -46,7 +46,11 @@ jobs:
         uses: pnpm/action-setup@v4
 
       - run: pnpm install --frozen-lockfile
-      - run: pnpm run build
+      
+      - name: Build project
+        env:
+          API_BASE_URL: ${{ secrets.API_BASE_URL }}
+        run: pnpm run build
 
   sync-main:
     name: Sync main to fork (prod)
