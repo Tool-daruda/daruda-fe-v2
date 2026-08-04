@@ -3,7 +3,7 @@ import "@repo/ui/foundations.css";
 import { themeClass } from "@repo/ui/foundations";
 import type { Metadata } from "next";
 import type { PropsWithChildren } from "react";
-import { ToastProvider } from "@/common/components/toast/toast";
+import { Toaster } from "@/common/components/toast";
 import "../common/styles/reset.css";
 
 export const metadata: Metadata = {
@@ -20,7 +20,8 @@ export default function RootLayout({ children }: PropsWithChildren) {
 	return (
 		<html lang="ko" className={themeClass}>
 			<body>
-				<ToastProvider>{children}</ToastProvider>
+				{children}
+				<Toaster />
 			</body>
 		</html>
 	);
