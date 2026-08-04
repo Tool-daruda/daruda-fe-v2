@@ -59,7 +59,7 @@ export const ToolPricingContent = ({ toolPlans }: Props) => {
 									{featureItems.map((feature, idx) => (
 										// biome-ignore lint/suspicious/noArrayIndexKey: "API에서 고유한 ID를 제공하지 않는 경우에 한해 인덱스 사용 허용"
 										<li key={idx} className={styles.featureItem}>
-											• {feature.replace(/^[•-\s]+/, "")}
+											{feature.replace(/^[•-\s]+/, "")}
 										</li>
 									))}
 								</ul>
