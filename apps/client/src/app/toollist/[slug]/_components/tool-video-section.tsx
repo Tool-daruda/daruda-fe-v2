@@ -1,6 +1,8 @@
 import Image from "next/image";
 import { ToolApi } from "@/common/api/tool-api";
+import { TOOL_SECTION_IDS } from "../_constants/toc";
 import * as styles from "./styles/tool-video-section.css";
+import { ToolEmptyState } from "./tool-empty-state";
 
 type Props = {
 	toolId: number;
@@ -30,37 +32,43 @@ const getVideoThumbnailUrl = (url: string) => {
 export const ToolVideoSection = async ({ toolId }: Props) => {
 	const info = await ToolApi.getToolDetail(toolId);
 
-	if (!info || !info.videos || info.videos.length === 0) return null;
+	if (!info) return null;
+
+	const videos = info.videos ?? [];
 
 	return (
-		<section className={styles.container}>
+		<section id={TOOL_SECTION_IDS.video} className={styles.container}>
 			<h2 className={styles.title}>이 영상을 참고해보세요</h2>
 
-			<div className={styles.grid}>
-				{info.videos.map((videoUrl, index) => {
-					const thumbnailUrl = getVideoThumbnailUrl(videoUrl);
+			{videos.length === 0 ? (
+				<ToolEmptyState message="등록된 컨텐츠가 없어요" />
+			) : (
+				<div className={styles.grid}>
+					{videos.map((videoUrl, index) => {
+						const thumbnailUrl = getVideoThumbnailUrl(videoUrl);
 
-					return (
-						<a
-							// biome-ignore lint/suspicious/noArrayIndexKey: 영상 URL이 고유하므로 인덱스 키 사용해도 무방
-							key={index}
-							href={videoUrl}
-							target="_blank"
-							rel="noopener noreferrer"
-							className={styles.card}
-						>
-							<Image
-								src={thumbnailUrl}
-								alt={`${info.toolMainName} 추천 영상 ${index + 1}`}
-								fill
-								sizes="(max-width: 768px) 100vw, 33vw"
-								className={styles.image}
-								style={{ objectFit: "cover" }}
-							/>
-						</a>
-					);
-				})}
-			</div>
+						return (
+							<a
+								// biome-ignore lint/suspicious/noArrayIndexKey: 영상 URL이 고유하므로 인덱스 키 사용해도 무방
+								key={index}
+								href={videoUrl}
+								target="_blank"
+								rel="noopener noreferrer"
+								className={styles.card}
+							>
+								<Image
+									src={thumbnailUrl}
+									alt={`${info.toolMainName} 추천 영상 ${index + 1}`}
+									fill
+									sizes="(max-width: 768px) 100vw, 33vw"
+									className={styles.image}
+									style={{ objectFit: "cover" }}
+								/>
+							</a>
+						);
+					})}
+				</div>
+			)}
 		</section>
 	);
 };

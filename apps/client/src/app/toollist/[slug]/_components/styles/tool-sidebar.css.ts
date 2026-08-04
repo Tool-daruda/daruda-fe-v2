@@ -37,6 +37,18 @@ export const tocItem = style({
 	wordBreak: "keep-all",
 });
 
+export const tocButton = style({
+	display: "block",
+	width: "100%",
+	padding: 0,
+	border: "none",
+	background: "none",
+	textAlign: "left",
+	cursor: "pointer",
+	wordBreak: "keep-all",
+	transition: "color 0.2s ease",
+});
+
 export const relatedList = style({
 	display: "flex",
 	flexDirection: "column",
