@@ -1,6 +1,7 @@
 import Image from "next/image";
 import type { ToolDetailRes } from "@/common/api/models/tool.model";
 import { ToolApi } from "@/common/api/tool-api";
+import { ShareButton } from "./share-button";
 import * as styles from "./styles/tool-meta-bar.css";
 
 type Props = {
@@ -79,9 +80,7 @@ export const ToolMetaBar = async ({ toolId }: Props) => {
 				<button type="button" className={styles.iconButton} aria-label="북마크">
 					<Image src="/icons/ic_bookmark_outline_24.svg" alt="북마크" width={24} height={24} />
 				</button>
-				<button type="button" className={styles.iconButton} aria-label="공유">
-					<Image src="/icons/ic_share_24.svg" alt="공유" width={24} height={24} />
-				</button>
+				<ShareButton />
 			</div>
 		</section>
 	);
