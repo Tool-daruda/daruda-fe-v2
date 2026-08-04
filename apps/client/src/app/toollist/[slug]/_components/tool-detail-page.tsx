@@ -18,8 +18,10 @@ export const ToolDetailPage = ({ toolId }: Props) => {
 	return (
 		<div className={styles.page}>
 			<section className={styles.header}>
-				<ToolHero toolId={toolId} />
-				<ToolMetaBar toolId={toolId} />
+				<div className={styles.headerInner}>
+					<ToolHero toolId={toolId} />
+					<ToolMetaBar toolId={toolId} />
+				</div>
 			</section>
 
 			<div className={styles.contentLayout}>

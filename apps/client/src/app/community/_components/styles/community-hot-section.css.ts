@@ -73,7 +73,7 @@ export const badge = style({
 	width: "28px",
 	height: "28px",
 	borderRadius: "6px",
-	backgroundColor: colors.brand.orange[400],
+	overflow: "hidden",
 });
 
 export const cardBody = style({

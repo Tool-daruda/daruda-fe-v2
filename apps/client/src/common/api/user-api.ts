@@ -1,19 +1,40 @@
+import { cache } from "react";
+import { hasAuthSession } from "./auth-session";
+import { ApiError } from "./errors/api-error";
 import { fetchServer } from "./fetch-server";
 import type { UserProfileData } from "./models/auth.model";
 import type { FavoriteToolsRes, MyBoardsRes } from "./models/tool.model";
 
 /**
+ * @description 사용자 프로필 조회
+ * @note 한 요청 안에서 레이아웃과 페이지가 각각 호출해도 실제 fetch는 1회만 발생하도록 캐싱합니다.
+ */
+const getUserProfile = cache(async () => {
+	return fetchServer<UserProfileData>("/api/v1/user/profile", {
+		method: "GET",
+		cache: "no-store",
+	});
+});
+
+/**
  * @description /api/v1/user 엔드포인트와 통신하는 API 서비스입니다.
  */
 export const UserApi = {
+	getUserProfile,
+
 	/**
-	 * @description 사용자 프로필 조회
+	 * @description 인증이 선택적인 화면에서 현재 로그인 사용자를 조회합니다.
+	 * @note 토큰이 없으면 요청 없이 null을 반환하고, 만료/무효 토큰(401)도 null로 처리합니다.
 	 */
-	getUserProfile: async () => {
-		return fetchServer<UserProfileData>("/api/v1/user/profile", {
-			method: "GET",
-			cache: "no-store",
-		});
+	getCurrentUser: async (): Promise<UserProfileData | null> => {
+		if (!(await hasAuthSession())) return null;
+
+		try {
+			return await getUserProfile();
+		} catch (error) {
+			if (error instanceof ApiError && error.status === 401) return null;
+			throw error;
+		}
 	},
 
 	/**

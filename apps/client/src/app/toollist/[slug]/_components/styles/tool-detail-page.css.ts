@@ -1,25 +1,32 @@
 import { colors } from "@repo/ui/foundations";
 import { style } from "@vanilla-extract/css";
 
+const CONTENT_MAX_WIDTH = "1200px";
+
 export const page = style({
 	width: "100%",
 	background: colors.grayscale[25],
 });
 
 export const header = style({
+	width: "100%",
+	background: colors.grayscale[0],
+});
+
+export const headerInner = style({
 	display: "flex",
 	flexDirection: "column",
 	gap: "24px",
-	background: colors.grayscale[0],
+	maxWidth: CONTENT_MAX_WIDTH,
 	margin: "0 auto",
+	padding: "0 24px",
 });
 
 export const contentLayout = style({
 	display: "grid",
 	gridTemplateColumns: "260px minmax(0, 1fr)",
 	gap: "24px",
-	marginTop: "24px",
-	maxWidth: "1200px",
+	maxWidth: CONTENT_MAX_WIDTH,
 	margin: "0 auto",
 	padding: "40px 24px 120px",
 });

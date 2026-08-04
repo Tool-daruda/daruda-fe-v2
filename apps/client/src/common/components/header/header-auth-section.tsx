@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { NotificationBell } from "@/common/components/notification/notification-bell";
 import * as styles from "./header.css";
 
 type Props = {
@@ -19,9 +20,7 @@ export default function HeaderAuthSection({ isLoggedIn }: Props) {
 
 	return (
 		<div className={styles.authSection}>
-			<Link href="/notification" aria-label="알림" className={styles.iconButton}>
-				<Image src="/icons/ic_alarm_gray500_28.svg" alt="" width={28} height={28} />
-			</Link>
+			<NotificationBell />
 			<Link href="/mypage" aria-label="마이페이지" className={styles.iconButton}>
 				<Image src="/icons/ic_profile_gray500_28.svg" alt="" width={28} height={28} />
 			</Link>

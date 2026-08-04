@@ -23,8 +23,7 @@ export default async function MyPostsPage() {
 					title: board.title,
 					content: board.content,
 					comments: board.commentCount,
-					// TODO: 스크랩 수 필요
-					bookmarks: board.isScraped ? 1 : 0,
+					bookmarks: board.scrapCount,
 				};
 
 				return <PostItem key={board.boardId} post={formattedPost} />;

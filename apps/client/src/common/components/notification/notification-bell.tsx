@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useIsLoggedIn } from "@/common/context/auth-context";
 import { useNotification } from "@/common/context/notification-context";
-import { useCurrentUser } from "@/common/context/user-context";
 import * as s from "./notification-bell.css";
 import { NotificationPopover } from "./notification-popover";
 
 export function NotificationBell() {
-	const currentUser = useCurrentUser();
+	const isLoggedIn = useIsLoggedIn();
 	const { unreadCount } = useNotification();
 	const [isOpen, setIsOpen] = useState(false);
 	const wrapperRef = useRef<HTMLDivElement>(null);
@@ -24,7 +24,7 @@ export function NotificationBell() {
 		};
 	}, []);
 
-	if (!currentUser) return null;
+	if (!isLoggedIn) return null;
 
 	return (
 		<div ref={wrapperRef} className={s.bellWrapper}>

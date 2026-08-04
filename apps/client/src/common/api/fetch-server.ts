@@ -127,7 +127,12 @@ async function parseErrorResponse(response: Response, endpoint: string) {
 		errorMessage = `API Error: ${response.status} (Failed to parse error response)`;
 	}
 
-	console.error(`[FETCH ERROR] ${response.status} <- ${endpoint}`, errorBody);
+	// 404(리소스 없음), 401(비로그인)은 정상적으로 발생할 수 있는 응답이므로 warn으로 처리하고,
+	// 그 외는 error로 처리
+	const isExpectedStatus = response.status === 404 || response.status === 401;
+	const log = isExpectedStatus ? console.warn : console.error;
+	log(`[FETCH ERROR] ${response.status} <- ${endpoint}`, errorBody);
+
 	throw new ApiError(errorMessage, response.status, errorBody);
 }
 

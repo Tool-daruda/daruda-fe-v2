@@ -34,7 +34,11 @@ export const CommunityHotSection = ({ posts }: CommunityHotSectionProps) => {
 							{post.images[0] && (
 								<Image src={post.images[0]} alt={post.title} fill style={{ objectFit: "cover" }} />
 							)}
-							<div className={s.badge} />
+							<div className={s.badge}>
+								{post.toolLogo && (
+									<Image src={post.toolLogo} alt="" fill style={{ objectFit: "cover" }} />
+								)}
+							</div>
 						</div>
 						<div className={s.cardBody}>
 							<p className={s.cardTitle}>{post.title}</p>

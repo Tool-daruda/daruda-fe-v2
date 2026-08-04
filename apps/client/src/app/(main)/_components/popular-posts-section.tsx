@@ -35,8 +35,7 @@ export const PopularPostsSection = async () => {
 							title: post.title,
 							content: post.content,
 							comments: post.commentCount,
-							// TODO: 스크랩 수 필요
-							bookmarks: post.isScraped ? 1 : 0,
+							bookmarks: post.scrapCount,
 						}}
 					/>
 				))}

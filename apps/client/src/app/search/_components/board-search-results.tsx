@@ -33,7 +33,6 @@ export function BoardSearchResults({
 
 	const sentinelRef = useRef<HTMLDivElement>(null);
 
-	// Reset state when initialPosts or initialNextCursor change
 	useEffect(() => {
 		setPosts(initialPosts);
 		setNextCursor(initialNextCursor);
