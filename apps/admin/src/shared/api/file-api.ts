@@ -1,9 +1,27 @@
 import axios, { type AxiosResponse } from "axios";
 import { get } from "@/shared/api";
 
-export const getPresignedUrls = async (fileName: string) => {
+export interface PresignedUrlParams {
+	prefix: "profile" | "board" | "tool" | string;
+	extension: string;
+}
+
+export interface PresignedUrlRes {
+	presignedUrl: string;
+	publicUrl: string;
+}
+
+export const getPresignedUrls = async ({
+	prefix,
+	extension,
+}: PresignedUrlParams): Promise<PresignedUrlRes> => {
 	try {
-		const res: AxiosResponse = await get(`/image/presigned-url?imageName=${fileName}`);
+		const query = new URLSearchParams({
+			prefix,
+			extension: extension.startsWith(".") ? extension : `.${extension}`,
+		}).toString();
+
+		const res: AxiosResponse = await get(`/image/presigned-url?${query}`);
 		return res.data;
 	} catch (err) {
 		console.error("Presigned URL 발급 실패:", err);
