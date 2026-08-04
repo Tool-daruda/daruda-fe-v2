@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { withdrawUserAction } from "@/app/mypage/_actions/user.actions"; // 2단계 서버액션 임포트
+import { toast } from "@/common/components/toast";
 import * as styles from "./account.css";
 
 export default function AccountPage() {
@@ -15,15 +16,15 @@ export default function AccountPage() {
 			const result = await withdrawUserAction(undefined);
 
 			if (!result.success) {
-				alert(result.error || "회원 탈퇴 처리 중 오류가 발생했습니다.");
+				toast(result.error || "회원 탈퇴 처리 중 오류가 발생했어요.");
 				return;
 			}
 
-			alert("회원 탈퇴가 완료되었습니다. 그동안 이용해 주셔서 감사합니다.");
+			toast("회원 탈퇴가 완료되었어요. 그동안 이용해 주셔서 감사합니다.", { duration: 4000 });
 
 			router.push("/");
 		} catch (error) {
-			alert("회원 탈퇴 처리 중 오류가 발생했습니다.");
+			toast("회원 탈퇴 처리 중 오류가 발생했어요.");
 			console.error("Withdrawal error:", error);
 		}
 	};

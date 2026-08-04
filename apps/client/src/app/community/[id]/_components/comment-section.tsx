@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { CommentItem } from "@/common/api/models/comment.model";
 import { MoreMenu, type MoreMenuItem } from "@/common/components/more-menu/more-menu";
+import { toast } from "@/common/components/toast";
 import { useContentMenu } from "@/common/hooks/use-content-menu";
 import { formatDate, formatTime } from "@/common/utils";
 import { deleteCommentAction } from "../../_actions/comment-actions";
@@ -50,7 +51,7 @@ const CommentRow = ({ comment, boardId }: { comment: CommentItem; boardId: numbe
 			onClick: async () => {
 				const result = await deleteCommentAction({ commentId: comment.commentId, boardId });
 				if (result.success) router.refresh();
-				else alert(result.error || "삭제에 실패했습니다."); // TODO: 토스트 머지 후 교체
+				else toast(result.error || "삭제에 실패했어요.");
 			},
 		},
 	];
