@@ -4,6 +4,7 @@ import { Radio, RadioGroup } from "@repo/ui";
 import { useId, useState } from "react";
 import { logoutAction } from "@/common/api/actions/auth.actions";
 import type { UserProfileData } from "@/common/api/models/auth.model";
+import { toast } from "@/common/components/toast";
 import { updateUserProfileAction } from "../_actions/user.actions";
 import * as styles from "./user.css";
 
@@ -91,13 +92,13 @@ export default function UserProfileClient({ initialData }: Props) {
 		try {
 			const result = await updateUserProfileAction(payload);
 			if (!result.success) {
-				alert(result.error || "정보 변경에 실패했습니다. 다시 시도해 주세요.");
+				toast(result.error || "정보 변경에 실패했어요. 다시 시도해 주세요.");
 				return;
 			}
-			alert("정보가 성공적으로 변경되었습니다.");
+			toast("정보를 변경했어요.");
 			setIsEditing(false);
 		} catch {
-			alert("정보 변경 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
+			toast("정보 변경 중 오류가 발생했어요. 잠시 후 다시 시도해 주세요.");
 		}
 	};
 

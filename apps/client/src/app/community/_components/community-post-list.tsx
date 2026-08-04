@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { BoardItem, BoardSortBy } from "@/common/api/models/board.model";
 import { MoreMenu, type MoreMenuItem } from "@/common/components/more-menu/more-menu";
+import { toast } from "@/common/components/toast";
 import { useContentMenu } from "@/common/hooks/use-content-menu";
 import { formatDate } from "@/common/utils";
 import { deleteBoardAction, postBoardScrapAction } from "../_actions/board-actions";
@@ -54,13 +55,16 @@ export const PostCard = ({ post }: { post: BoardItem }) => {
 			label: "삭제하기",
 			iconSrc: "/icons/community/ic_delete_20.svg",
 			onClick: async () => {
-				// TODO: 토스트 머지 후 에러 피드백 교체
 				const result = await deleteBoardAction({
 					boardId: post.boardId,
 					toolId: post.toolId || undefined,
 				});
-				if (result.success) router.refresh();
-				else alert(result.error || "삭제에 실패했습니다.");
+				if (result.success) {
+					toast("게시글을 삭제했어요.");
+					router.refresh();
+				} else {
+					toast(result.error || "삭제에 실패했어요.");
+				}
 			},
 		},
 	];
@@ -74,10 +78,13 @@ export const PostCard = ({ post }: { post: BoardItem }) => {
 					router.push("/login");
 					return;
 				}
-				// TODO: 토스트 머지 후 에러 피드백 교체
 				const result = await postBoardScrapAction(post.boardId);
-				if (result.success) router.refresh();
-				else alert(result.error || "저장에 실패했습니다.");
+				if (result.success) {
+					toast(result.data.scrap ? "게시글을 저장했어요." : "저장을 취소했어요.");
+					router.refresh();
+				} else {
+					toast(result.error || "저장에 실패했어요.");
+				}
 			},
 		},
 		{

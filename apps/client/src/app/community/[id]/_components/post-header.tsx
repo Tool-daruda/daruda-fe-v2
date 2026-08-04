@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { BoardItem } from "@/common/api/models/board.model";
 import { MoreMenu, type MoreMenuItem } from "@/common/components/more-menu/more-menu";
+import { toast } from "@/common/components/toast";
 import { useContentMenu } from "@/common/hooks/use-content-menu";
 import { formatDate } from "@/common/utils";
 import { deleteBoardAction } from "../../_actions/board-actions";
@@ -35,7 +36,7 @@ export const PostHeader = ({ post }: PostHeaderProps) => {
 					toolId: post.toolId || undefined,
 				});
 				if (result.success) router.push("/community");
-				else alert(result.error || "삭제에 실패했습니다."); // TODO: 토스트 머지 후 교체
+				else toast(result.error || "삭제에 실패했어요.");
 			},
 		},
 	];
