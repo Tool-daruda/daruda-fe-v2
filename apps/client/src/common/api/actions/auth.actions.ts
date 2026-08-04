@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { AUTH_COOKIE_OPTIONS, applySetCookieHeaders, getSafeInternalPath } from "../cookie-utils";
@@ -107,6 +108,8 @@ export async function logoutAction() {
 		const cookieStore = await cookies();
 		cookieStore.delete("accessToken");
 		cookieStore.delete("refreshToken");
+		// 루트 레이아웃이 쿠키로 로그인 상태를 판정하므로, 캐시된 헤더가 남지 않도록 무효화합니다.
+		revalidatePath("/", "layout");
 		redirect("/");
 	}
 }
@@ -121,5 +124,6 @@ export async function withdrawAction() {
 		console.error("[withdraw] 회원 탈퇴 실패:", error);
 		return;
 	}
+	revalidatePath("/", "layout");
 	redirect("/");
 }

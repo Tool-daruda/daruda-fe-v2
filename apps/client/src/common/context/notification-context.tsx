@@ -14,7 +14,7 @@ import {
 	readNotificationAction,
 } from "../api/actions/notification.actions";
 import type { NotificationData } from "../api/models/notification.model";
-import { useCurrentUser } from "./user-context";
+import { useIsLoggedIn } from "./auth-context";
 
 type NotificationListener = (data: NotificationData) => void;
 
@@ -133,12 +133,12 @@ interface NotificationContextValue {
 const NotificationContext = createContext<NotificationContextValue | null>(null);
 
 export function NotificationProvider({ children }: { children: ReactNode }) {
-	const currentUser = useCurrentUser();
+	const isLoggedIn = useIsLoggedIn();
 	const [notifications, setNotifications] = useState<NotificationData[]>([]);
 	const [isLoading, setIsLoading] = useState(false);
 
 	const loadNotifications = useCallback(async () => {
-		if (!currentUser) {
+		if (!isLoggedIn) {
 			setNotifications([]);
 			return;
 		}
@@ -151,14 +151,14 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
 		} finally {
 			setIsLoading(false);
 		}
-	}, [currentUser]);
+	}, [isLoggedIn]);
 
 	useEffect(() => {
 		void loadNotifications();
 	}, [loadNotifications]);
 
 	useEffect(() => {
-		if (!currentUser) return;
+		if (!isLoggedIn) return;
 
 		const unsubscribe = sseManager.subscribe((newNotif) => {
 			setNotifications((prev) => {
@@ -170,7 +170,7 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
 		return () => {
 			unsubscribe();
 		};
-	}, [currentUser]);
+	}, [isLoggedIn]);
 
 	const markAsRead = useCallback(async (id: number) => {
 		setNotifications((prev) =>
