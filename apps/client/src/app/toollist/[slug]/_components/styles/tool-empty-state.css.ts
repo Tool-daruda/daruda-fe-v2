@@ -11,8 +11,8 @@ export const container = style({
 });
 
 export const message = style({
-	...themeVars.fonts.b5_2,
-	color: colors.grayscale[500],
+	...themeVars.fonts.t3_1,
+	color: colors.grayscale[200],
 	textAlign: "center",
 	wordBreak: "keep-all",
 	margin: 0,
