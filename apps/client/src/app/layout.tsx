@@ -15,9 +15,9 @@ export const metadata: Metadata = {
 	title: "daruda",
 	description: "대학생활에 필요한 툴을 다루다",
 	icons: {
-		icon: "/ic_logo_20.svg",
-		shortcut: "/ic_logo_20.svg",
-		apple: "/ic_logo_20.svg",
+		icon: "/icons/ic_logo_20.svg",
+		shortcut: "/icons/ic_logo_20.svg",
+		apple: "/icons/ic_logo_20.svg",
 	},
 };
 
