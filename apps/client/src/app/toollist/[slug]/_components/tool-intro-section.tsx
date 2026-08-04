@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { ToolApi } from "@/common/api/tool-api";
+import { withObjectJosa } from "@/common/utils";
 import { TOOL_SECTION_IDS } from "../_constants/toc";
 import * as styles from "./styles/tool-intro-section.css";
 
@@ -26,7 +27,7 @@ export const ToolIntroSection = async ({ toolId }: Props) => {
 
 	return (
 		<section id={TOOL_SECTION_IDS.intro} className={styles.container}>
-			<h2 className={styles.title}>{info.toolMainName}을 소개합니다.</h2>
+			<h2 className={styles.title}>{withObjectJosa(info.toolMainName)} 소개합니다.</h2>
 			<p className={styles.description}>{info.description}</p>
 
 			<div className={styles.imageGrid}>
