@@ -5,6 +5,7 @@ import { useId, useState } from "react";
 import { logoutAction } from "@/common/api/actions/auth.actions";
 import type { UserProfileData } from "@/common/api/models/auth.model";
 import { toast } from "@/common/components/toast";
+import { useNavigationGuard } from "@/common/hooks/use-navigation-guard";
 import { updateUserProfileAction } from "../_actions/user.actions";
 import * as styles from "./user.css";
 
@@ -49,6 +50,19 @@ export default function UserProfileClient({ initialData }: Props) {
 
 	const [nicknameStatus, setNicknameStatus] = useState<ValidationStatus>("idle");
 	const [errorMessage, setErrorMessage] = useState("");
+
+	const hasUnsavedChanges =
+		isEditing &&
+		(nickname !== (initialData?.nickname || "") ||
+			affiliation !== findPositionKeyByServerValue(initialData?.positions));
+
+	useNavigationGuard(hasUnsavedChanges, {
+		title: "아직 수정된 내용이 저장되지 않았어요.",
+		description: "정말 페이지를 벗어나시겠어요?",
+		cancelText: "마저 수정할게요",
+		confirmText: "네 나갈래요",
+		intent: "danger",
+	});
 
 	const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const value = e.target.value;
@@ -102,12 +116,6 @@ export default function UserProfileClient({ initialData }: Props) {
 		}
 	};
 
-	const handleLogout = async () => {
-		if (confirm("로그아웃 하시겠습니까?")) {
-			await logoutAction();
-		}
-	};
-
 	if (!isEditing) {
 		return (
 			<div className={styles.formWrapper}>
@@ -127,7 +135,7 @@ export default function UserProfileClient({ initialData }: Props) {
 				<div className={styles.actionButtonGroup}>
 					<button
 						type="button"
-						onClick={() => void handleLogout()}
+						onClick={() => void logoutAction()}
 						className={styles.textButtonOrange}
 					>
 						로그아웃

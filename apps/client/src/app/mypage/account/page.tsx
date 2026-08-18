@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { withdrawUserAction } from "@/app/mypage/_actions/user.actions"; // 2단계 서버액션 임포트
+import { confirm } from "@/common/components/modal";
 import { toast } from "@/common/components/toast";
 import * as styles from "./account.css";
 
@@ -9,8 +10,14 @@ export default function AccountPage() {
 	const router = useRouter();
 
 	const handleWithdraw = async () => {
-		const isConfirmed = window.confirm("정말로 탈퇴하시겠습니까? 이 작업은 되돌릴 수 없습니다.");
-		if (!isConfirmed) return;
+		const confirmed = await confirm({
+			title: "정말 탈퇴하시겠어요?",
+			description: "지금 탈퇴하면 계정을 복구할 수 없어요.",
+			cancelText: "좀 더 생각해볼게요",
+			confirmText: "네, 탈퇴할게요",
+			intent: "danger",
+		});
+		if (!confirmed) return;
 
 		try {
 			const result = await withdrawUserAction(undefined);
@@ -38,7 +45,7 @@ export default function AccountPage() {
 				<li>한 번 회원 탈퇴할 경우 계정을 복구할 수 없습니다.</li>
 			</ul>
 
-			<button type="button" onClick={handleWithdraw}>
+			<button type="button" className={styles.withdrawButton} onClick={handleWithdraw}>
 				탈퇴하기
 			</button>
 		</div>

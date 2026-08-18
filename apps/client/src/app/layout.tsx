@@ -6,6 +6,7 @@ import type { Metadata } from "next";
 import type { PropsWithChildren } from "react";
 import { hasAuthSession } from "@/common/api/auth-session";
 import Header from "@/common/components/header/header";
+import { ModalHost } from "@/common/components/modal";
 import { Toaster } from "@/common/components/toast";
 import { AuthProvider } from "@/common/context/auth-context";
 import { NotificationProvider } from "@/common/context/notification-context";
@@ -32,6 +33,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
 						<Header isLoggedIn={isLoggedIn} />
 						<main>{children}</main>
 						<Toaster />
+						<ModalHost />
 					</NotificationProvider>
 				</AuthProvider>
 			</body>
