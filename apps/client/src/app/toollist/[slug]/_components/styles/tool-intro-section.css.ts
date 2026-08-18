@@ -25,16 +25,17 @@ export const imageGrid = style({
 
 export const imageCard = style({
 	position: "relative",
-	// 데스크탑에서 2장이 보이던 기존 비율을 유지합니다. gap의 절반씩 나눠 뺍니다.
 	flex: "0 0 calc(50% - 7px)",
 	aspectRatio: "43/24",
 	borderRadius: "12px",
 	overflow: "hidden",
 	background: "#f3f4f6",
 	scrollSnapAlign: "start",
+	padding: 0,
+	border: "none",
+	cursor: "pointer",
 
 	"@media": {
-		// 좁은 화면에서는 다음 장이 살짝 보이게 해 스크롤 가능함을 드러냅니다.
 		"screen and (max-width: 768px)": {
 			flex: "0 0 85%",
 		},

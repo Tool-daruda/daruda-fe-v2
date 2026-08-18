@@ -1,8 +1,8 @@
-import Image from "next/image";
 import { ToolApi } from "@/common/api/tool-api";
 import { withObjectJosa } from "@/common/utils";
 import { TOOL_SECTION_IDS } from "../_constants/toc";
 import * as styles from "./styles/tool-intro-section.css";
+import { ToolIntroImages } from "./tool-intro-images";
 
 type Props = {
 	toolId: number;
@@ -30,18 +30,7 @@ export const ToolIntroSection = async ({ toolId }: Props) => {
 			<h2 className={styles.title}>{withObjectJosa(info.toolMainName)} 소개합니다.</h2>
 			<p className={styles.description}>{info.description}</p>
 
-			<div className={styles.imageGrid}>
-				{imageItems.map((item, index) => (
-					<div key={item.id} className={styles.imageCard}>
-						<Image
-							src={item.imageUrl}
-							alt={`${info.toolMainName} 이미지 ${index + 1}`}
-							fill
-							className={styles.image}
-						/>
-					</div>
-				))}
-			</div>
+			<ToolIntroImages items={imageItems} toolMainName={info.toolMainName} />
 		</section>
 	);
 };

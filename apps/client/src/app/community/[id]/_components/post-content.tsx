@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { ImageLightbox } from "@/common/components/image-lightbox/image-lightbox";
 import * as s from "./styles/post-content.css";
 
 interface PostContentProps {
@@ -11,22 +12,6 @@ interface PostContentProps {
 
 export const PostContent = ({ content, images }: PostContentProps) => {
 	const [selectedImage, setSelectedImage] = useState<string | null>(null);
-
-	useEffect(() => {
-		if (!selectedImage) return;
-
-		const handleKeyDown = (e: KeyboardEvent) => {
-			if (e.key === "Escape") setSelectedImage(null);
-		};
-
-		document.addEventListener("keydown", handleKeyDown);
-		document.body.style.overflow = "hidden";
-
-		return () => {
-			document.removeEventListener("keydown", handleKeyDown);
-			document.body.style.overflow = "";
-		};
-	}, [selectedImage]);
 
 	return (
 		<div className={s.wrapper}>
@@ -52,35 +37,7 @@ export const PostContent = ({ content, images }: PostContentProps) => {
 				</button>
 			))}
 
-			{selectedImage && (
-				<div className={s.lightboxBackdrop}>
-					<button
-						type="button"
-						className={s.lightboxOverlayButton}
-						onClick={() => setSelectedImage(null)}
-						aria-label="닫기"
-					/>
-					<div className={s.lightboxFigure}>
-						<button
-							type="button"
-							className={s.lightboxCloseButton}
-							onClick={() => setSelectedImage(null)}
-							aria-label="닫기"
-						>
-							<Image src="/icons/community/ic_cross_36.svg" alt="" width={22} height={22} />
-						</button>
-						<div className={s.lightboxImageWrapper}>
-							<Image
-								src={selectedImage}
-								alt=""
-								fill
-								className={s.image}
-								style={{ objectFit: "cover" }}
-							/>
-						</div>
-					</div>
-				</div>
-			)}
+			<ImageLightbox src={selectedImage} onClose={() => setSelectedImage(null)} />
 		</div>
 	);
 };
