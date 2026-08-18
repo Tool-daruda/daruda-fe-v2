@@ -19,6 +19,12 @@ const isTypingTarget = (target: EventTarget | null) => {
 	return target.isContentEditable || !!target.closest("input, textarea, select");
 };
 
+// Space는 버튼을 누르는 키이기도 해서, 버튼 위에서는 막지 않는다.
+const isButtonTarget = (target: EventTarget | null) => {
+	if (!(target instanceof HTMLElement)) return false;
+	return !!target.closest('button, [role="button"]');
+};
+
 /**
  * 페이지 스크롤을 잠급니다.
  *
@@ -36,6 +42,7 @@ export const useScrollLock = (locked: boolean) => {
 
 		const handleKeyDown = (e: KeyboardEvent) => {
 			if (isTypingTarget(e.target)) return;
+			if (e.key === " " && isButtonTarget(e.target)) return;
 			if (SCROLL_KEYS.has(e.key)) e.preventDefault();
 		};
 

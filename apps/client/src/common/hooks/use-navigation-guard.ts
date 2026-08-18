@@ -34,8 +34,15 @@ export const useNavigationGuard = (enabled: boolean, options: ConfirmOptions) =>
 			// 외부 링크는 beforeunload가 처리한다.
 			if (anchor.origin !== window.location.origin) return;
 
+			// 해시 점프처럼 같은 문서 안에서 움직이는 이동은 페이지를 벗어나지 않는다.
+			if (
+				anchor.pathname === window.location.pathname &&
+				anchor.search === window.location.search
+			) {
+				return;
+			}
+
 			const href = `${anchor.pathname}${anchor.search}${anchor.hash}`;
-			if (anchor.href === window.location.href) return;
 
 			e.preventDefault();
 			e.stopPropagation();

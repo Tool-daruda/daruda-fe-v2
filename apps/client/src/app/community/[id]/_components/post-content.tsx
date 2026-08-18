@@ -11,7 +11,7 @@ interface PostContentProps {
 }
 
 export const PostContent = ({ content, images }: PostContentProps) => {
-	const [selectedImage, setSelectedImage] = useState<string | null>(null);
+	const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
 	return (
 		<div className={s.wrapper}>
@@ -23,8 +23,8 @@ export const PostContent = ({ content, images }: PostContentProps) => {
 					key={`${image}-${index}`}
 					type="button"
 					className={s.imageButton}
-					onClick={() => setSelectedImage(image)}
-					aria-label="이미지 크게 보기"
+					onClick={() => setSelectedIndex(index)}
+					aria-label={`이미지 ${index + 1} 크게 보기`}
 				>
 					<Image
 						src={image}
@@ -37,7 +37,11 @@ export const PostContent = ({ content, images }: PostContentProps) => {
 				</button>
 			))}
 
-			<ImageLightbox src={selectedImage} onClose={() => setSelectedImage(null)} />
+			<ImageLightbox
+				src={selectedIndex === null ? null : images[selectedIndex]}
+				onClose={() => setSelectedIndex(null)}
+				alt={selectedIndex === null ? "" : `이미지 ${selectedIndex + 1}`}
+			/>
 		</div>
 	);
 };

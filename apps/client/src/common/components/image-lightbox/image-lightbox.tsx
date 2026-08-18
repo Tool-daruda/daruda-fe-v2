@@ -49,7 +49,13 @@ export const ImageLightbox = ({
 					<Image src="/icons/community/ic_cross_36.svg" alt="" width={22} height={22} />
 				</button>
 				<div className={s.imageWrapper} style={{ aspectRatio }}>
-					<Image src={src} alt={alt} fill className={s.image} />
+					<Image
+						src={src}
+						alt={alt}
+						fill
+						sizes={`(max-width: ${maxWidth}px) 100vw, ${maxWidth}px`}
+						className={s.image}
+					/>
 				</div>
 			</div>
 		</div>

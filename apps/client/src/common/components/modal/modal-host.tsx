@@ -42,7 +42,7 @@ export function ModalHost() {
 			onClose={() => closeModal(false)}
 		>
 			{modal && (
-				<div key={modal.id}>
+				<div key={modal.id} className={s.body}>
 					<div className={s.content}>
 						<div className={s.header}>
 							<h2 id={titleId} className={s.title}>

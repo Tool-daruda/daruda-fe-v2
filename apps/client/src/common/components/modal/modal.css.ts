@@ -13,7 +13,7 @@ export const dialog = style({
 	margin: "auto",
 	width: "492px",
 	maxWidth: "calc(100vw - 32px)",
-	padding: "32px 36px 28px",
+	padding: 0,
 	border: "none",
 	borderRadius: "10px",
 	backgroundColor: themeVars.colors.grayscale[0],
@@ -28,6 +28,10 @@ export const dialog = style({
 			animation: "none",
 		},
 	},
+});
+
+export const body = style({
+	padding: "32px 36px 28px",
 });
 
 export const content = style({

@@ -41,4 +41,10 @@ export const withdrawButton = style({
 	fontSize: "16px",
 	lineHeight: "24px",
 	letterSpacing: "-0.192px",
+	selectors: {
+		"&:disabled": {
+			opacity: 0.5,
+			cursor: "not-allowed",
+		},
+	},
 });
