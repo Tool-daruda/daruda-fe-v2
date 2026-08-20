@@ -4,10 +4,10 @@ import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import {
-	AUTH_COOKIE_OPTIONS,
 	applySetCookieHeaders,
 	clearAuthCookies,
 	getSafeInternalPath,
+	TEMP_COOKIE_OPTIONS,
 } from "../cookie-utils";
 import { ApiError } from "../errors/api-error";
 import { fetchPublic } from "../fetch-public";
@@ -32,7 +32,7 @@ async function getKakaoLoginUrl({ next }: { next?: string } = {}) {
 	if (safeNext) {
 		const cookieStore = await cookies();
 		cookieStore.set("pendingNext", safeNext, {
-			...AUTH_COOKIE_OPTIONS,
+			...TEMP_COOKIE_OPTIONS,
 			maxAge: 60 * 5,
 		});
 	}

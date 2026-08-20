@@ -2,16 +2,23 @@ import type { NextResponse } from "next/server";
 
 const COOKIE_DOMAIN = process.env.COOKIE_DOMAIN;
 
-// accessToken/refreshToken은 admin 등 다른 서브도메인에서도 api 서버로 실려가야 하므로
-// COOKIE_DOMAIN(.daruda.shop)을 붙여 상위 도메인 쿠키로 심습니다.
-// 로컬은 COOKIE_DOMAIN 미설정 → host-only로 동작합니다.
-export const AUTH_COOKIE_OPTIONS = {
+const BASE_COOKIE_OPTIONS = {
 	httpOnly: true,
 	secure: process.env.NODE_ENV === "production",
 	sameSite: "lax" as const,
 	path: "/",
+};
+
+// accessToken/refreshToken은 admin 등 다른 서브도메인에서도 api 서버로 실려가야 하므로
+// COOKIE_DOMAIN(.daruda.shop)을 붙여 상위 도메인 쿠키로 심습니다.
+// 로컬은 COOKIE_DOMAIN 미설정 → host-only로 동작합니다.
+export const AUTH_COOKIE_OPTIONS = {
+	...BASE_COOKIE_OPTIONS,
 	...(COOKIE_DOMAIN ? { domain: COOKIE_DOMAIN } : {}),
 };
+
+// pendingNext/pendingSignup은 client 앱 안에서만 쓰이는 임시 쿠키라 host-only로 둡니다.
+export const TEMP_COOKIE_OPTIONS = BASE_COOKIE_OPTIONS;
 
 const AUTH_COOKIE_NAMES = ["accessToken", "refreshToken"] as const;
 

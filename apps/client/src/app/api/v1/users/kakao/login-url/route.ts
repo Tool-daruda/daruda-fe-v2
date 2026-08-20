@@ -1,8 +1,8 @@
 import { type NextRequest, NextResponse } from "next/server";
 import {
-	AUTH_COOKIE_OPTIONS,
 	forwardSetCookieHeaders,
 	getSafeInternalPath,
+	TEMP_COOKIE_OPTIONS,
 } from "@/common/api/cookie-utils";
 import type { ApiResponse } from "@/common/api/models/api-response.model";
 import type { LoginData } from "@/common/api/models/auth.model";
@@ -47,7 +47,7 @@ export async function GET(request: NextRequest) {
 
 		if (!loginData.isUser) {
 			response.cookies.set("pendingSignup", JSON.stringify({ email: loginData.email }), {
-				...AUTH_COOKIE_OPTIONS,
+				...TEMP_COOKIE_OPTIONS,
 				maxAge: 60 * 10,
 			});
 		}
