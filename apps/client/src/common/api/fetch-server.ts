@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import {
 	AUTH_COOKIE_OPTIONS,
 	applySetCookieHeaders,
+	clearAuthCookies,
 	createCookieHeader,
 	getCookieFromSetCookie,
 } from "./cookie-utils";
@@ -68,8 +69,7 @@ async function reissueAccessToken(refreshToken?: string) {
 			);
 			try {
 				const cookieStore = await cookies();
-				cookieStore.delete("accessToken");
-				cookieStore.delete("refreshToken");
+				clearAuthCookies(cookieStore);
 			} catch {
 				// Server Components cannot mutate response cookies.
 			}
@@ -85,6 +85,14 @@ async function reissueAccessToken(refreshToken?: string) {
 
 		if (!accessToken) {
 			console.error(`[FETCH REISSUE FAILED] No accessToken found in response headers or body`);
+			// 재발급이 성공 응답을 줬는데 토큰이 없으면 세션을 이어갈 수 없으므로 정리합니다.
+			// (네트워크/파싱 예외는 일시적일 수 있어 catch에서는 쿠키를 지우지 않습니다.)
+			try {
+				const cookieStore = await cookies();
+				clearAuthCookies(cookieStore);
+			} catch {
+				// Server Components cannot mutate response cookies.
+			}
 			return null;
 		}
 
