@@ -1,4 +1,4 @@
-import type { NextResponse } from "next/server";
+import type { NextRequest, NextResponse } from "next/server";
 
 const COOKIE_DOMAIN = process.env.COOKIE_DOMAIN;
 
@@ -90,13 +90,40 @@ export function applySetCookieHeaders(store: WritableCookieStore, setCookieHeade
 	}
 }
 
-// 도메인 쿠키는 domain을 지정해야 삭제되고, 이 변경 이전에 심긴 host-only 쿠키는
-// domain 없이 지워야 하므로 두 변형을 모두 삭제합니다.
+// 도메인 쿠키는 domain을 지정해야 삭제됩니다.
+// ResponseCookies는 이름만 Map 키로 쓰므로 같은 이름을 두 번 지워도 헤더는 하나만 남습니다.
+// host-only 변형 정리는 raw 헤더를 쓸 수 있는 clearLegacyHostOnlyCookies가 담당합니다.
 export function clearAuthCookies(store: WritableCookieStore) {
 	for (const name of AUTH_COOKIE_NAMES) {
-		store.delete({ name, path: "/" });
-		if (COOKIE_DOMAIN) store.delete({ name, path: "/", domain: COOKIE_DOMAIN });
+		store.delete(COOKIE_DOMAIN ? { name, path: "/", domain: COOKIE_DOMAIN } : { name, path: "/" });
 	}
+}
+
+// COOKIE_DOMAIN이 설정된 환경에서 host-only 인증 쿠키는 이 변경 이전에 심긴 것뿐이므로
+// 항상 정리 대상입니다. Domain 없는 삭제 헤더는 host-only 쿠키만 지우고
+// 상위 도메인 쿠키는 건드리지 않습니다.
+//
+// ResponseCookies 조작은 set-cookie 헤더를 통째로 재작성하므로,
+// 반드시 쿠키 조작을 모두 마친 뒤 마지막에 호출해야 합니다.
+export function clearLegacyHostOnlyCookies(
+	request: NextRequest,
+	response: NextResponse
+): NextResponse {
+	if (!COOKIE_DOMAIN) return response;
+
+	// 인증 쿠키를 들고 온 요청에만 붙입니다.
+	// 비로그인 트래픽까지 Set-Cookie가 붙으면 불필요하게 캐시가 깨집니다.
+	const hasAuthCookie = AUTH_COOKIE_NAMES.some((name) => request.cookies.has(name));
+	if (!hasAuthCookie) return response;
+
+	for (const name of AUTH_COOKIE_NAMES) {
+		response.headers.append(
+			"set-cookie",
+			`${name}=; Path=/; Expires=Thu, 01 Jan 1970 00:00:00 GMT`
+		);
+	}
+
+	return response;
 }
 
 export function forwardSetCookieHeaders(

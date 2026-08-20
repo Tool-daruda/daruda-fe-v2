@@ -2,6 +2,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import {
 	AUTH_COOKIE_OPTIONS,
 	clearAuthCookies,
+	clearLegacyHostOnlyCookies,
 	forwardSetCookieHeaders,
 	getCookieFromSetCookie,
 } from "@/common/api/cookie-utils";
@@ -103,6 +104,11 @@ async function reissueAccessToken(refreshToken: string) {
 }
 
 export async function middleware(request: NextRequest) {
+	// 쿠키 조작을 모두 마친 응답에 legacy 정리 헤더를 덧붙입니다.
+	return clearLegacyHostOnlyCookies(request, await handleRequest(request));
+}
+
+async function handleRequest(request: NextRequest) {
 	const { pathname } = request.nextUrl;
 
 	// 회원가입 플로우: pendingSignup 쿠키 필요
@@ -157,7 +163,9 @@ export async function middleware(request: NextRequest) {
 				return redirectToLogin(request, true);
 			}
 
-			return redirectToLogin(request, false);
+			// refreshToken이 없어도 만료된 accessToken은 지웁니다.
+			// hasAuthSession이 쿠키 존재만 보므로, 남겨두면 로그인 상태가 stale하게 유지됩니다.
+			return redirectToLogin(request, Boolean(accessToken));
 		}
 	}
 
