@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import {
 	AUTH_COOKIE_OPTIONS,
 	applySetCookieHeaders,
+	clearAuthCookies,
 	createCookieHeader,
 	getCookieFromSetCookie,
 } from "./cookie-utils";
@@ -68,8 +69,7 @@ async function reissueAccessToken(refreshToken?: string) {
 			);
 			try {
 				const cookieStore = await cookies();
-				cookieStore.delete("accessToken");
-				cookieStore.delete("refreshToken");
+				clearAuthCookies(cookieStore);
 			} catch {
 				// Server Components cannot mutate response cookies.
 			}

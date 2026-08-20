@@ -13,6 +13,8 @@ export const AUTH_COOKIE_OPTIONS = {
 	...(COOKIE_DOMAIN ? { domain: COOKIE_DOMAIN } : {}),
 };
 
+const AUTH_COOKIE_NAMES = ["accessToken", "refreshToken"] as const;
+
 interface CookieSetOptions {
 	httpOnly?: boolean;
 	secure?: boolean;
@@ -24,6 +26,7 @@ interface CookieSetOptions {
 
 type WritableCookieStore = {
 	set(name: string, value: string, options?: CookieSetOptions): unknown;
+	delete(options: { name: string; path?: string; domain?: string }): unknown;
 };
 
 export function getSafeInternalPath(path?: string) {
@@ -77,6 +80,15 @@ export function applySetCookieHeaders(store: WritableCookieStore, setCookieHeade
 			...AUTH_COOKIE_OPTIONS,
 			...(parsed.maxAge !== undefined && { maxAge: parsed.maxAge }),
 		});
+	}
+}
+
+// 도메인 쿠키는 domain을 지정해야 삭제되고, 이 변경 이전에 심긴 host-only 쿠키는
+// domain 없이 지워야 하므로 두 변형을 모두 삭제합니다.
+export function clearAuthCookies(store: WritableCookieStore) {
+	for (const name of AUTH_COOKIE_NAMES) {
+		store.delete({ name, path: "/" });
+		if (COOKIE_DOMAIN) store.delete({ name, path: "/", domain: COOKIE_DOMAIN });
 	}
 }
 

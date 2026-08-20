@@ -1,6 +1,7 @@
 import { type NextRequest, NextResponse } from "next/server";
 import {
 	AUTH_COOKIE_OPTIONS,
+	clearAuthCookies,
 	forwardSetCookieHeaders,
 	getCookieFromSetCookie,
 } from "@/common/api/cookie-utils";
@@ -44,15 +45,14 @@ function isTokenExpired(token: string): boolean {
 	return Date.now() >= exp * 1000 - 5000;
 }
 
-function redirectToLogin(request: NextRequest, clearAuthCookies: boolean) {
+function redirectToLogin(request: NextRequest, shouldClearAuthCookies: boolean) {
 	const { pathname } = request.nextUrl;
 	const loginUrl = new URL("/login", request.url);
 	loginUrl.searchParams.set("next", `${pathname}${request.nextUrl.search}`);
 	const response = NextResponse.redirect(loginUrl);
 
-	if (clearAuthCookies) {
-		response.cookies.delete("accessToken");
-		response.cookies.delete("refreshToken");
+	if (shouldClearAuthCookies) {
+		clearAuthCookies(response.cookies);
 	}
 
 	return response;

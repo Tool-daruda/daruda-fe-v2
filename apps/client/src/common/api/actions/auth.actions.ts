@@ -3,7 +3,12 @@
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { AUTH_COOKIE_OPTIONS, applySetCookieHeaders, getSafeInternalPath } from "../cookie-utils";
+import {
+	AUTH_COOKIE_OPTIONS,
+	applySetCookieHeaders,
+	clearAuthCookies,
+	getSafeInternalPath,
+} from "../cookie-utils";
 import { ApiError } from "../errors/api-error";
 import { fetchPublic } from "../fetch-public";
 import { fetchServer } from "../fetch-server";
@@ -106,8 +111,7 @@ export async function logoutAction() {
 		console.error("[logout] 백엔드 로그아웃 실패:", error);
 	} finally {
 		const cookieStore = await cookies();
-		cookieStore.delete("accessToken");
-		cookieStore.delete("refreshToken");
+		clearAuthCookies(cookieStore);
 		// 루트 레이아웃이 쿠키로 로그인 상태를 판정하므로, 캐시된 헤더가 남지 않도록 무효화합니다.
 		revalidatePath("/", "layout");
 		redirect("/");
@@ -118,8 +122,7 @@ export async function withdrawAction() {
 	try {
 		await fetchServer("/api/v1/auth/withdraw", { method: "DELETE" });
 		const cookieStore = await cookies();
-		cookieStore.delete("accessToken");
-		cookieStore.delete("refreshToken");
+		clearAuthCookies(cookieStore);
 	} catch (error) {
 		console.error("[withdraw] 회원 탈퇴 실패:", error);
 		return;
