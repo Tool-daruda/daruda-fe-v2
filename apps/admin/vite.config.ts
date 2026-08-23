@@ -8,8 +8,8 @@ import tsconfigPaths from "vite-tsconfig-paths";
 export default defineConfig({
 	plugins: [tsconfigPaths(), react(), vanillaExtractPlugin(), svgr()],
 	resolve: {
-		// @repo/ui/dist의 react import가 packages/ui/node_modules로 해석되어
-		// 번들에 React가 두 벌 들어가는 것을 방지
+		// dedupe가 없으면 @repo/ui/dist의 react import가 packages/ui/node_modules로
+		// 해석돼 React가 두 벌 번들링된다. 이 앱의 사본 하나로 통일한다.
 		dedupe: ["react", "react-dom"],
 	},
 });
