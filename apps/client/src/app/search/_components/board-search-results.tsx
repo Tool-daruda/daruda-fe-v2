@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { PostCard } from "@/app/community/_components/community-post-list";
 import type { BoardItem } from "@/common/api/models/board.model";
 import { normalizeBoardSearchResponse } from "@/common/api/models/search.model";
@@ -10,7 +11,6 @@ import * as s from "../styles/search-page.css";
 interface BoardSearchResultsProps {
 	initialPosts: BoardItem[];
 	initialNextCursor: number | string | null;
-	totalCount?: number;
 	keyword: string;
 }
 
@@ -23,7 +23,6 @@ const isValidCursor = (cursor: number | string | null | undefined): boolean => {
 export function BoardSearchResults({
 	initialPosts,
 	initialNextCursor,
-	totalCount,
 	keyword,
 }: BoardSearchResultsProps) {
 	const [posts, setPosts] = useState<BoardItem[]>(initialPosts);
@@ -103,28 +102,24 @@ export function BoardSearchResults({
 
 	if (!keyword.trim()) return null;
 
-	const displayCount = totalCount !== undefined ? totalCount : posts.length;
-
 	return (
-		<section className={s.sectionContainer}>
+		<section className={s.boardSection}>
 			<div className={s.sectionHeader}>
+				<Image src="/icons/ic_search_community_24.svg" alt="" width={24} height={24} />
 				<h2 className={s.sectionTitle}>커뮤니티</h2>
-				<span className={s.sectionCountChip}>{displayCount}</span>
 			</div>
 
 			{posts.length === 0 && !isLoading ? (
 				<div className={s.emptySection}>
-					<p className={s.emptyTitle}>
-						&apos;{keyword}&apos;에 대한 커뮤니티 게시글 검색 결과가 없습니다.
-					</p>
+					<p className={s.emptyTitle}>검색어와 관련된 글이 존재하지 않아요.</p>
 				</div>
 			) : (
 				<div className={s.boardList}>
 					{posts.map((post, index) => (
-						<div key={post.boardId}>
+						<Fragment key={post.boardId}>
 							{index > 0 && <div className={s.boardItemDivider} />}
 							<PostCard post={post} />
-						</div>
+						</Fragment>
 					))}
 
 					{hasMore && (

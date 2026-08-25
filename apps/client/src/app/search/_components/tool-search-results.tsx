@@ -1,3 +1,5 @@
+import Image from "next/image";
+import Link from "next/link";
 import type { ToolSummary } from "@/common/api/models/tool.model";
 import ToolCard from "@/common/components/tool-card/tool-card";
 import { type ApiLicenseType, LICENSE_MAP } from "@/common/constants/price";
@@ -5,22 +7,25 @@ import * as s from "../styles/search-page.css";
 
 interface ToolSearchResultsProps {
 	tools: ToolSummary[];
-	keyword: string;
 }
 
-export function ToolSearchResults({ tools, keyword }: ToolSearchResultsProps) {
-	if (!keyword.trim()) return null;
-
+export function ToolSearchResults({ tools }: ToolSearchResultsProps) {
 	return (
-		<section className={s.sectionContainer}>
+		<section className={s.toolSection}>
 			<div className={s.sectionHeader}>
-				<h2 className={s.sectionTitle}>툴</h2>
-				<span className={s.sectionCountChip}>{tools.length}</span>
+				<Image src="/icons/ic_search_toollist_24.svg" alt="" width={24} height={24} />
+				<h2 className={s.sectionTitle}>툴 리스트</h2>
 			</div>
 
 			{tools.length === 0 ? (
 				<div className={s.emptySection}>
-					<p className={s.emptyTitle}>&apos;{keyword}&apos;에 대한 툴 검색 결과가 없습니다.</p>
+					<div className={s.emptyTextGroup}>
+						<p className={s.emptyTitle}>키워드와 연관된 툴이 존재하지 않아요.</p>
+						<p className={s.emptyDescription}>원하는 툴이 있다면, 다루다에게 요청해 보세요.</p>
+					</div>
+					<Link href="/contact" className={s.toolRequestButton}>
+						다루다에게 툴 요청하기
+					</Link>
 				</div>
 			) : (
 				<div className={s.toolGrid}>
