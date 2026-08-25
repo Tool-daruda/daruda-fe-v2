@@ -5,6 +5,7 @@ import { themeClass } from "@repo/ui/foundations";
 import type { Metadata } from "next";
 import type { PropsWithChildren } from "react";
 import { hasAuthSession } from "@/common/api/auth-session";
+import DevAuthPanel from "@/common/components/dev-auth/dev-auth-panel";
 import Footer from "@/common/components/footer/footer";
 import Header from "@/common/components/header/header";
 import { ModalHost } from "@/common/components/modal";
@@ -38,6 +39,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
 						<Footer />
 						<Toaster />
 						<ModalHost />
+						{process.env.NODE_ENV !== "production" && <DevAuthPanel isLoggedIn={isLoggedIn} />}
 					</NotificationProvider>
 				</AuthProvider>
 			</body>
