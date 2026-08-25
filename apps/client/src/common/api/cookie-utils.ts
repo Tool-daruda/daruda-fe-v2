@@ -1,6 +1,8 @@
 import type { NextRequest, NextResponse } from "next/server";
 
-const COOKIE_DOMAIN = process.env.COOKIE_DOMAIN;
+// 로컬(localhost)에는 .daruda.shop 쿠키를 심을 수도, 읽을 수도 없습니다.
+// .env에 COOKIE_DOMAIN이 남아 있어도 개발 환경에서는 host-only로 강제합니다.
+const COOKIE_DOMAIN = process.env.NODE_ENV === "production" ? process.env.COOKIE_DOMAIN : undefined;
 
 const BASE_COOKIE_OPTIONS = {
 	httpOnly: true,
