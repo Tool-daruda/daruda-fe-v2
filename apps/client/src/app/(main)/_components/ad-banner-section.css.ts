@@ -23,6 +23,11 @@ export const track = style({
 	transition: "transform 0.4s ease",
 });
 
+/** 복제 슬라이드에서 실제 슬라이드로 되돌릴 때, 그 이동만 애니메이션 없이 처리한다 */
+export const trackStatic = style({
+	transition: "none",
+});
+
 export const slide = style({
 	flex: "0 0 100%",
 	minWidth: 0,
