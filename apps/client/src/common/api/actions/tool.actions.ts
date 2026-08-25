@@ -30,5 +30,5 @@ export const postToolScrapAction = createSafeAction(async (toolId: number) => {
 	});
 
 	updateTag("tools");
-	return data;
+	return { toolId: data.toolId, isScrapped: data.scarp ?? data.scrap ?? false };
 });

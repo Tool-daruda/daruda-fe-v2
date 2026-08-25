@@ -76,8 +76,8 @@ export default function ToolCard({
 				return;
 			}
 
-			setIsScrapped(result.data.scrap);
-			toast(result.data.scrap ? "툴을 찜했어요." : "찜을 취소했어요.");
+			setIsScrapped(result.data.isScrapped);
+			toast(result.data.isScrapped ? "툴을 찜했어요." : "찜을 취소했어요.");
 		});
 	};
 
