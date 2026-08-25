@@ -1,7 +1,7 @@
 import { colors } from "@repo/ui/foundations";
 import { style } from "@vanilla-extract/css";
 
-const CONTENT_MAX_WIDTH = "1200px";
+import { CONTENT_MAX_WIDTH } from "@/common/styles/layout.css";
 
 export const page = style({
 	width: "100%",

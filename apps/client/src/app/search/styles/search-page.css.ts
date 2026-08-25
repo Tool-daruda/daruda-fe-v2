@@ -1,5 +1,6 @@
 import { colors, themeVars } from "@repo/ui/foundations";
 import { keyframes, style } from "@vanilla-extract/css";
+import { pageContainer } from "@/common/styles/layout.css";
 
 const spinAnimation = keyframes({
 	"0%": { transform: "rotate(0deg)" },
@@ -111,11 +112,13 @@ export const searchSubmitButton = style({
 	justifyContent: "center",
 });
 
-export const container = style({
-	maxWidth: "1200px",
-	margin: "0 auto",
-	padding: "48px 20px 100px",
-});
+export const container = style([
+	pageContainer,
+	{
+		paddingTop: "48px",
+		paddingBottom: "100px",
+	},
+]);
 
 export const contentArea = style({
 	width: "100%",

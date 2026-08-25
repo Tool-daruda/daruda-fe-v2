@@ -1,5 +1,6 @@
 import { themeVars } from "@repo/ui/foundations";
 import { style } from "@vanilla-extract/css";
+import { pageContainer } from "@/common/styles/layout.css";
 
 export const header = style({
 	width: "100%",
@@ -10,15 +11,15 @@ export const header = style({
 	justifyContent: "center",
 });
 
-export const inner = style({
-	width: "100%",
-	maxWidth: "120rem",
-	height: "100%",
-	padding: "0 2.4rem",
-	display: "flex",
-	alignItems: "center",
-	justifyContent: "space-between",
-});
+export const inner = style([
+	pageContainer,
+	{
+		height: "100%",
+		display: "flex",
+		alignItems: "center",
+		justifyContent: "space-between",
+	},
+]);
 
 export const leftSection = style({
 	display: "flex",

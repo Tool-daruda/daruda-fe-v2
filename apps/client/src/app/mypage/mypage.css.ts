@@ -7,7 +7,7 @@ const borderColor = colors.grayscale[50];
 export const pageWrapper = style({
 	maxWidth: "800px",
 	margin: "0 auto",
-	padding: "40px 20px",
+	padding: "40px 24px",
 });
 
 export const pageTitle = style({
