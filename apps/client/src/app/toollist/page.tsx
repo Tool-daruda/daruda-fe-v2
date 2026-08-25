@@ -1,9 +1,8 @@
 import { ToolApi } from "@/common/api/tool-api";
-import ToolCard from "@/common/components/tool-card/tool-card";
-import { LICENSE_MAP } from "@/common/constants/price";
 import { FilterBar } from "./_components/filter-bar";
 import { SearchBar } from "./_components/search-bar";
 import { SidebarWrapper } from "./_components/sidebar-wrapper";
+import { ToolListGrid } from "./_components/tool-list-grid";
 import * as s from "./_components/toollist.css";
 
 interface Props {
@@ -31,6 +30,7 @@ export default async function ToolListPage({ searchParams }: Props) {
 
 	const categories = categoriesRes || [];
 	const toolList = initialToolsRes?.tools || [];
+	const pagination = initialToolsRes?.scrollPaginationDto;
 
 	return (
 		<>
@@ -41,25 +41,14 @@ export default async function ToolListPage({ searchParams }: Props) {
 					<SidebarWrapper categories={categories} currentCategory={currentCategory} />
 
 					<section className={s.content}>
-						<div className={s.grid}>
-							{toolList.length === 0 ? (
-								<p>해당 카테고리의 툴이 없습니다.</p>
-							) : (
-								toolList.map((tool) => (
-									<ToolCard
-										key={tool.toolId}
-										title={tool.toolName}
-										thumbnailUrl={tool.toolLogo}
-										description={tool.description}
-										priceType={LICENSE_MAP[tool.license]}
-										isBookmarked={tool.isScraped}
-										tags={tool.keywords}
-										variant="horizontal"
-										href={`/toollist/${tool.toolId}`}
-									/>
-								))
-							)}
-						</div>
+						<ToolListGrid
+							initialTools={toolList}
+							initialNextCursor={pagination?.nextCursor ?? null}
+							totalElements={pagination?.totalElements ?? toolList.length}
+							category={currentCategory}
+							criteria={currentCriteria}
+							isFree={isFree}
+						/>
 					</section>
 				</div>
 			</div>
