@@ -1,4 +1,4 @@
-import { colorTokens, typographyTokens } from "@repo/ui/foundations";
+import { themeVars } from "@repo/ui/foundations";
 import { style } from "@vanilla-extract/css";
 
 export const bellWrapper = style({
@@ -10,43 +10,29 @@ export const bellWrapper = style({
 
 export const bellButton = style({
 	position: "relative",
-	background: "none",
+	width: "2.8rem",
+	height: "2.8rem",
 	border: "none",
-	cursor: "pointer",
-	padding: "8px",
-	borderRadius: "50%",
-	display: "flex",
+	background: "transparent",
+	display: "inline-flex",
 	alignItems: "center",
 	justifyContent: "center",
-	color: colorTokens.grayscale[700],
-	transition: "background-color 0.2s ease",
+	cursor: "pointer",
+	padding: 0,
+	transition: "opacity 0.15s",
 	selectors: {
 		"&:hover": {
-			backgroundColor: colorTokens.grayscale[50],
+			opacity: 0.7,
 		},
 	},
 });
 
 export const badgeDot = style({
 	position: "absolute",
-	top: "6px",
-	right: "6px",
-	width: "8px",
-	height: "8px",
+	top: "0.5rem",
+	right: "0.6rem",
+	width: "0.6rem",
+	height: "0.6rem",
 	borderRadius: "50%",
-	backgroundColor: colorTokens.brand.orange[500],
-	border: `2px solid ${colorTokens.grayscale[0]}`,
-});
-
-export const badgeCount = style({
-	position: "absolute",
-	top: "2px",
-	right: "2px",
-	backgroundColor: colorTokens.brand.orange[500],
-	color: colorTokens.grayscale[0],
-	borderRadius: "10px",
-	padding: "1px 5px",
-	...typographyTokens.h6_2,
-	lineHeight: "1",
-	border: `2px solid ${colorTokens.grayscale[0]}`,
+	backgroundColor: themeVars.colors.brand.orange[500],
 });

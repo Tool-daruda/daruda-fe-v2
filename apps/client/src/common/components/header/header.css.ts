@@ -74,21 +74,19 @@ export const authSection = style({
 });
 
 export const iconButton = style({
-	width: "3.6rem",
-	height: "3.6rem",
+	width: "2.8rem",
+	height: "2.8rem",
 	border: "none",
-	borderRadius: "9999px",
 	background: "transparent",
 	display: "inline-flex",
 	alignItems: "center",
 	justifyContent: "center",
 	cursor: "pointer",
 	padding: 0,
-	color: themeVars.colors.grayscale[300],
+	transition: "opacity 0.15s",
 	selectors: {
 		"&:hover": {
-			backgroundColor: themeVars.colors.grayscale[100],
-			color: themeVars.colors.grayscale[700],
+			opacity: 0.7,
 		},
 	},
 });
