@@ -30,6 +30,12 @@ export interface ToolScrapRes {
 	scrap?: boolean;
 }
 
+export interface ToolLikeRes {
+	toolId: number;
+	liked: boolean;
+	likeCount: number;
+}
+
 export type FavoriteTool = {
 	toolId: number;
 	toolName: string;

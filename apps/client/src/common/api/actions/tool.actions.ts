@@ -2,7 +2,7 @@
 
 import { updateTag } from "next/cache";
 import { fetchServer } from "../fetch-server";
-import type { ToolScrapRes } from "../models/tool.model";
+import type { ToolLikeRes, ToolScrapRes } from "../models/tool.model";
 import { createSafeAction } from "../safe-action";
 import { ToolApi } from "../tool-api";
 
@@ -31,4 +31,16 @@ export const postToolScrapAction = createSafeAction(async (toolId: number) => {
 
 	updateTag("tools");
 	return { toolId: data.toolId, isScrapped: data.scarp ?? data.scrap ?? false };
+});
+
+/**
+ * @description 툴 좋아요/해제 액션
+ */
+export const postToolLikeAction = createSafeAction(async (toolId: number) => {
+	const data = await fetchServer<ToolLikeRes>(`/api/v1/tool/${toolId}/like`, {
+		method: "POST",
+	});
+
+	updateTag(`tool-${toolId}`);
+	return data;
 });

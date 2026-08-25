@@ -43,15 +43,11 @@ export default function ToolCard({
 	const isVertical = variant === "vertical";
 	const isLoggedIn = useIsLoggedIn();
 	const router = useRouter();
+	// 재검증 리프레시로 prop이 갱신돼도 상태를 되돌리지 않습니다.
+	// 서버 응답으로 이미 확정한 값이라, prop을 다시 반영하면 아이콘이 튑니다.
+	// 카드는 toolId를 key로 렌더되므로 다른 툴이면 인스턴스가 새로 만들어집니다.
 	const [isScrapped, setIsScrapped] = useState(isBookmarked);
-	const [syncedBookmark, setSyncedBookmark] = useState(isBookmarked);
 	const [isPending, startTransition] = useTransition();
-
-	// 찜 이후 재검증으로 서버 값이 새로 내려오면 카드 상태를 서버 기준으로 맞춥니다.
-	if (syncedBookmark !== isBookmarked) {
-		setSyncedBookmark(isBookmarked);
-		setIsScrapped(isBookmarked);
-	}
 
 	const handleBookmarkClick = (e: React.MouseEvent) => {
 		e.preventDefault();
