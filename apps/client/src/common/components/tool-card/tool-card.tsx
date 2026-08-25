@@ -44,7 +44,14 @@ export default function ToolCard({
 	const isLoggedIn = useIsLoggedIn();
 	const router = useRouter();
 	const [isScrapped, setIsScrapped] = useState(isBookmarked);
+	const [syncedBookmark, setSyncedBookmark] = useState(isBookmarked);
 	const [isPending, startTransition] = useTransition();
+
+	// 찜 이후 재검증으로 서버 값이 새로 내려오면 카드 상태를 서버 기준으로 맞춥니다.
+	if (syncedBookmark !== isBookmarked) {
+		setSyncedBookmark(isBookmarked);
+		setIsScrapped(isBookmarked);
+	}
 
 	const handleBookmarkClick = (e: React.MouseEvent) => {
 		e.preventDefault();
@@ -70,6 +77,7 @@ export default function ToolCard({
 			}
 
 			setIsScrapped(result.data.scrap);
+			toast(result.data.scrap ? "툴을 찜했어요." : "찜을 취소했어요.");
 		});
 	};
 
