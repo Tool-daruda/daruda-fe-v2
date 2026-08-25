@@ -9,10 +9,6 @@ type Props = {
 };
 
 export const ToolAlternativesList = ({ relatedTools }: Props) => {
-	const handleBookmarkClick = (toolName: string) => {
-		console.log(`${toolName} 북마크 클릭`);
-	};
-
 	return (
 		<>
 			{relatedTools.map((tool) => {
@@ -22,13 +18,13 @@ export const ToolAlternativesList = ({ relatedTools }: Props) => {
 				return (
 					<li key={tool.toolId}>
 						<ToolCard
+							toolId={tool.toolId}
 							title={tool.toolName}
 							thumbnailUrl={tool.toolLogo}
 							tags={tool.keywords}
 							priceType={mappedPriceType}
 							variant="vertical"
 							href={`/toollist/${tool.toolId}`}
-							onBookmarkClick={() => handleBookmarkClick(tool.toolName)}
 						/>
 					</li>
 				);

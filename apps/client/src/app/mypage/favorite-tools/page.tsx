@@ -1,4 +1,3 @@
-import { postToolScrapAction } from "@/app/toollist/_actions/tool-actions";
 import { UserApi } from "@/common/api/user-api";
 import ToolCard from "@/common/components/tool-card/tool-card";
 import { LICENSE_MAP } from "@/common/constants/price";
@@ -17,6 +16,7 @@ export default async function FavoriteToolsPage() {
 			{tools.map((tool) => (
 				<ToolCard
 					key={tool.toolId}
+					toolId={tool.toolId}
 					title={tool.toolName}
 					description={tool.description}
 					thumbnailUrl={tool.toolLogo}
@@ -25,7 +25,6 @@ export default async function FavoriteToolsPage() {
 					isBookmarked={tool.isScraped}
 					badgeType={undefined}
 					variant="horizontal"
-					onBookmarkClick={postToolScrapAction.bind(null, tool.toolId)}
 				/>
 			))}
 		</div>

@@ -29,6 +29,7 @@ export function ToolSearchResults({ tools, keyword }: ToolSearchResultsProps) {
 						return (
 							<ToolCard
 								key={tool.toolId}
+								toolId={tool.toolId}
 								title={tool.toolName}
 								thumbnailUrl={tool.toolLogo}
 								description={tool.description}

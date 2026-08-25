@@ -3,7 +3,12 @@
 import { cx } from "@repo/ui";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState, useTransition } from "react";
+import { postToolScrapAction } from "@/common/api/actions/tool.actions";
+import { toast } from "@/common/components/toast";
 import { PRICE_LABEL, type PriceType } from "@/common/constants/price";
+import { useIsLoggedIn } from "@/common/context/auth-context";
 import BookmarkIcon from "../icons/bookmark";
 import * as styles from "./tool-card.css";
 
@@ -11,6 +16,7 @@ type ToolCardVariant = "horizontal" | "vertical";
 type BadgeType = "hot" | "new";
 
 type Props = {
+	toolId?: number;
 	title: string;
 	description?: string;
 	thumbnailUrl?: string;
@@ -20,10 +26,10 @@ type Props = {
 	badgeType?: BadgeType;
 	variant?: ToolCardVariant;
 	href?: string;
-	onBookmarkClick?: () => void;
 };
 
 export default function ToolCard({
+	toolId,
 	title,
 	description,
 	thumbnailUrl,
@@ -33,61 +39,85 @@ export default function ToolCard({
 	badgeType,
 	variant = "horizontal",
 	href,
-	onBookmarkClick,
 }: Props) {
 	const isVertical = variant === "vertical";
+	const isLoggedIn = useIsLoggedIn();
+	const router = useRouter();
+	const [isScrapped, setIsScrapped] = useState(isBookmarked);
+	const [isPending, startTransition] = useTransition();
+
+	const handleBookmarkClick = (e: React.MouseEvent) => {
+		e.preventDefault();
+		e.stopPropagation();
+
+		if (!isLoggedIn) {
+			router.push("/login");
+			return;
+		}
+
+		const next = !isScrapped;
+		setIsScrapped(next);
+
+		if (toolId === undefined) return;
+
+		startTransition(async () => {
+			const result = await postToolScrapAction(toolId);
+
+			if (!result.success) {
+				setIsScrapped(!next);
+				toast(result.error || "찜하기에 실패했어요. 다시 시도해 주세요.");
+				return;
+			}
+
+			setIsScrapped(result.data.scrap);
+		});
+	};
 
 	const contentInner = (
 		<>
 			<button
 				type="button"
 				className={styles.bookmarkButton}
-				onClick={(e) => {
-					e.preventDefault();
-					e.stopPropagation();
-					onBookmarkClick?.();
-				}}
+				onClick={handleBookmarkClick}
+				disabled={isPending}
+				aria-pressed={isScrapped}
 			>
-				<BookmarkIcon isBookmarked={isBookmarked} />
+				<BookmarkIcon isBookmarked={isScrapped} />
 			</button>
 
-			<div className={styles.thumbnailSection}>
-				{badgeType === "hot" && (
-					<div className={styles.hotBadge}>
-						<Image src="/icons/ic_hot_24_red.svg" alt="Hot" width={24} height={24} />
-					</div>
-				)}
-				{badgeType === "new" && <div className={styles.newBadge}>New</div>}
-
-				<div className={cx(styles.thumbnail, styles.thumbnailVariant[variant])}>
-					{thumbnailUrl && (
-						<Image src={thumbnailUrl} alt={title} fill className={styles.thumbnailImage} />
+			<div className={cx(styles.body, styles.bodyVariant[variant])}>
+				<div className={styles.thumbnailSection}>
+					{badgeType === "hot" && (
+						<div className={styles.hotBadge}>
+							<Image src="/icons/ic_hot_24_red.svg" alt="Hot" width={24} height={24} />
+						</div>
 					)}
-				</div>
-			</div>
+					{badgeType === "new" && <div className={styles.newBadge}>New</div>}
 
-			<div className={styles.content}>
-				<div className={styles.topRow}>
-					<div className={cx(styles.textBlock, styles.textBlockVariant[variant])}>
-						<h3 className={cx(styles.title, styles.titleVariant[variant])}>{title}</h3>
-						{!isVertical && description && <p className={styles.description}>{description}</p>}
-					</div>
-				</div>
-
-				<div className={styles.bottomRow}>
-					<div className={styles.tagList}>
-						{[...new Set(tags)].slice(0, 2).map((tag) => (
-							<span key={tag} className={styles.tag}>
-								{tag}
-							</span>
-						))}
-						{priceType && (
-							<span className={cx(styles.priceTag, styles.priceTone[priceType])}>
-								{PRICE_LABEL[priceType]}
-							</span>
+					<div className={cx(styles.thumbnail, styles.thumbnailVariant[variant])}>
+						{thumbnailUrl && (
+							<Image src={thumbnailUrl} alt={title} fill className={styles.thumbnailImage} />
 						)}
 					</div>
 				</div>
+
+				<div className={cx(styles.textBlock, styles.textBlockVariant[variant])}>
+					<h3 className={cx(styles.title, styles.titleVariant[variant])}>{title}</h3>
+					{!isVertical && description && <p className={styles.description}>{description}</p>}
+				</div>
+			</div>
+
+			<div className={styles.tagList}>
+				{[...new Set(tags)].slice(0, 2).map((tag) => (
+					<span key={tag} className={styles.tag}>
+						{tag}
+					</span>
+				))}
+				{priceType && (
+					<span className={cx(styles.priceTag, styles.priceTone[priceType])}>
+						{PRICE_LABEL[priceType]}
+					</span>
+				)}
 			</div>
 		</>
 	);

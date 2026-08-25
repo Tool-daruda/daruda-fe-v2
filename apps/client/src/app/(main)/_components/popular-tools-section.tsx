@@ -28,6 +28,7 @@ export const PopularToolsSection = async () => {
 				{tools.map((tool) => (
 					<ToolCard
 						key={tool.toolId}
+						toolId={tool.toolId}
 						title={tool.toolName}
 						thumbnailUrl={tool.toolLogo}
 						priceType={LICENSE_MAP[tool.license]}

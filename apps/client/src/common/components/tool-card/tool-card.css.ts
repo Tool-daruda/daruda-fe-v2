@@ -4,6 +4,7 @@ import { style, styleVariants } from "@vanilla-extract/css";
 export const card = style({
 	position: "relative",
 	display: "flex",
+	flexDirection: "column",
 	backgroundColor: themeVars.colors.grayscale[0],
 	border: `1px solid ${themeVars.colors.grayscale[25]}`,
 	borderRadius: "16px",
@@ -15,18 +16,26 @@ export const card = style({
 
 export const variant = styleVariants({
 	vertical: {
-		flexDirection: "column",
 		minWidth: "188px",
 		height: "150px",
 		padding: "14px",
 	},
 	horizontal: {
-		flexDirection: "row",
 		minWidth: "244px",
-		height: "126px",
+		minHeight: "130px",
 		padding: "14px",
-		gap: "12px",
+		gap: "8px",
 	},
+});
+
+export const body = style({
+	display: "flex",
+	minWidth: 0,
+});
+
+export const bodyVariant = styleVariants({
+	vertical: { flexDirection: "column" },
+	horizontal: { flexDirection: "row", gap: "12px" },
 });
 
 export const thumbnailSection = style({
@@ -75,21 +84,6 @@ export const thumbnailVariant = styleVariants({
 
 export const thumbnailImage = style({ objectFit: "cover" });
 
-export const content = style({
-	display: "flex",
-	flexDirection: "column",
-	flex: 1,
-	minWidth: 0,
-	height: "100%",
-});
-
-export const topRow = style({
-	display: "flex",
-	justifyContent: "space-between",
-	alignItems: "flex-start",
-	width: "100%",
-});
-
 export const textBlock = style({
 	display: "flex",
 	flexDirection: "column",
@@ -100,7 +94,7 @@ export const textBlock = style({
 export const textBlockVariant = styleVariants({
 	vertical: {},
 	horizontal: {
-		maxWidth: "114px",
+		paddingRight: "16px",
 	},
 });
 
@@ -127,9 +121,10 @@ export const description = style({
 	margin: "2px 0 0 0",
 	color: themeVars.colors.grayscale[600],
 	...themeVars.fonts.caption2_1,
-	whiteSpace: "nowrap",
+	display: "-webkit-box",
+	WebkitLineClamp: 2,
+	WebkitBoxOrient: "vertical",
 	overflow: "hidden",
-	textOverflow: "ellipsis",
 });
 
 export const bookmarkButton = style({
@@ -144,16 +139,14 @@ export const bookmarkButton = style({
 	lineHeight: 0,
 });
 
-export const bottomRow = style({
-	marginTop: "auto",
-});
-
 export const tagList = style({
 	display: "flex",
 	gap: "4px",
 	alignItems: "center",
+	marginTop: "auto",
 	overflow: "hidden",
 });
+
 const baseTag = style({
 	padding: "2px 6px",
 	borderRadius: "4px",
@@ -169,7 +162,7 @@ export const tag = style([
 	},
 ]);
 
-export const priceTag = style([baseTag]);
+export const priceTag = style([baseTag, { flexShrink: 0 }]);
 
 export const priceTone = styleVariants({
 	free: {
