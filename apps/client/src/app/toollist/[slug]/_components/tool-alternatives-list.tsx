@@ -23,7 +23,7 @@ export const ToolAlternativesList = ({ relatedTools }: Props) => {
 							thumbnailUrl={tool.toolLogo}
 							tags={tool.keywords}
 							priceType={mappedPriceType}
-							variant="vertical"
+							variant="alternative"
 							href={`/toollist/${tool.toolId}`}
 						/>
 					</li>

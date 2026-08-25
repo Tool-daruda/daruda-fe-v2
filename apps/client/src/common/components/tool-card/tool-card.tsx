@@ -12,7 +12,7 @@ import { useIsLoggedIn } from "@/common/context/auth-context";
 import BookmarkIcon from "../icons/bookmark";
 import * as styles from "./tool-card.css";
 
-type ToolCardVariant = "horizontal" | "vertical";
+type ToolCardVariant = "horizontal" | "vertical" | "alternative";
 type BadgeType = "hot" | "new";
 
 type Props = {
@@ -40,7 +40,8 @@ export default function ToolCard({
 	variant = "horizontal",
 	href,
 }: Props) {
-	const isVertical = variant === "vertical";
+	// 대안툴 카드는 사이드바용 축약형이라 찜 버튼과 한 줄 소개가 없다.
+	const isAlternative = variant === "alternative";
 	const isLoggedIn = useIsLoggedIn();
 	const router = useRouter();
 	// 재검증 리프레시로 prop이 갱신돼도 상태를 되돌리지 않습니다.
@@ -79,15 +80,17 @@ export default function ToolCard({
 
 	const contentInner = (
 		<>
-			<button
-				type="button"
-				className={styles.bookmarkButton}
-				onClick={handleBookmarkClick}
-				disabled={isPending}
-				aria-pressed={isScrapped}
-			>
-				<BookmarkIcon isBookmarked={isScrapped} />
-			</button>
+			{!isAlternative && (
+				<button
+					type="button"
+					className={styles.bookmarkButton}
+					onClick={handleBookmarkClick}
+					disabled={isPending}
+					aria-pressed={isScrapped}
+				>
+					<BookmarkIcon isBookmarked={isScrapped} />
+				</button>
+			)}
 
 			<div className={cx(styles.body, styles.bodyVariant[variant])}>
 				<div className={styles.thumbnailSection}>
@@ -107,7 +110,9 @@ export default function ToolCard({
 
 				<div className={cx(styles.textBlock, styles.textBlockVariant[variant])}>
 					<h3 className={cx(styles.title, styles.titleVariant[variant])}>{title}</h3>
-					{!isVertical && description && <p className={styles.description}>{description}</p>}
+					{variant === "horizontal" && description && (
+						<p className={styles.description}>{description}</p>
+					)}
 				</div>
 			</div>
 
