@@ -151,8 +151,8 @@ export const sectionTitle = style({
 
 export const toolGrid = style({
 	display: "grid",
-	gridTemplateColumns: "repeat(auto-fit, 244px)",
-	justifyContent: "center",
+	gridTemplateColumns: "repeat(3, 244px)",
+	justifyContent: "flex-start",
 	gap: "10px",
 	width: "100%",
 });
