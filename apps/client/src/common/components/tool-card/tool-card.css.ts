@@ -47,7 +47,7 @@ export const body = style({
 
 export const bodyVariant = styleVariants({
 	vertical: { flexDirection: "column" },
-	horizontal: { flexDirection: "row", gap: "12px" },
+	horizontal: { flexDirection: "row", gap: "14px" },
 	alternative: { flexDirection: "row", gap: "14px", alignItems: "flex-start", width: "100%" },
 });
 
@@ -91,7 +91,7 @@ export const thumbnail = style({
 
 export const thumbnailVariant = styleVariants({
 	vertical: { width: "60px", height: "60px", borderRadius: "8px", marginBottom: "11px" },
-	horizontal: { width: "74px", height: "74px", borderRadius: "12px" },
+	horizontal: { width: "60px", height: "60px", borderRadius: "8px" },
 	alternative: { width: "60px", height: "60px", borderRadius: "8px" },
 });
 
@@ -125,6 +125,7 @@ export const titleVariant = styleVariants({
 		textOverflow: "ellipsis",
 	},
 	horizontal: {
+		color: themeVars.colors.grayscale[700],
 		whiteSpace: "normal",
 		wordBreak: "keep-all",
 	},
