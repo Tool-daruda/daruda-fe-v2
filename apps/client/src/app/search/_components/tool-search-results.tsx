@@ -2,8 +2,15 @@ import Image from "next/image";
 import Link from "next/link";
 import type { ToolSummary } from "@/common/api/models/tool.model";
 import ToolCard from "@/common/components/tool-card/tool-card";
-import { type ApiLicenseType, LICENSE_MAP } from "@/common/constants/price";
+import type { PriceType } from "@/common/constants/price";
 import * as s from "../styles/search-page.css";
+
+// 검색 API는 툴 목록 API와 달리 라이선스를 한글 라벨이 아닌 서버 enum으로 내려준다.
+const SEARCH_LICENSE_MAP: Record<string, PriceType> = {
+	FREE: "free",
+	PAID: "paid",
+	PARTIALLY_FREE: "partial",
+};
 
 interface ToolSearchResultsProps {
 	tools: ToolSummary[];
@@ -29,23 +36,20 @@ export function ToolSearchResults({ tools }: ToolSearchResultsProps) {
 				</div>
 			) : (
 				<div className={s.toolGrid}>
-					{tools.map((tool) => {
-						const priceType = LICENSE_MAP[tool.license as ApiLicenseType] || tool.license;
-						return (
-							<ToolCard
-								key={tool.toolId}
-								toolId={tool.toolId}
-								title={tool.toolName}
-								thumbnailUrl={tool.toolLogo}
-								description={tool.description}
-								priceType={priceType as "free" | "paid" | "partial"}
-								isBookmarked={tool.isScraped}
-								tags={tool.keywords}
-								variant="horizontal"
-								href={`/toollist/${tool.toolId}`}
-							/>
-						);
-					})}
+					{tools.map((tool) => (
+						<ToolCard
+							key={tool.toolId}
+							toolId={tool.toolId}
+							title={tool.toolName}
+							thumbnailUrl={tool.toolLogo}
+							description={tool.description}
+							priceType={SEARCH_LICENSE_MAP[tool.license]}
+							isBookmarked={tool.isScraped}
+							tags={tool.keywords}
+							variant="horizontal"
+							href={`/toollist/${tool.toolId}`}
+						/>
+					))}
 				</div>
 			)}
 		</section>
