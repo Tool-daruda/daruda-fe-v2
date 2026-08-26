@@ -7,11 +7,11 @@ export const sidebarContainer = style({
 	flexShrink: 0,
 	backgroundColor: colors.grayscale[0],
 	borderRadius: "24px",
-	padding: "32px 24px",
+	padding: "20px 24px",
 	border: `1px solid ${colors.grayscale[25]}`,
 	display: "flex",
 	flexDirection: "column",
-	gap: "24px",
+	gap: "12px",
 });
 
 export const title = style({
@@ -23,14 +23,13 @@ export const title = style({
 export const list = style({
 	display: "flex",
 	flexDirection: "column",
-	gap: "8px",
+	gap: "12px",
 });
 
 export const categoryItem = style({
 	display: "flex",
 	alignItems: "center",
 	justifyContent: "space-between",
-	padding: "12px 8px",
 	cursor: "pointer",
 
 	color: colors.grayscale[500],
@@ -48,24 +47,38 @@ export const radioCircle = style({
 	width: "20px",
 	height: "20px",
 	borderRadius: "50%",
-	border: `2px solid ${colors.grayscale[200]}`,
 	display: "flex",
 	alignItems: "center",
 	justifyContent: "center",
 	position: "relative",
+	flexShrink: 0,
+});
+
+export const radioRing = style({
+	width: "13px",
+	height: "13px",
+	borderRadius: "50%",
+	backgroundColor: colors.grayscale[0],
+	border: `1px solid ${colors.brand.iris[100]}`,
+	display: "flex",
+	alignItems: "center",
+	justifyContent: "center",
 	transition: "all 0.2s ease",
 	selectors: {
 		[`${categoryItem}.active &`]: {
-			borderColor: colors.brand.iris[500],
+			width: "14px",
+			height: "14px",
+			border: "none",
+			backgroundColor: colors.brand.iris[500],
 		},
 	},
 });
 
 export const radioInner = style({
-	width: "10px",
-	height: "10px",
+	width: "6px",
+	height: "6px",
 	borderRadius: "50%",
-	backgroundColor: colors.brand.iris[500],
+	backgroundColor: colors.grayscale[0],
 	display: "none",
 	selectors: {
 		[`${categoryItem}.active &`]: {

@@ -17,7 +17,18 @@ export const container = style([
 
 export const mainLayout = style({
 	display: "flex",
-	gap: "40px",
+	gap: "13px",
+});
+
+export const sidebarColumn = style({
+	display: "flex",
+	flexDirection: "column",
+	gap: "16px",
+	width: "236px",
+	flexShrink: 0,
+	position: "sticky",
+	top: "24px",
+	alignSelf: "flex-start",
 });
 
 export const content = style({
@@ -28,7 +39,6 @@ export const grid = style({
 	display: "grid",
 	gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
 	gap: "12px",
-	marginTop: "20px",
 });
 
 export const emptyMessage = style({
