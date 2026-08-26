@@ -21,11 +21,12 @@ export default async function ToolListPage({ searchParams }: Props) {
 
 	const [categoriesRes, initialToolsRes] = await Promise.all([
 		ToolApi.getCategories(),
+		// 검색 결과가 0건이면 백엔드가 200 대신 404를 내려주므로, 빈 목록으로 취급한다.
 		ToolApi.getToolList({
 			category: currentCategory,
 			criteria: currentCriteria,
 			isFree: isFree,
-		}),
+		}).catch(() => null),
 	]);
 
 	const categories = categoriesRes || [];
