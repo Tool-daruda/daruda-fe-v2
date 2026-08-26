@@ -4,8 +4,16 @@ import { cx } from "@repo/ui";
 import Image from "next/image";
 import Link from "next/link";
 import { type TransitionEvent, useEffect, useState } from "react";
-import type { AdBanner } from "../_types/ad-banner";
 import * as s from "./ad-banner-section.css";
+
+export type AdBanner = {
+	id: number;
+	href: string;
+	title: string;
+	description: string;
+	/** 등록된 배너 이미지. 없으면 title/description만 표시한다 */
+	imageUrl?: string;
+};
 
 type Props = {
 	banners: AdBanner[];

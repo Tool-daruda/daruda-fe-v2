@@ -1,4 +1,4 @@
-import type { AdBanner } from "../_types/ad-banner";
+import type { AdBanner } from "@/common/components/ad-banner/ad-banner-section";
 
 /**
  * @description 메인 광고 배너 목록. 광고 관리 API가 생기면 이 상수를 서버 조회 결과로 교체하고
