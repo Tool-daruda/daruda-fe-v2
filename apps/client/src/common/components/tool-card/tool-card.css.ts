@@ -11,6 +11,12 @@ export const card = style({
 	textDecoration: "none",
 	width: "100%",
 	maxWidth: "244px",
+
+	selectors: {
+		"&:hover": {
+			backgroundColor: themeVars.colors.grayscale[30],
+		},
+	},
 });
 
 export const variant = styleVariants({
