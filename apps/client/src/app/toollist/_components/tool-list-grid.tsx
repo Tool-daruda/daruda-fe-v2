@@ -67,9 +67,10 @@ export const ToolListGrid = ({
 				return [...prev, ...nextTools.filter((tool) => !existingIds.has(tool.toolId))];
 			});
 
-			// 커서가 앞으로 가지 않으면 같은 페이지를 무한히 다시 부르게 되므로 끝으로 본다.
+			// 최신순·인기순은 커서가 toolId 오름차순이 아니므로, 값이 바뀌었는지만 본다.
+			// 커서가 그대로면 같은 페이지를 무한히 다시 부르게 되므로 끝으로 본다.
 			const newCursor = scrollPaginationDto?.nextCursor ?? null;
-			setNextCursor(hasValidCursor(newCursor) && newCursor > nextCursor ? newCursor : null);
+			setNextCursor(hasValidCursor(newCursor) && newCursor !== nextCursor ? newCursor : null);
 		} catch (error) {
 			console.error("툴 목록 추가 조회 실패:", error);
 			setNextCursor(null);
