@@ -6,6 +6,7 @@ import { useState, useTransition } from "react";
 import { postToolScrapAction } from "@/common/api/actions/tool.actions";
 import { toast } from "@/common/components/toast";
 import { useIsLoggedIn } from "@/common/context/auth-context";
+import { useActionError } from "@/common/hooks/use-action-error";
 import * as styles from "./styles/tool-meta-bar.css";
 
 type Props = {
@@ -16,6 +17,7 @@ type Props = {
 export const BookmarkButton = ({ toolId, initialScrapped }: Props) => {
 	const isLoggedIn = useIsLoggedIn();
 	const router = useRouter();
+	const handleActionError = useActionError();
 	const [isScrapped, setIsScrapped] = useState(initialScrapped);
 	const [isPending, startTransition] = useTransition();
 
@@ -33,7 +35,7 @@ export const BookmarkButton = ({ toolId, initialScrapped }: Props) => {
 
 			if (!result.success) {
 				setIsScrapped(!next);
-				toast(result.error || "저장에 실패했어요. 다시 시도해 주세요.");
+				handleActionError(result, "저장에 실패했어요. 다시 시도해 주세요.");
 				return;
 			}
 

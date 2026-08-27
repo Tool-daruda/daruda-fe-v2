@@ -6,6 +6,7 @@ import { useState, useTransition } from "react";
 import { postToolLikeAction } from "@/common/api/actions/tool.actions";
 import { toast } from "@/common/components/toast";
 import { useIsLoggedIn } from "@/common/context/auth-context";
+import { useActionError } from "@/common/hooks/use-action-error";
 import * as styles from "./styles/tool-like-button.css";
 
 type Props = {
@@ -17,6 +18,7 @@ type Props = {
 export const ToolLikeButton = ({ toolId, initialLiked, initialLikeCount }: Props) => {
 	const isLoggedIn = useIsLoggedIn();
 	const router = useRouter();
+	const handleActionError = useActionError();
 	// 재검증 리프레시로 prop이 갱신돼도 상태를 되돌리지 않습니다.
 	// 서버 응답으로 이미 확정한 값이라, prop을 다시 반영하면 값이 튀며 깜빡입니다.
 	const [isLiked, setIsLiked] = useState(initialLiked);
@@ -39,7 +41,7 @@ export const ToolLikeButton = ({ toolId, initialLiked, initialLikeCount }: Props
 			if (!result.success) {
 				setIsLiked(!next);
 				setLikeCount((prev) => (next ? Math.max(prev - 1, 0) : prev + 1));
-				toast(result.error || "좋아요에 실패했어요. 다시 시도해 주세요.");
+				handleActionError(result, "좋아요에 실패했어요. 다시 시도해 주세요.");
 				return;
 			}
 

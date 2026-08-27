@@ -9,12 +9,14 @@ import type { BoardItem } from "@/common/api/models/board.model";
 import { MoreMenu, type MoreMenuItem } from "@/common/components/more-menu/more-menu";
 import { ReportModal } from "@/common/components/report-modal/report-modal";
 import { toast } from "@/common/components/toast";
+import { useActionError } from "@/common/hooks/use-action-error";
 import { useContentMenu } from "@/common/hooks/use-content-menu";
 import { formatDate } from "@/common/utils";
 import * as s from "./main-community-card.css";
 
 export const MainCommunityCard = ({ post }: { post: BoardItem }) => {
 	const router = useRouter();
+	const handleActionError = useActionError();
 	const { isOpen, toggle, close, containerRef, isOwner, currentUser } = useContentMenu(post.author);
 	const [reportOpen, setReportOpen] = useState(false);
 
@@ -56,7 +58,7 @@ export const MainCommunityCard = ({ post }: { post: BoardItem }) => {
 					toast(result.data.scrap ? "게시글을 저장했어요." : "저장을 취소했어요.");
 					router.refresh();
 				} else {
-					toast(result.error || "저장에 실패했어요.");
+					handleActionError(result, "저장에 실패했어요.");
 				}
 			},
 		},

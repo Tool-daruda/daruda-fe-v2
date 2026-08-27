@@ -9,6 +9,7 @@ import { postToolScrapAction } from "@/common/api/actions/tool.actions";
 import { toast } from "@/common/components/toast";
 import { PRICE_LABEL, type PriceType } from "@/common/constants/price";
 import { useIsLoggedIn } from "@/common/context/auth-context";
+import { useActionError } from "@/common/hooks/use-action-error";
 import BookmarkIcon from "../icons/bookmark";
 import * as styles from "./tool-card.css";
 
@@ -44,6 +45,7 @@ export default function ToolCard({
 	const isAlternative = variant === "alternative";
 	const isLoggedIn = useIsLoggedIn();
 	const router = useRouter();
+	const handleActionError = useActionError();
 	// 재검증 리프레시로 prop이 갱신돼도 상태를 되돌리지 않습니다.
 	// 서버 응답으로 이미 확정한 값이라, prop을 다시 반영하면 아이콘이 튑니다.
 	// 카드는 toolId를 key로 렌더되므로 다른 툴이면 인스턴스가 새로 만들어집니다.
@@ -69,7 +71,7 @@ export default function ToolCard({
 
 			if (!result.success) {
 				setIsScrapped(!next);
-				toast(result.error || "찜하기에 실패했어요. 다시 시도해 주세요.");
+				handleActionError(result, "찜하기에 실패했어요. 다시 시도해 주세요.");
 				return;
 			}
 
