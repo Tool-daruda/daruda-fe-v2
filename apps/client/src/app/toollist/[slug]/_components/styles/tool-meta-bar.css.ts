@@ -13,17 +13,6 @@ const baseBadge = style({
 	borderRadius: "6px",
 });
 
-const baseButton = style([
-	baseFlexCenter,
-	{
-		height: "44px",
-		borderRadius: "12px",
-		cursor: "pointer",
-		border: "none",
-		display: "inline-flex",
-	},
-]);
-
 export const container = style([
 	baseFlexCenter,
 	{
@@ -89,31 +78,74 @@ export const badge = styleVariants({
 export const actionGroup = style([
 	baseFlexCenter,
 	{
-		gap: "12px",
+		gap: "10px",
 		flexShrink: 0,
 	},
 ]);
 
 export const primaryButton = style([
-	baseButton,
+	baseFlexCenter,
 	{
-		gap: "6px",
-		padding: "0 20px",
+		height: "36px",
+		borderRadius: "10px",
+		gap: "2px",
+		padding: "0 14px 0 10px",
 		background: colors.brand.iris[500],
 		color: colors.grayscale[0],
 		fontSize: "14px",
 		fontWeight: 600,
 		textDecoration: "none",
 		whiteSpace: "nowrap",
+		transition: "background-color 0.2s ease",
+
+		":hover": {
+			background: colors.brand.iris[600],
+		},
 	},
 ]);
 
-export const iconButton = style([
-	baseButton,
-	{
-		width: "44px",
-		background: colors.brand.iris[100],
-		justifyContent: "center",
-		fontSize: "16px",
+// 아이콘 호버 전환의 부모 선택자로 쓰이므로 합성(style([...])) 없이 단일 클래스로 둡니다.
+export const iconButton = style({
+	display: "inline-flex",
+	alignItems: "center",
+	justifyContent: "center",
+	width: "36px",
+	height: "36px",
+	borderRadius: "10px",
+	border: "none",
+	cursor: "pointer",
+	background: colors.brand.iris[100],
+	transition: "background-color 0.2s ease",
+
+	":hover": {
+		background: colors.brand.iris[200],
 	},
-]);
+});
+
+export const iconSwap = style({
+	position: "relative",
+	display: "inline-flex",
+});
+
+export const iconDefault = style({
+	transition: "opacity 0.2s ease",
+
+	selectors: {
+		[`${iconButton}:hover &`]: {
+			opacity: 0,
+		},
+	},
+});
+
+export const iconHovered = style({
+	position: "absolute",
+	inset: 0,
+	opacity: 0,
+	transition: "opacity 0.2s ease",
+
+	selectors: {
+		[`${iconButton}:hover &`]: {
+			opacity: 1,
+		},
+	},
+});
