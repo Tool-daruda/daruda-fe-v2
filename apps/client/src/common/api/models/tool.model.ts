@@ -105,8 +105,8 @@ export interface ToolDetailRes {
 export interface ToolPlanItem {
 	planId: number;
 	planName: string;
-	priceAnnual: number;
-	priceMonthly: number;
+	priceAnnual: number | null;
+	priceMonthly: number | null;
 	description: string;
 }
 

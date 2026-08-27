@@ -9,34 +9,45 @@ type Props = {
 };
 
 export const ToolPricingContent = ({ toolPlans }: Props) => {
-	const [billingPeriod, setBillingPeriod] = useState<"monthly" | "annual">("monthly");
+	const hasMonthlyPlan = toolPlans.some((plan) => plan.priceMonthly !== null);
+	const hasAnnualPlan = toolPlans.some((plan) => plan.priceAnnual !== null);
+
+	const [billingPeriod, setBillingPeriod] = useState<"monthly" | "annual">(
+		hasMonthlyPlan ? "monthly" : "annual"
+	);
+
+	const visiblePlans = toolPlans.flatMap((plan) => {
+		const currentPrice = billingPeriod === "monthly" ? plan.priceMonthly : plan.priceAnnual;
+		return currentPrice === null ? [] : [{ plan, currentPrice }];
+	});
+
+	const periodPrefix = billingPeriod === "monthly" ? "월간" : "연간";
+	const periodLabel = billingPeriod === "monthly" ? "월" : "연";
 
 	return (
-		<>
-			<div className={styles.tabRow}>
-				<button
-					type="button"
-					className={billingPeriod === "monthly" ? styles.activeTab : styles.tab}
-					onClick={() => setBillingPeriod("monthly")}
-				>
-					월간
-				</button>
-				<button
-					type="button"
-					className={billingPeriod === "annual" ? styles.activeTab : styles.tab}
-					onClick={() => setBillingPeriod("annual")}
-				>
-					연간
-				</button>
-			</div>
+		<div className={styles.planGroup}>
+			{hasMonthlyPlan && hasAnnualPlan && (
+				<div className={styles.tabRow}>
+					<button
+						type="button"
+						className={billingPeriod === "monthly" ? styles.activeTab : styles.tab}
+						onClick={() => setBillingPeriod("monthly")}
+					>
+						월간
+					</button>
+					<span className={styles.tabDivider} />
+					<button
+						type="button"
+						className={billingPeriod === "annual" ? styles.activeTab : styles.tab}
+						onClick={() => setBillingPeriod("annual")}
+					>
+						연간
+					</button>
+				</div>
+			)}
 
 			<div className={styles.planList}>
-				{toolPlans.map((plan) => {
-					const currentPrice = billingPeriod === "monthly" ? plan.priceMonthly : plan.priceAnnual;
-					const priceText =
-						currentPrice === 0 ? "무료" : `${currentPrice.toLocaleString("ko-KR")}₩`;
-					const periodLabel = billingPeriod === "monthly" ? "월" : "연";
-
+				{visiblePlans.map(({ plan, currentPrice }) => {
 					const featureItems = plan.description
 						? plan.description.split("\n").filter((item) => item.trim() !== "")
 						: [];
@@ -44,13 +55,19 @@ export const ToolPricingContent = ({ toolPlans }: Props) => {
 					return (
 						<article key={plan.planId} className={styles.plan}>
 							<div className={styles.planHeader}>
-								<h3 className={styles.planName}>
-									{currentPrice > 0 && `${billingPeriod === "monthly" ? "월간 " : "연간 "}`}
+								<p className={styles.planName}>
+									{currentPrice > 0 && `${periodPrefix} `}
 									{plan.planName}
-								</h3>
+								</p>
 								<p className={styles.planPrice}>
-									{currentPrice > 0 && `${periodLabel} `}
-									{priceText}
+									{currentPrice === 0 ? (
+										"무료 플랜"
+									) : (
+										<>
+											{`${periodLabel} ${currentPrice.toLocaleString("ko-KR")}`}
+											<span className={styles.priceCurrency}>₩</span>
+										</>
+									)}
 								</p>
 							</div>
 
@@ -68,6 +85,6 @@ export const ToolPricingContent = ({ toolPlans }: Props) => {
 					);
 				})}
 			</div>
-		</>
+		</div>
 	);
 };
