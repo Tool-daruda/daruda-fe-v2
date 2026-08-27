@@ -2,8 +2,8 @@
 
 import { colors } from "@repo/ui/foundations";
 import { useState, useTransition } from "react";
+import { postBoardScrapAction } from "@/common/api/actions/board.actions";
 import { toast } from "@/common/components/toast";
-import { postBoardScrapAction } from "../../_actions/board-actions";
 import * as s from "./styles/post-bookmark-button.css";
 
 interface PostBookmarkButtonProps {

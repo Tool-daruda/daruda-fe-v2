@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
+import { createReportAction } from "@/common/api/actions/report.actions";
 import type { ReportType } from "@/common/api/models/report.model";
-import { createReportAction } from "../../_actions/report-actions";
 import * as s from "./report-modal.css";
 
 const REPORT_TYPE_LABELS: Record<ReportType, string> = {

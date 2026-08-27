@@ -4,14 +4,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { deleteBoardAction, postBoardScrapAction } from "@/common/api/actions/board.actions";
 import type { BoardItem, BoardSortBy } from "@/common/api/models/board.model";
 import { MoreMenu, type MoreMenuItem } from "@/common/components/more-menu/more-menu";
+import { ReportModal } from "@/common/components/report-modal/report-modal";
 import { toast } from "@/common/components/toast";
 import { useContentMenu } from "@/common/hooks/use-content-menu";
 import { formatDate } from "@/common/utils";
-import { deleteBoardAction, postBoardScrapAction } from "../_actions/board-actions";
 import { CommunitySortTabs } from "./community-sort-tabs";
-import { ReportModal } from "./report-modal/report-modal";
 import * as s from "./styles/community-post-list.css";
 
 interface CommunityPostListProps {
