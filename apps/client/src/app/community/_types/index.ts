@@ -8,4 +8,6 @@ export interface CommunityFilterCategory {
 	name: string;
 	koreanName: string;
 	tools: CommunityFilterTool[];
+	totalElements: number;
+	nextCursor: number | null;
 }

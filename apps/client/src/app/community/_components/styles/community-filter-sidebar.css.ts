@@ -1,6 +1,9 @@
 import { colors, themeVars } from "@repo/ui/foundations";
 import { style } from "@vanilla-extract/css";
 
+const LIST_ROW_HEIGHT = 48;
+const VISIBLE_ROW_COUNT = 11;
+
 export const root = style({
 	position: "sticky",
 	top: "24px",
@@ -15,6 +18,7 @@ export const card = style({
 	flexDirection: "column",
 	width: "192px",
 	maxHeight: "calc(100vh - 48px)",
+	overflow: "hidden",
 	backgroundColor: colors.grayscale[0],
 	border: `1px solid ${colors.grayscale[50]}`,
 	borderRadius: "16px",
@@ -188,6 +192,13 @@ export const listSection = style({
 	flexDirection: "column",
 	borderBottomLeftRadius: "16px",
 	borderBottomRightRadius: "16px",
+
+	selectors: {
+		"&[data-capped='true']": {
+			flex: "none",
+			maxHeight: `${LIST_ROW_HEIGHT * VISIBLE_ROW_COUNT}px`,
+		},
+	},
 });
 
 export const freeRow = style({
@@ -263,14 +274,14 @@ export const toolRowInner = style({
 
 	selectors: {
 		"&[data-selected='true']": {
-			backgroundColor: colors.brand.iris[50],
+			backgroundColor: colors.grayscale[700],
 		},
 	},
 });
 
 export const toolRowInnerHover = style({
 	":hover": {
-		backgroundColor: colors.grayscale[25],
+		backgroundColor: colors.grayscale[30],
 	},
 });
 
@@ -286,15 +297,14 @@ export const toolLogo = style({
 
 export const toolName = style({
 	...themeVars.fonts.b5_2,
-	color: colors.grayscale[700],
+	color: colors.grayscale[900],
 	overflow: "hidden",
 	textOverflow: "ellipsis",
 	whiteSpace: "nowrap",
 
 	selectors: {
 		[`${toolRowInner}[data-selected='true'] &`]: {
-			color: colors.brand.iris[600],
-			fontWeight: 600,
+			color: colors.grayscale[0],
 		},
 	},
 });

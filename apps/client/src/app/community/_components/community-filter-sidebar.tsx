@@ -3,9 +3,16 @@
 import { cx } from "@repo/ui";
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { fetchMoreToolListAction } from "@/common/api/actions/tool.actions";
+import { LoadingSentinel } from "@/common/components/loading-spinner/loading-spinner";
 import type { CommunityFilterCategory, CommunityFilterTool } from "../_types";
 import * as s from "./styles/community-filter-sidebar.css";
+
+const TOOLS_PER_CATEGORY_SIZE = 11;
+
+const hasValidCursor = (cursor: number | null): cursor is number =>
+	cursor !== null && Number.isFinite(cursor) && cursor > 0;
 
 interface CommunityFilterSidebarProps {
 	categories: CommunityFilterCategory[];
@@ -27,13 +34,31 @@ export const CommunityFilterSidebar = ({
 	const [isSearchActive, setIsSearchActive] = useState(false);
 	const [activeCategory, setActiveCategory] = useState<CommunityFilterCategory | null>(null);
 
+	const [extraToolsByCategory, setExtraToolsByCategory] = useState<
+		Record<string, CommunityFilterTool[]>
+	>({});
+	const [cursorByCategory, setCursorByCategory] = useState<Record<string, number | null>>(() =>
+		Object.fromEntries(categories.map((category) => [category.name, category.nextCursor]))
+	);
+	const [loadingCategoryName, setLoadingCategoryName] = useState<string | null>(null);
+
+	const listSectionRef = useRef<HTMLDivElement>(null);
+	const sentinelRef = useRef<HTMLDivElement>(null);
+
 	const trimmedKeyword = keyword.trim().toLowerCase();
 	const isSearching = trimmedKeyword.length > 0;
 
+	const activeCategoryTools = useMemo(() => {
+		if (!activeCategory) return [];
+		return [...activeCategory.tools, ...(extraToolsByCategory[activeCategory.name] ?? [])];
+	}, [activeCategory, extraToolsByCategory]);
+
+	const activeCursor = activeCategory ? (cursorByCategory[activeCategory.name] ?? null) : null;
+	const hasMoreActiveCategoryTools = hasValidCursor(activeCursor);
+
 	const searchScopeTools = useMemo(
-		() =>
-			activeCategory ? activeCategory.tools : categories.flatMap((category) => category.tools),
-		[activeCategory, categories]
+		() => (activeCategory ? activeCategoryTools : categories.flatMap((category) => category.tools)),
+		[activeCategory, activeCategoryTools, categories]
 	);
 
 	const searchResultTools = useMemo(() => {
@@ -49,6 +74,69 @@ export const CommunityFilterSidebar = ({
 		}
 		return null;
 	}, [categories, selectedToolId]);
+
+	const loadMoreActiveCategoryTools = useCallback(async () => {
+		if (!activeCategory) return;
+		const cursor = cursorByCategory[activeCategory.name] ?? null;
+		if (!hasValidCursor(cursor) || loadingCategoryName === activeCategory.name) return;
+
+		const categoryName = activeCategory.name;
+		setLoadingCategoryName(categoryName);
+
+		try {
+			const res = await fetchMoreToolListAction({
+				category: categoryName,
+				criteria: "popular",
+				isFree: false,
+				lastToolId: cursor,
+				size: TOOLS_PER_CATEGORY_SIZE,
+			});
+
+			if (!res.success || !res.data || res.data.tools.length === 0) {
+				setCursorByCategory((prev) => ({ ...prev, [categoryName]: null }));
+				return;
+			}
+
+			const { tools: nextTools, scrollPaginationDto } = res.data;
+
+			setExtraToolsByCategory((prev) => {
+				const existingIds = new Set([
+					...activeCategory.tools.map((tool) => tool.toolId),
+					...(prev[categoryName] ?? []).map((tool) => tool.toolId),
+				]);
+				const filtered = nextTools.filter((tool) => !existingIds.has(tool.toolId));
+				return { ...prev, [categoryName]: [...(prev[categoryName] ?? []), ...filtered] };
+			});
+
+			// 최신순·인기순은 커서가 toolId 오름차순이 아니므로, 값이 바뀌었는지만 본다.
+			const newCursor = scrollPaginationDto?.nextCursor ?? null;
+			setCursorByCategory((prev) => ({
+				...prev,
+				[categoryName]: hasValidCursor(newCursor) && newCursor !== cursor ? newCursor : null,
+			}));
+		} catch (error) {
+			console.error(`카테고리 툴 목록 추가 조회 실패 (${categoryName})`, error);
+			setCursorByCategory((prev) => ({ ...prev, [categoryName]: null }));
+		} finally {
+			setLoadingCategoryName(null);
+		}
+	}, [activeCategory, cursorByCategory, loadingCategoryName]);
+
+	useEffect(() => {
+		const sentinelEl = sentinelRef.current;
+		const rootEl = listSectionRef.current;
+		if (!sentinelEl || !rootEl || !activeCategory || !hasMoreActiveCategoryTools) return;
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				if (entries[0]?.isIntersecting) loadMoreActiveCategoryTools();
+			},
+			{ root: rootEl, rootMargin: "100px" }
+		);
+		observer.observe(sentinelEl);
+
+		return () => observer.unobserve(sentinelEl);
+	}, [activeCategory, hasMoreActiveCategoryTools, loadMoreActiveCategoryTools]);
 
 	const updateFilterParams = (next: { toolId?: number | null; noTopic?: boolean | null }) => {
 		const params = new URLSearchParams(searchParams.toString());
@@ -174,7 +262,11 @@ export const CommunityFilterSidebar = ({
 					</div>
 				</div>
 
-				<div className={s.listSection}>
+				<div
+					className={s.listSection}
+					ref={listSectionRef}
+					data-capped={!isSearching && activeCategory ? "true" : "false"}
+				>
 					{isSearching ? (
 						searchResultTools.length === 0 ? (
 							<p className={s.emptyResult}>일치하는 툴이 없어요.</p>
@@ -196,10 +288,10 @@ export const CommunityFilterSidebar = ({
 								</span>
 								<Image src="/icons/community/ic_chevron_down_14.svg" alt="" width={14} height={7} />
 							</button>
-							{activeCategory.tools.length === 0 ? (
+							{activeCategoryTools.length === 0 ? (
 								<p className={s.emptyResult}>등록된 툴이 없어요.</p>
 							) : (
-								activeCategory.tools.map((tool) => (
+								activeCategoryTools.map((tool) => (
 									<ToolRow
 										key={tool.toolId}
 										tool={tool}
@@ -207,6 +299,12 @@ export const CommunityFilterSidebar = ({
 										onSelect={() => selectTool(tool)}
 									/>
 								))
+							)}
+							{hasMoreActiveCategoryTools && (
+								<LoadingSentinel
+									ref={sentinelRef}
+									isLoading={loadingCategoryName === activeCategory.name}
+								/>
 							)}
 						</>
 					) : (
