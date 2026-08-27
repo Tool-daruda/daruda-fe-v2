@@ -30,10 +30,13 @@ export const grid = style({
 });
 
 export const card = style({
+	display: "block",
 	borderRadius: "12px",
 	border: `1px solid ${colors.grayscale[25]}`,
 	background: colors.grayscale[0],
 	overflow: "hidden",
+	color: "inherit",
+	textDecoration: "none",
 });
 
 export const thumbnail = style({
