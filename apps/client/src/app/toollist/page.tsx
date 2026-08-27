@@ -42,7 +42,13 @@ export default async function ToolListPage({ searchParams }: Props) {
 					<SidebarWrapper categories={categories} currentCategory={currentCategory} />
 
 					<section className={s.content}>
+						{/*
+						 * 필터가 바뀌면 key가 바뀌어 인스턴스가 새로 만들어지고 누적분이 버려진다.
+						 * 반대로 찜하기 등의 재검증(updateTag)으로 이 페이지만 다시 렌더될 때는
+						 * key가 같아 스크롤로 쌓아둔 목록이 유지된다.
+						 */}
 						<ToolListGrid
+							key={`${currentCategory}-${currentCriteria}-${isFree}`}
 							initialTools={toolList}
 							initialNextCursor={pagination?.nextCursor ?? null}
 							totalElements={pagination?.totalElements ?? toolList.length}

@@ -34,13 +34,6 @@ export const ToolListGrid = ({
 
 	const sentinelRef = useRef<HTMLDivElement>(null);
 
-	// 카테고리·정렬·무료 필터가 바뀌면 서버가 새 첫 페이지를 내려주므로 누적분을 버린다.
-	useEffect(() => {
-		setTools(initialTools);
-		setNextCursor(initialNextCursor);
-		setIsLoading(false);
-	}, [initialTools, initialNextCursor]);
-
 	const hasMore = hasValidCursor(nextCursor) && tools.length < totalElements;
 
 	const loadMore = useCallback(async () => {
