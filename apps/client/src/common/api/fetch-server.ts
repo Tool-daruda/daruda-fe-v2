@@ -47,8 +47,19 @@ async function persistSetCookieHeaders(setCookieHeaders: string[]) {
 	}
 }
 
-async function reissueAccessToken(refreshToken?: string) {
-	if (!refreshToken || !SPRING_API_URL) return null;
+// 서버 컴포넌트 렌더 중에는 응답 쿠키를 쓸 수 없어 조용히 실패합니다.
+// 실제로 지워지는 건 Server Action / Route Handler에서 호출됐을 때입니다.
+async function clearAuthCookiesSafely() {
+	try {
+		const cookieStore = await cookies();
+		clearAuthCookies(cookieStore);
+	} catch {
+		// Server Components cannot mutate response cookies.
+	}
+}
+
+async function reissueAccessToken(refreshToken: string) {
+	if (!SPRING_API_URL) return null;
 
 	console.log(`[FETCH REISSUE START] POST -> ${SPRING_API_URL}${AUTH_REISSUE_ENDPOINT}`);
 
@@ -67,12 +78,7 @@ async function reissueAccessToken(refreshToken?: string) {
 				`[FETCH REISSUE FAILED] ${response.status} <- ${AUTH_REISSUE_ENDPOINT}`,
 				errorText
 			);
-			try {
-				const cookieStore = await cookies();
-				clearAuthCookies(cookieStore);
-			} catch {
-				// Server Components cannot mutate response cookies.
-			}
+			await clearAuthCookiesSafely();
 			return null;
 		}
 
@@ -87,12 +93,7 @@ async function reissueAccessToken(refreshToken?: string) {
 			console.error(`[FETCH REISSUE FAILED] No accessToken found in response headers or body`);
 			// 재발급이 성공 응답을 줬는데 토큰이 없으면 세션을 이어갈 수 없으므로 정리합니다.
 			// (네트워크/파싱 예외는 일시적일 수 있어 catch에서는 쿠키를 지우지 않습니다.)
-			try {
-				const cookieStore = await cookies();
-				clearAuthCookies(cookieStore);
-			} catch {
-				// Server Components cannot mutate response cookies.
-			}
+			await clearAuthCookiesSafely();
 			return null;
 		}
 
@@ -195,12 +196,19 @@ export async function fetchServer<T>(endpoint: string, options: RequestInit = {}
 		});
 
 		if (response.status === 401 && endpoint !== AUTH_REISSUE_ENDPOINT) {
-			const reissuedAccessToken = await reissueAccessToken(refreshToken);
-			if (reissuedAccessToken) {
-				response = await fetch(`${SPRING_API_URL}${endpoint}`, {
-					...options,
-					headers: createHeaders(options, createCookieHeader(reissuedAccessToken, refreshToken)),
-				});
+			if (refreshToken) {
+				const reissuedAccessToken = await reissueAccessToken(refreshToken);
+				if (reissuedAccessToken) {
+					response = await fetch(`${SPRING_API_URL}${endpoint}`, {
+						...options,
+						headers: createHeaders(options, createCookieHeader(reissuedAccessToken, refreshToken)),
+					});
+				}
+			} else if (accessToken) {
+				// refreshToken이 없으면 재발급 자체가 불가능하므로 되살릴 수 없는 세션입니다.
+				// 남겨두면 hasAuthSession()이 쿠키 존재만 보고 로그인 상태로 판정해 401만 반복됩니다.
+				console.warn("[FETCH AUTH] refreshToken 없이 401 → 남은 accessToken을 정리합니다.");
+				await clearAuthCookiesSafely();
 			}
 		}
 
