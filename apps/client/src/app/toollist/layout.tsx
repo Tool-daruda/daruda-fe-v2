@@ -1,3 +1,5 @@
+import * as s from "./layout.css";
+
 export default function ToolListLayout({ children }: { children: React.ReactNode }) {
-	return <section style={{ minHeight: "100vh" }}>{children}</section>;
+	return <section className={s.wrapper}>{children}</section>;
 }

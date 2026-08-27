@@ -3,14 +3,21 @@
 import { cx } from "@repo/ui";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState, useTransition } from "react";
+import { postToolScrapAction } from "@/common/api/actions/tool.actions";
+import { toast } from "@/common/components/toast";
 import { PRICE_LABEL, type PriceType } from "@/common/constants/price";
+import { useIsLoggedIn } from "@/common/context/auth-context";
+import { useActionError } from "@/common/hooks/use-action-error";
 import BookmarkIcon from "../icons/bookmark";
 import * as styles from "./tool-card.css";
 
-type ToolCardVariant = "horizontal" | "vertical";
+type ToolCardVariant = "horizontal" | "vertical" | "alternative";
 type BadgeType = "hot" | "new";
 
 type Props = {
+	toolId?: number;
 	title: string;
 	description?: string;
 	thumbnailUrl?: string;
@@ -20,10 +27,10 @@ type Props = {
 	badgeType?: BadgeType;
 	variant?: ToolCardVariant;
 	href?: string;
-	onBookmarkClick?: () => void;
 };
 
 export default function ToolCard({
+	toolId,
 	title,
 	description,
 	thumbnailUrl,
@@ -33,61 +40,95 @@ export default function ToolCard({
 	badgeType,
 	variant = "horizontal",
 	href,
-	onBookmarkClick,
 }: Props) {
-	const isVertical = variant === "vertical";
+	// 대안툴 카드는 사이드바용 축약형이라 찜 버튼과 한 줄 소개가 없다.
+	const isAlternative = variant === "alternative";
+	const isLoggedIn = useIsLoggedIn();
+	const router = useRouter();
+	const handleActionError = useActionError();
+	// 재검증 리프레시로 prop이 갱신돼도 상태를 되돌리지 않습니다.
+	// 서버 응답으로 이미 확정한 값이라, prop을 다시 반영하면 아이콘이 튑니다.
+	// 카드는 toolId를 key로 렌더되므로 다른 툴이면 인스턴스가 새로 만들어집니다.
+	const [isScrapped, setIsScrapped] = useState(isBookmarked);
+	const [isPending, startTransition] = useTransition();
+
+	const handleBookmarkClick = (e: React.MouseEvent) => {
+		e.preventDefault();
+		e.stopPropagation();
+
+		if (!isLoggedIn) {
+			router.push("/login");
+			return;
+		}
+
+		const next = !isScrapped;
+		setIsScrapped(next);
+
+		if (toolId === undefined) return;
+
+		startTransition(async () => {
+			const result = await postToolScrapAction(toolId);
+
+			if (!result.success) {
+				setIsScrapped(!next);
+				handleActionError(result, "찜하기에 실패했어요. 다시 시도해 주세요.");
+				return;
+			}
+
+			setIsScrapped(result.data.isScrapped);
+			toast(result.data.isScrapped ? "툴을 찜했어요." : "찜을 취소했어요.");
+		});
+	};
 
 	const contentInner = (
 		<>
-			<button
-				type="button"
-				className={styles.bookmarkButton}
-				onClick={(e) => {
-					e.preventDefault();
-					e.stopPropagation();
-					onBookmarkClick?.();
-				}}
-			>
-				<BookmarkIcon isBookmarked={isBookmarked} />
-			</button>
+			{!isAlternative && (
+				<button
+					type="button"
+					className={styles.bookmarkButton}
+					onClick={handleBookmarkClick}
+					disabled={isPending}
+					aria-pressed={isScrapped}
+				>
+					<BookmarkIcon isBookmarked={isScrapped} />
+				</button>
+			)}
 
-			<div className={styles.thumbnailSection}>
-				{badgeType === "hot" && (
-					<div className={styles.hotBadge}>
-						<Image src="/icons/ic_hot_24_red.svg" alt="Hot" width={24} height={24} />
+			<div className={cx(styles.body, styles.bodyVariant[variant])}>
+				<div className={styles.thumbnailSection}>
+					{badgeType === "hot" && (
+						<div className={styles.hotBadge}>
+							<Image src="/icons/ic_hot_24_red.svg" alt="Hot" width={24} height={24} />
+						</div>
+					)}
+					{badgeType === "new" && <div className={styles.newBadge}>New</div>}
+
+					<div className={cx(styles.thumbnail, styles.thumbnailVariant[variant])}>
+						{thumbnailUrl && (
+							<Image src={thumbnailUrl} alt={title} fill className={styles.thumbnailImage} />
+						)}
 					</div>
-				)}
-				{badgeType === "new" && <div className={styles.newBadge}>New</div>}
+				</div>
 
-				<div className={cx(styles.thumbnail, styles.thumbnailVariant[variant])}>
-					{thumbnailUrl && (
-						<Image src={thumbnailUrl} alt={title} fill className={styles.thumbnailImage} />
+				<div className={cx(styles.textBlock, styles.textBlockVariant[variant])}>
+					<h3 className={cx(styles.title, styles.titleVariant[variant])}>{title}</h3>
+					{variant === "horizontal" && description && (
+						<p className={styles.description}>{description}</p>
 					)}
 				</div>
 			</div>
 
-			<div className={styles.content}>
-				<div className={styles.topRow}>
-					<div className={cx(styles.textBlock, styles.textBlockVariant[variant])}>
-						<h3 className={cx(styles.title, styles.titleVariant[variant])}>{title}</h3>
-						{!isVertical && description && <p className={styles.description}>{description}</p>}
-					</div>
-				</div>
-
-				<div className={styles.bottomRow}>
-					<div className={styles.tagList}>
-						{[...new Set(tags)].slice(0, 2).map((tag) => (
-							<span key={tag} className={styles.tag}>
-								{tag}
-							</span>
-						))}
-						{priceType && (
-							<span className={cx(styles.priceTag, styles.priceTone[priceType])}>
-								{PRICE_LABEL[priceType]}
-							</span>
-						)}
-					</div>
-				</div>
+			<div className={styles.tagList}>
+				{[...new Set(tags)].slice(0, 2).map((tag) => (
+					<span key={tag} className={styles.tag}>
+						{tag}
+					</span>
+				))}
+				{priceType && (
+					<span className={cx(styles.priceTag, styles.priceTone[priceType])}>
+						{PRICE_LABEL[priceType]}
+					</span>
+				)}
 			</div>
 		</>
 	);

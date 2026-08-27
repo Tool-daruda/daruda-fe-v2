@@ -5,11 +5,11 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { CommentItem } from "@/common/api/models/comment.model";
 import { MoreMenu, type MoreMenuItem } from "@/common/components/more-menu/more-menu";
+import { ReportModal } from "@/common/components/report-modal/report-modal";
 import { toast } from "@/common/components/toast";
 import { useContentMenu } from "@/common/hooks/use-content-menu";
 import { formatDate, formatTime } from "@/common/utils";
 import { deleteCommentAction } from "../../_actions/comment-actions";
-import { ReportModal } from "../../_components/report-modal/report-modal";
 import * as s from "./styles/comment-section.css";
 
 interface CommentSectionProps {

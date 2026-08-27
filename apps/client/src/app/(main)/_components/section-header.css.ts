@@ -11,14 +11,15 @@ export const container = style({
 export const title = style({
 	display: "flex",
 	alignItems: "center",
-	gap: "8px",
+	gap: "6px",
 	margin: 0,
 	...themeVars.fonts.t2_1,
-	color: colors.grayscale[900],
+	color: colors.grayscale[700],
 });
 
 export const moreLink = style({
-	...themeVars.fonts.b5_1,
+	padding: "2px 4px",
+	...themeVars.fonts.b4_1,
 	color: colors.grayscale[300],
 	textDecoration: "none",
 });

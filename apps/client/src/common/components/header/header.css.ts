@@ -1,5 +1,6 @@
 import { themeVars } from "@repo/ui/foundations";
 import { style } from "@vanilla-extract/css";
+import { pageContainer } from "@/common/styles/layout.css";
 
 export const header = style({
 	width: "100%",
@@ -10,15 +11,15 @@ export const header = style({
 	justifyContent: "center",
 });
 
-export const inner = style({
-	width: "100%",
-	maxWidth: "120rem",
-	height: "100%",
-	padding: "0 2.4rem",
-	display: "flex",
-	alignItems: "center",
-	justifyContent: "space-between",
-});
+export const inner = style([
+	pageContainer,
+	{
+		height: "100%",
+		display: "flex",
+		alignItems: "center",
+		justifyContent: "space-between",
+	},
+]);
 
 export const leftSection = style({
 	display: "flex",
@@ -73,21 +74,19 @@ export const authSection = style({
 });
 
 export const iconButton = style({
-	width: "3.6rem",
-	height: "3.6rem",
+	width: "2.8rem",
+	height: "2.8rem",
 	border: "none",
-	borderRadius: "9999px",
 	background: "transparent",
 	display: "inline-flex",
 	alignItems: "center",
 	justifyContent: "center",
 	cursor: "pointer",
 	padding: 0,
-	color: themeVars.colors.grayscale[300],
+	transition: "opacity 0.15s",
 	selectors: {
 		"&:hover": {
-			backgroundColor: themeVars.colors.grayscale[100],
-			color: themeVars.colors.grayscale[700],
+			opacity: 0.7,
 		},
 	},
 });

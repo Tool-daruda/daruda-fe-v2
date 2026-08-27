@@ -25,7 +25,15 @@ export interface CategoryRes {
 
 export interface ToolScrapRes {
 	toolId: number;
-	scrap: boolean;
+	// 서버가 오타 필드명(scarp)으로 내려주고 있습니다. 서버가 바로잡아도 동작하도록 둘 다 받습니다.
+	scarp?: boolean;
+	scrap?: boolean;
+}
+
+export interface ToolLikeRes {
+	toolId: number;
+	liked: boolean;
+	likeCount: number;
 }
 
 export type FavoriteTool = {
@@ -97,8 +105,8 @@ export interface ToolDetailRes {
 export interface ToolPlanItem {
 	planId: number;
 	planName: string;
-	priceAnnual: number;
-	priceMonthly: number;
+	priceAnnual: number | null;
+	priceMonthly: number | null;
 	description: string;
 }
 

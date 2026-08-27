@@ -1,10 +1,13 @@
 import { style } from "@vanilla-extract/css";
+import { pageContainer } from "@/common/styles/layout.css";
 
-export const container = style({
-	maxWidth: "1200px",
-	margin: "0 auto",
-	padding: "32px 20px 100px",
-});
+export const container = style([
+	pageContainer,
+	{
+		paddingTop: "32px",
+		paddingBottom: "100px",
+	},
+]);
 
 export const mainLayout = style({
 	display: "flex",

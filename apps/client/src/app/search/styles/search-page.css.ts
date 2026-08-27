@@ -11,86 +11,66 @@ export const heroContainer = style({
 	display: "flex",
 	flexDirection: "column",
 	alignItems: "center",
-	paddingTop: "48px",
-	paddingBottom: "56px",
+	width: "100%",
+	height: "220px",
+	paddingTop: "40px",
+	boxSizing: "border-box",
 	textAlign: "center",
-	background: "linear-gradient(180deg, #F8F9FF 0%, #FFFFFF 100%)",
+	backgroundColor: colors.grayscale[0],
 	overflow: "hidden",
 });
 
-export const blurShape1 = style({
+export const heroBackdrop = style({
 	position: "absolute",
-	width: "360px",
-	height: "360px",
+	top: "88.5px",
+	left: "50%",
+	transform: "translate(-50%, -50%)",
+	width: "771px",
+	height: "135px",
 	borderRadius: "50%",
-	background: "radial-gradient(circle, rgba(129, 139, 248, 0.35) 0%, rgba(238, 242, 255, 0) 70%)",
-	filter: "blur(50px)",
-	top: "-80px",
-	right: "15%",
-	pointerEvents: "none",
-});
-
-export const blurShape2 = style({
-	position: "absolute",
-	width: "320px",
-	height: "320px",
-	borderRadius: "50%",
-	background: "radial-gradient(circle, rgba(199, 210, 254, 0.45) 0%, rgba(238, 242, 255, 0) 70%)",
-	filter: "blur(45px)",
-	bottom: "-60px",
-	left: "10%",
-	pointerEvents: "none",
-});
-
-export const blurShape3 = style({
-	position: "absolute",
-	width: "280px",
-	height: "280px",
-	borderRadius: "50%",
-	background: "radial-gradient(circle, rgba(255, 184, 108, 0.3) 0%, rgba(255, 247, 237, 0) 70%)",
-	filter: "blur(55px)",
-	top: "10%",
-	left: "30%",
+	backgroundColor: colors.brand.iris[50],
+	filter: "blur(40px)",
 	pointerEvents: "none",
 });
 
 export const subTitle = style({
 	...themeVars.fonts.b1_1,
 	color: colors.brand.iris[400],
+	marginBottom: "-2px",
 	zIndex: 1,
-	marginBottom: "4px",
 });
 
 export const title = style({
 	...themeVars.fonts.h2_1,
 	color: colors.brand.iris[500],
-	marginBottom: "28px",
+	marginBottom: "16px",
 	zIndex: 1,
 });
 
 export const searchForm = style({
-	position: "relative",
-	width: "100%",
-	maxWidth: "560px",
+	display: "flex",
+	alignItems: "center",
+	gap: "8px",
+	width: "442px",
+	maxWidth: "100%",
+	padding: "12px 24px",
+	borderRadius: "60px",
+	border: `1px solid ${colors.brand.iris[200]}`,
+	backgroundColor: colors.grayscale[0],
+	boxSizing: "border-box",
 	zIndex: 1,
 });
 
 export const searchInput = style({
-	width: "100%",
-	padding: "14px 56px 14px 24px",
-	borderRadius: "60px",
-	boxSizing: "border-box",
-	border: `1.5px solid ${colors.brand.iris[200]}`,
-	...themeVars.fonts.b4_2,
-	backgroundColor: colors.grayscale[0],
+	flex: 1,
+	minWidth: 0,
+	border: "none",
 	outline: "none",
-	boxShadow: "0px 4px 20px rgba(82, 84, 240, 0.06)",
-	transition: "border-color 0.2s ease, box-shadow 0.2s ease",
+	background: "transparent",
+	padding: 0,
+	...themeVars.fonts.caption1_1,
+	color: colors.grayscale[900],
 	selectors: {
-		"&:focus": {
-			borderColor: colors.brand.iris[500],
-			boxShadow: "0 0 0 3px rgba(82, 84, 240, 0.15)",
-		},
 		"&::placeholder": {
 			color: colors.grayscale[300],
 		},
@@ -98,81 +78,96 @@ export const searchInput = style({
 });
 
 export const searchSubmitButton = style({
-	position: "absolute",
-	right: "20px",
-	top: "50%",
-	transform: "translateY(-50%)",
-	background: "none",
-	border: "none",
-	cursor: "pointer",
-	padding: 0,
 	display: "flex",
 	alignItems: "center",
 	justifyContent: "center",
+	flexShrink: 0,
+	width: "20px",
+	height: "20px",
+	background: "none",
+	border: "none",
+	padding: 0,
+	cursor: "pointer",
 });
 
 export const container = style({
-	maxWidth: "1200px",
+	display: "flex",
+	flexDirection: "column",
+	gap: "16px",
+	width: "100%",
+	maxWidth: "804px",
 	margin: "0 auto",
-	padding: "48px 20px 100px",
+	paddingTop: "20px",
+	paddingBottom: "100px",
+	paddingLeft: "24px",
+	paddingRight: "24px",
+	boxSizing: "border-box",
+});
+
+export const resultSummary = style({
+	display: "flex",
+	alignItems: "center",
+	gap: "2px",
+	height: "28px",
+	...themeVars.fonts.b4_1,
+	color: colors.grayscale[500],
+});
+
+export const resultKeyword = style({
+	maxWidth: "600px",
+	overflow: "hidden",
+	textOverflow: "ellipsis",
+	whiteSpace: "nowrap",
 });
 
 export const contentArea = style({
+	display: "flex",
+	flexDirection: "column",
+	gap: "40px",
 	width: "100%",
 });
 
 export const sectionContainer = style({
-	marginBottom: "56px",
+	display: "flex",
+	flexDirection: "column",
+	width: "100%",
 });
+
+export const toolSection = style([sectionContainer, { gap: "16px" }]);
+
+export const boardSection = style([sectionContainer, { gap: "20px" }]);
 
 export const sectionHeader = style({
 	display: "flex",
 	alignItems: "center",
-	gap: "8px",
-	marginBottom: "20px",
+	gap: "6px",
+	height: "24px",
 });
 
 export const sectionTitle = style({
-	...themeVars.fonts.t1_1,
-	color: colors.grayscale[900],
-	fontWeight: 700,
-});
-
-export const sectionCountChip = style({
-	display: "inline-flex",
-	alignItems: "center",
-	justifyContent: "center",
-	padding: "2px 8px",
-	borderRadius: "12px",
-	backgroundColor: colors.brand.iris[50],
-	color: colors.brand.iris[500],
-	...themeVars.fonts.b5_1,
-	fontWeight: 600,
+	...themeVars.fonts.t2_1,
+	color: colors.grayscale[700],
 });
 
 export const toolGrid = style({
 	display: "grid",
-	gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
-	gap: "16px",
-	"@media": {
-		"screen and (max-width: 960px)": {
-			gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-		},
-		"screen and (max-width: 640px)": {
-			gridTemplateColumns: "1fr",
-		},
-	},
+	gridTemplateColumns: "repeat(3, 244px)",
+	justifyContent: "flex-start",
+	gap: "10px",
+	width: "100%",
 });
 
 export const boardList = style({
 	display: "flex",
 	flexDirection: "column",
+	gap: "10px",
+	width: "100%",
 });
 
 export const boardItemDivider = style({
+	width: "100%",
 	height: "1px",
 	backgroundColor: colors.grayscale[50],
-	margin: "16px 0",
 });
 
 export const emptySection = style({
@@ -180,35 +175,41 @@ export const emptySection = style({
 	flexDirection: "column",
 	alignItems: "center",
 	justifyContent: "center",
-	padding: "48px 0",
-	backgroundColor: colors.grayscale[5],
-	borderRadius: "16px",
+	gap: "32px",
+	height: "200px",
+	width: "100%",
 	textAlign: "center",
 });
 
-export const emptyState = style({
+export const emptyTextGroup = style({
 	display: "flex",
 	flexDirection: "column",
 	alignItems: "center",
-	justifyContent: "center",
-	padding: "100px 0",
-	textAlign: "center",
-});
-
-export const emptyIcon = style({
-	marginBottom: "16px",
-	opacity: 0.6,
+	gap: "10px",
 });
 
 export const emptyTitle = style({
-	...themeVars.fonts.t2_1,
+	...themeVars.fonts.t3_1,
 	color: colors.grayscale[700],
-	marginBottom: "8px",
 });
 
 export const emptyDescription = style({
 	...themeVars.fonts.b4_2,
-	color: colors.grayscale[400],
+	color: colors.grayscale[300],
+});
+
+export const toolRequestButton = style({
+	display: "flex",
+	alignItems: "center",
+	justifyContent: "center",
+	width: "236px",
+	padding: "14px 24px",
+	borderRadius: "10px",
+	backgroundColor: colors.grayscale[600],
+	...themeVars.fonts.t4_1,
+	color: colors.grayscale[0],
+	textDecoration: "none",
+	boxSizing: "border-box",
 });
 
 export const loadingTrigger = style({

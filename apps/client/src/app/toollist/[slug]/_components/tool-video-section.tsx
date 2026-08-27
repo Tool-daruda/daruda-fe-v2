@@ -64,6 +64,14 @@ export const ToolVideoSection = async ({ toolId }: Props) => {
 									className={styles.image}
 									style={{ objectFit: "cover" }}
 								/>
+								<div className={styles.dim} />
+								<Image
+									src="/icons/ic_video_play_48.svg"
+									alt=""
+									width={48}
+									height={48}
+									className={styles.playIcon}
+								/>
 							</a>
 						);
 					})}

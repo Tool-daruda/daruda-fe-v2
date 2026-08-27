@@ -3,13 +3,13 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { deleteBoardAction } from "@/common/api/actions/board.actions";
 import type { BoardItem } from "@/common/api/models/board.model";
 import { MoreMenu, type MoreMenuItem } from "@/common/components/more-menu/more-menu";
+import { ReportModal } from "@/common/components/report-modal/report-modal";
 import { toast } from "@/common/components/toast";
 import { useContentMenu } from "@/common/hooks/use-content-menu";
 import { formatDate } from "@/common/utils";
-import { deleteBoardAction } from "../../_actions/board-actions";
-import { ReportModal } from "../../_components/report-modal/report-modal";
 import * as s from "./styles/post-header.css";
 
 interface PostHeaderProps {

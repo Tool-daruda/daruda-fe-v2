@@ -1,5 +1,7 @@
 import Image from "next/image";
+import Link from "next/link";
 import { BoardApi } from "@/common/api/board-api";
+import { formatDate } from "@/common/utils";
 import { TOOL_SECTION_IDS } from "../_constants/toc";
 import * as styles from "./styles/tool-related-post-section.css";
 import { ToolEmptyState } from "./tool-empty-state";
@@ -21,9 +23,9 @@ export const ToolRelatedPostSection = async ({ toolId }: Props) => {
 		<section id={TOOL_SECTION_IDS.community} className={styles.container}>
 			<div className={styles.header}>
 				<h2 className={styles.title}>툴과 관련된 글만 모아봤어요</h2>
-				<button type="button" className={styles.moreButton}>
+				<Link href={`/community?toolId=${toolId}`} className={styles.moreButton}>
 					더보기
-				</button>
+				</Link>
 			</div>
 
 			{posts.length === 0 ? (
@@ -31,34 +33,57 @@ export const ToolRelatedPostSection = async ({ toolId }: Props) => {
 			) : (
 				<div className={styles.list}>
 					{posts.map((post) => (
-						<article key={post.boardId} className={styles.card}>
-							<div className={styles.meta}>
-								<span>{post.toolName}</span>
-								<span>{post.author}</span>
-								<span>{post.updatedAt}</span>
+						<Link key={post.boardId} href={`/community/${post.boardId}`} className={styles.card}>
+							<div className={styles.cardHead}>
+								{post.toolName && (
+									<div className={styles.toolChip}>
+										<div className={styles.toolLogo}>
+											{post.toolLogo && (
+												<Image src={post.toolLogo} alt="" fill style={{ objectFit: "cover" }} />
+											)}
+										</div>
+										<span className={styles.toolName}>{post.toolName}</span>
+									</div>
+								)}
+								<div className={styles.metaRow}>
+									<span>{post.author}</span>
+									<div className={styles.metaDivider} />
+									<span>{formatDate(post.updatedAt)}</span>
+								</div>
 							</div>
 
-							<div className={styles.body}>
-								<div className={styles.textBlock}>
-									<h3 className={styles.cardTitle}>{post.title}</h3>
-									<p className={styles.summary}>{post.content}</p>
+							<div className={styles.cardBody}>
+								<div className={styles.cardBodyLeft}>
+									<div className={styles.textBlock}>
+										<p className={styles.cardTitle}>{post.title}</p>
+										<p className={styles.cardContent}>{post.content}</p>
+									</div>
 
-									<div className={styles.reactionRow}>
-										<span>♡ {post.author}</span>
-										<span>댓글 {post.commentCount}</span>
+									<div className={styles.statsRow}>
+										<span className={styles.statItem}>
+											<Image src="/svg/post/ic_comment_16.svg" alt="" width={16} height={16} />
+											{post.commentCount}개
+										</span>
+										<div className={styles.metaDivider} />
+										<span className={styles.statItem}>
+											<Image src="/svg/post/ic_bookmark_16.svg" alt="" width={16} height={16} />
+											{post.scrapCount}회
+										</span>
 									</div>
 								</div>
 
 								<div className={styles.thumbnail}>
-									<Image
-										src={post.images[0] ? post.images[0] : "/placeholder-thumbnail.png"}
-										alt={post.title}
-										fill
-										className={styles.thumbnailImage}
-									/>
+									{post.images[0] && (
+										<Image
+											src={post.images[0]}
+											alt={post.title}
+											fill
+											style={{ objectFit: "cover" }}
+										/>
+									)}
 								</div>
 							</div>
-						</article>
+						</Link>
 					))}
 				</div>
 			)}

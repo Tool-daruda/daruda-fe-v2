@@ -1,10 +1,10 @@
 import { ToolApi } from "@/common/api/tool-api";
 import type { CommunityFilterCategory } from "../_types";
 
-// TODO: 카테고리별 툴이 50개를 초과하면 나머지가 조회되지 않음.
-// community-filter-sidebar, post-tag-selector에 클라이언트 사이드 무한스크롤 추가 필요.
-// ToolApi.getToolList는 lastToolId 커서 기반 페이지네이션 지원함.
-const TOOLS_PER_CATEGORY_SIZE = 50;
+// TODO: post-tag-selector는 카테고리 구분 없이 전체 툴을 평탄화해 이름으로 검색하므로,
+// 카테고리당 첫 페이지(TOOLS_PER_CATEGORY_SIZE)를 넘는 툴은 여전히 검색되지 않음.
+// community-filter-sidebar는 카테고리별 클라이언트 사이드 무한스크롤을 적용함.
+const TOOLS_PER_CATEGORY_SIZE = 11;
 
 /**
  * @description 카테고리 목록과 카테고리별 툴 목록을 병렬로 조회합니다.
@@ -28,14 +28,21 @@ export const getCommunityFilterCategories = async (): Promise<CommunityFilterCat
 				return null;
 			});
 
+			const tools = toolsRes?.tools || [];
+			const totalElements = toolsRes?.scrollPaginationDto?.totalElements ?? tools.length;
+			const nextCursor =
+				tools.length < totalElements ? (toolsRes?.scrollPaginationDto?.nextCursor ?? null) : null;
+
 			return {
 				name: category.name,
 				koreanName: category.koreanName,
-				tools: (toolsRes?.tools || []).map((tool) => ({
+				tools: tools.map((tool) => ({
 					toolId: tool.toolId,
 					toolName: tool.toolName,
 					toolLogo: tool.toolLogo,
 				})),
+				totalElements,
+				nextCursor,
 			};
 		})
 	);

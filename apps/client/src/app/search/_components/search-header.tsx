@@ -27,9 +27,7 @@ export function SearchHeader({ initialKeyword }: SearchHeaderProps) {
 
 	return (
 		<header className={s.heroContainer}>
-			<div className={s.blurShape1} />
-			<div className={s.blurShape2} />
-			<div className={s.blurShape3} />
+			<div className={s.heroBackdrop} />
 
 			<p className={s.subTitle}>지금 내게 필요한 디지털 툴을 모아보다</p>
 			<h1 className={s.title}>daruda 검색결과</h1>
@@ -43,7 +41,7 @@ export function SearchHeader({ initialKeyword }: SearchHeaderProps) {
 					className={s.searchInput}
 				/>
 				<button type="submit" className={s.searchSubmitButton} aria-label="검색">
-					<Image src="/icons/ic_search_iris300_20.svg" alt="검색" width={20} height={20} />
+					<Image src="/icons/ic_search_iris300_20.svg" alt="" width={20} height={20} />
 				</button>
 			</form>
 		</header>

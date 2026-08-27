@@ -28,9 +28,11 @@ export interface BoardListRes {
 	contents: BoardItem[];
 	scrollPaginationDto: {
 		totalElements: number;
+		// 다음 페이지가 없으면 -1
 		nextCursor: number;
 	};
-	nextScrapCount: number;
+	// SCRAP 정렬에서만 내려온다. 0도 유효한 커서 값이므로 null 체크로만 판단해야 한다.
+	nextScrapCount: number | null;
 }
 
 export interface BoardScrapRes {

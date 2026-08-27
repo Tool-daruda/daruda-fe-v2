@@ -3,6 +3,9 @@ import { style } from "@vanilla-extract/css";
 
 export const container = style({
 	padding: "0 24px",
+	display: "flex",
+	flexDirection: "column",
+	gap: "20px",
 });
 
 export const title = style({
@@ -32,4 +35,33 @@ export const card = style({
 
 export const image = style({
 	objectFit: "cover",
+});
+
+export const dim = style({
+	position: "absolute",
+	inset: 0,
+	backgroundColor: "rgba(22, 22, 22, 0.4)",
+	opacity: 0,
+	transition: "opacity 0.2s ease",
+
+	selectors: {
+		[`${card}:hover &`]: {
+			opacity: 1,
+		},
+	},
+});
+
+export const playIcon = style({
+	position: "absolute",
+	top: "50%",
+	left: "50%",
+	transform: "translate(-50%, -50%)",
+	opacity: 0,
+	transition: "opacity 0.2s ease",
+
+	selectors: {
+		[`${card}:hover &`]: {
+			opacity: 1,
+		},
+	},
 });

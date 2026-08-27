@@ -1,6 +1,7 @@
 import Image from "next/image";
 import type { ToolDetailRes } from "@/common/api/models/tool.model";
 import { ToolApi } from "@/common/api/tool-api";
+import { BookmarkButton } from "./bookmark-button";
 import { ShareButton } from "./share-button";
 import * as styles from "./styles/tool-meta-bar.css";
 
@@ -77,9 +78,7 @@ export const ToolMetaBar = async ({ toolId }: Props) => {
 					<Image src="/icons/ic_link_20.svg" alt="링크 아이콘" width={20} height={20} />
 					직접 체험해보기
 				</a>
-				<button type="button" className={styles.iconButton} aria-label="북마크">
-					<Image src="/icons/ic_bookmark_outline_24.svg" alt="북마크" width={24} height={24} />
-				</button>
+				<BookmarkButton toolId={toolId} initialScrapped={info.isScrapped} />
 				<ShareButton />
 			</div>
 		</section>

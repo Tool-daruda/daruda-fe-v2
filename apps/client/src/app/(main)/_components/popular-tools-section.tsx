@@ -17,7 +17,7 @@ export const PopularToolsSection = async () => {
 	if (tools.length === 0) return null;
 
 	return (
-		<section className={s.section}>
+		<section>
 			<SectionHeader
 				iconSrc="/icons/main/ic_main_hot_24_blue.svg"
 				title="대학생들 사이에서 가장 인기있는 툴이에요"
@@ -28,6 +28,7 @@ export const PopularToolsSection = async () => {
 				{tools.map((tool) => (
 					<ToolCard
 						key={tool.toolId}
+						toolId={tool.toolId}
 						title={tool.toolName}
 						thumbnailUrl={tool.toolLogo}
 						priceType={LICENSE_MAP[tool.license]}

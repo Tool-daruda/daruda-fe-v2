@@ -1,14 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { fn } from "@storybook/test";
 import ToolCard from "./tool-card";
 
 const meta = {
 	title: "Client/Components/ToolCard",
 	component: ToolCard,
 	tags: ["autodocs"],
-	args: {
-		onBookmarkClick: fn(),
-	},
 	argTypes: {
 		variant: {
 			control: "radio",

@@ -2,8 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { type ClipboardEvent, useEffect, useRef, useState } from "react";
+import { createBoardAction, updateBoardAction } from "@/common/api/actions/board.actions";
 import { uploadImage } from "@/common/utils/upload-image";
-import { createBoardAction, updateBoardAction } from "../_actions/board-actions";
 import type { ImageSlot, PostFormInitialValues } from "../_components/post-form/types";
 import type { CommunityFilterTool } from "../_types";
 

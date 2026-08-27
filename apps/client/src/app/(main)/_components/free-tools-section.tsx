@@ -17,7 +17,7 @@ export const FreeToolsSection = async () => {
 	if (tools.length === 0) return null;
 
 	return (
-		<section className={s.section}>
+		<section>
 			<SectionHeader
 				iconSrc="/icons/main/ic_main_free_24.svg"
 				title="무료로 사용할 수 있는 툴만 모아봤어요"
@@ -28,6 +28,7 @@ export const FreeToolsSection = async () => {
 				{tools.map((tool) => (
 					<ToolCard
 						key={tool.toolId}
+						toolId={tool.toolId}
 						title={tool.toolName}
 						thumbnailUrl={tool.toolLogo}
 						priceType={LICENSE_MAP[tool.license]}

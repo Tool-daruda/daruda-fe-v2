@@ -5,8 +5,11 @@ import { themeClass } from "@repo/ui/foundations";
 import type { Metadata } from "next";
 import type { PropsWithChildren } from "react";
 import { hasAuthSession } from "@/common/api/auth-session";
+import DevAuthPanel from "@/common/components/dev-auth/dev-auth-panel";
+import Footer from "@/common/components/footer/footer";
 import Header from "@/common/components/header/header";
 import { ModalHost } from "@/common/components/modal";
+import ScrollToTop from "@/common/components/scroll-to-top/scroll-to-top";
 import { Toaster } from "@/common/components/toast";
 import { AuthProvider } from "@/common/context/auth-context";
 import { NotificationProvider } from "@/common/context/notification-context";
@@ -30,10 +33,13 @@ export default async function RootLayout({ children }: PropsWithChildren) {
 			<body>
 				<AuthProvider isLoggedIn={isLoggedIn}>
 					<NotificationProvider>
+						<ScrollToTop />
 						<Header isLoggedIn={isLoggedIn} />
 						<main>{children}</main>
+						<Footer />
 						<Toaster />
 						<ModalHost />
+						{process.env.NODE_ENV !== "production" && <DevAuthPanel isLoggedIn={isLoggedIn} />}
 					</NotificationProvider>
 				</AuthProvider>
 			</body>

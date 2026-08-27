@@ -1,111 +1,110 @@
-import { themeVars } from "@repo/ui/foundations";
+import { colors, themeVars } from "@repo/ui/foundations";
 import { style } from "@vanilla-extract/css";
 
 export const container = style({
+	display: "flex",
+	flexDirection: "column",
+	gap: "20px",
 	padding: "0 24px",
 });
 
 export const header = style({
-	marginBottom: "16px",
+	display: "flex",
+	flexDirection: "column",
+	gap: "6px",
 });
 
 export const title = style({
 	...themeVars.fonts.t3_1,
-	color: themeVars.colors.grayscale[900],
+	color: colors.grayscale[900],
 });
 
 export const description = style({
-	marginTop: "8px",
-	fontSize: "14px",
-	color: "#6b7280",
+	...themeVars.fonts.caption2_1,
+	color: colors.grayscale[300],
+});
+
+export const descriptionLink = style({
+	color: colors.grayscale[300],
+	textDecoration: "underline",
+});
+
+export const planGroup = style({
+	display: "flex",
+	flexDirection: "column",
+	gap: "8px",
 });
 
 export const tabRow = style({
 	display: "flex",
+	alignItems: "center",
 	gap: "8px",
-	marginBottom: "20px",
-});
-
-export const activeTab = style({
-	height: "32px",
-	padding: "0 12px",
-	borderRadius: "999px",
-	border: "none",
-	background: "#111827",
-	color: "#ffffff",
-	fontSize: "13px",
-	fontWeight: 700,
-	cursor: "pointer",
 });
 
 export const tab = style({
-	height: "32px",
-	padding: "0 12px",
-	borderRadius: "999px",
-	border: "1px solid #e5e7eb",
-	background: "#ffffff",
-	color: "#6b7280",
-	fontSize: "13px",
-	fontWeight: 600,
+	...themeVars.fonts.b4_2,
+	padding: 0,
+	border: "none",
+	background: "none",
+	color: colors.grayscale[300],
 	cursor: "pointer",
+});
+
+export const activeTab = style([
+	tab,
+	{
+		...themeVars.fonts.t4_1,
+		color: colors.grayscale[900],
+	},
+]);
+
+export const tabDivider = style({
+	width: "1px",
+	height: "10px",
+	background: colors.grayscale[200],
 });
 
 export const planList = style({
 	display: "flex",
 	flexDirection: "column",
-	gap: "14px",
-});
-
-export const plan = style({
-	padding: "20px",
-	borderRadius: "18px",
-	border: "1px solid #ececec",
-	background: "#fafafa",
-});
-
-export const recommendedPlan = style([
-	plan,
-	{
-		border: "1px solid #c4b5fd",
-		background: "#f5f3ff",
-	},
-]);
-
-export const planHeader = style({
-	display: "flex",
-	justifyContent: "space-between",
-	alignItems: "center",
-	gap: "12px",
-	flexWrap: "wrap",
-});
-
-export const planName = style({
-	fontSize: "18px",
-	fontWeight: 700,
-	color: "#4c1d95",
-});
-
-export const planPrice = style({
-	fontSize: "16px",
-	fontWeight: 700,
-	color: "#111827",
-});
-
-export const planDescription = style({
-	marginTop: "8px",
-	fontSize: "14px",
-	color: "#6b7280",
-});
-
-export const featureList = style({
-	marginTop: "14px",
-	display: "flex",
-	flexDirection: "column",
 	gap: "8px",
 });
 
+export const plan = style({
+	display: "flex",
+	flexDirection: "column",
+	gap: "4px",
+	padding: "13px 18px",
+	borderRadius: "12px",
+	background: colors.grayscale[25],
+});
+
+export const planHeader = style({
+	display: "flex",
+	gap: "4px",
+	whiteSpace: "nowrap",
+});
+
+export const planName = style({
+	...themeVars.fonts.t4_1,
+	color: colors.brand.iris[500],
+});
+
+export const planPrice = style({
+	...themeVars.fonts.t4_1,
+	color: colors.grayscale[900],
+});
+
+export const priceCurrency = style({
+	fontWeight: 400,
+});
+
+export const featureList = style({
+	paddingInlineStart: "18px",
+	listStyleType: "disc",
+});
+
 export const featureItem = style({
-	fontSize: "14px",
-	lineHeight: 1.6,
-	color: "#374151",
+	...themeVars.fonts.b5_1,
+	color: colors.grayscale[500],
 });

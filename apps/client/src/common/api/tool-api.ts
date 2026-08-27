@@ -32,7 +32,8 @@ export const ToolApi = {
 			...(params.lastToolId && { lastToolId: String(params.lastToolId) }),
 		}).toString();
 
-		return fetchPublic<ToolListRes>(`/api/v1/tool?${query}`, {
+		// 응답의 isScraped가 로그인 사용자 기준이라 쿠키를 실어 보내야 합니다.
+		return fetchServer<ToolListRes>(`/api/v1/tool?${query}`, {
 			next: { tags: ["tools"] },
 		});
 	},

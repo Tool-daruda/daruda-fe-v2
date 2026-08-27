@@ -1,8 +1,5 @@
-import { UserApi } from "@/common/api/user-api";
-import UserProfileClient from "./user/client";
+import { redirect } from "next/navigation";
 
-export default async function UserProfilePage() {
-	const initialProfile = await UserApi.getUserProfile();
-
-	return <UserProfileClient initialData={initialProfile} />;
+export default function MyPageRoot() {
+	redirect("/mypage/user");
 }

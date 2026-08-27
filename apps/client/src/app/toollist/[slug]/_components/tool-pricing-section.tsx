@@ -11,12 +11,30 @@ type Props = {
 export const ToolPricingSection = async ({ toolId }: Props) => {
 	const plansData = await ToolApi.getToolPlans(toolId).catch(() => null);
 	const toolPlans = plansData?.toolPlans ?? [];
+	const planLink = plansData?.planLink;
 
 	return (
 		<section id={TOOL_SECTION_IDS.pricing} className={styles.container}>
 			<div className={styles.header}>
 				<h2 className={styles.title}>합리적인 플랜을 선택해 보세요</h2>
-				<p className={styles.description}>자세한 내용은 플랜별 설명을 확인해 주세요.</p>
+				<p className={styles.description}>
+					{planLink ? (
+						<>
+							자세한 내용은{" "}
+							<a
+								href={planLink}
+								target="_blank"
+								rel="noreferrer"
+								className={styles.descriptionLink}
+							>
+								해당 링크
+							</a>
+							를 확인해 주세요.
+						</>
+					) : (
+						"자세한 내용은 플랜별 설명을 확인해 주세요."
+					)}
+				</p>
 			</div>
 
 			{toolPlans.length === 0 ? (

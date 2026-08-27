@@ -18,7 +18,22 @@ export const ShareButton = () => {
 
 	return (
 		<button className={styles.iconButton} type="button" aria-label="공유" onClick={handleShare}>
-			<Image src="/icons/ic_share_24.svg" alt="공유" width={24} height={24} />
+			<span className={styles.iconSwap}>
+				<Image
+					src="/icons/tool/ic_share_iris300_20.svg"
+					alt=""
+					width={14}
+					height={19}
+					className={styles.iconDefault}
+				/>
+				<Image
+					src="/icons/tool/ic_share_iris400_20.svg"
+					alt=""
+					width={14}
+					height={19}
+					className={styles.iconHovered}
+				/>
+			</span>
 		</button>
 	);
 };

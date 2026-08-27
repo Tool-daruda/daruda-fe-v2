@@ -23,7 +23,9 @@ export const Sidebar = ({ categories, selectedCategory, onSelectCategory }: Side
 					>
 						<span>{cat.koreanName}</span>
 						<div className={s.radioCircle}>
-							<div className={s.radioInner} />
+							<div className={s.radioRing}>
+								<div className={s.radioInner} />
+							</div>
 						</div>
 					</button>
 				))}

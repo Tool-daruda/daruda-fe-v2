@@ -17,7 +17,7 @@ export const RecentToolsSection = async () => {
 	if (tools.length === 0) return null;
 
 	return (
-		<section className={s.section}>
+		<section>
 			<SectionHeader
 				iconSrc="/icons/main/ic_main_new_24.svg"
 				title="최근 daruda에 추가된 툴 정보"
@@ -28,6 +28,7 @@ export const RecentToolsSection = async () => {
 				{tools.map((tool) => (
 					<ToolCard
 						key={tool.toolId}
+						toolId={tool.toolId}
 						title={tool.toolName}
 						thumbnailUrl={tool.toolLogo}
 						priceType={LICENSE_MAP[tool.license]}

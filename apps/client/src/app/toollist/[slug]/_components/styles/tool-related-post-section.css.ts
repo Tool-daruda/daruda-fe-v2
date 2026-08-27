@@ -18,90 +18,134 @@ export const title = style({
 });
 
 export const moreButton = style({
-	border: "none",
-	background: "transparent",
+	padding: "2px 4px",
 	...themeVars.fonts.b4_1,
 	color: colors.grayscale[300],
-	cursor: "pointer",
+	textDecoration: "none",
 });
 
 export const list = style({
 	display: "flex",
 	flexDirection: "column",
-	gap: "16px",
+	gap: "14px",
 });
 
 export const card = style({
-	padding: "20px",
-	borderRadius: "18px",
-	border: "1px solid #ececec",
-	background: "#ffffff",
-});
-
-export const meta = style({
 	display: "flex",
-	gap: "10px",
-	flexWrap: "wrap",
-	fontSize: "12px",
-	color: "#9ca3af",
-	marginBottom: "12px",
+	flexDirection: "column",
+	gap: "12px",
+	width: "100%",
+	padding: "12px",
+	borderRadius: "16px",
+	border: `1px solid ${colors.grayscale[25]}`,
+	backgroundColor: colors.grayscale[0],
+	textDecoration: "none",
 });
 
-export const body = style({
-	display: "grid",
-	gridTemplateColumns: "minmax(0, 1fr) 96px",
-	gap: "16px",
+export const cardHead = style({
+	display: "flex",
 	alignItems: "center",
-
-	"@media": {
-		"screen and (max-width: 600px)": {
-			gridTemplateColumns: "1fr",
-		},
-	},
+	gap: "10px",
 });
 
-export const textBlock = style({
+export const toolChip = style({
+	display: "flex",
+	alignItems: "center",
+	gap: "5px",
+	padding: "4px 6px 4px 4px",
+	borderRadius: "8px",
+	backgroundColor: colors.grayscale[25],
+});
+
+export const toolLogo = style({
+	position: "relative",
+	flexShrink: 0,
+	width: "20px",
+	height: "20px",
+	borderRadius: "4px",
+	backgroundColor: colors.grayscale[100],
+	overflow: "hidden",
+});
+
+export const toolName = style({
+	...themeVars.fonts.b5_2,
+	color: colors.grayscale[700],
+	whiteSpace: "nowrap",
+});
+
+export const metaRow = style({
+	display: "flex",
+	alignItems: "center",
+	gap: "8px",
+	...themeVars.fonts.b5_3,
+	color: colors.grayscale[300],
+	whiteSpace: "nowrap",
+});
+
+export const metaDivider = style({
+	width: "1px",
+	height: "10px",
+	backgroundColor: colors.grayscale[200],
+});
+
+export const cardBody = style({
+	display: "flex",
+	alignItems: "flex-start",
+	gap: "28px",
+	width: "100%",
+});
+
+export const cardBodyLeft = style({
+	display: "flex",
+	flex: 1,
+	flexDirection: "column",
+	gap: "14px",
 	minWidth: 0,
 });
 
-export const cardTitle = style({
-	fontSize: "18px",
-	fontWeight: 700,
-	color: "#111827",
-	lineHeight: 1.5,
-});
-
-export const summary = style({
-	marginTop: "8px",
-	fontSize: "14px",
-	color: "#6b7280",
-	lineHeight: 1.6,
-});
-
-export const reactionRow = style({
+export const textBlock = style({
 	display: "flex",
-	gap: "12px",
-	marginTop: "12px",
-	fontSize: "13px",
-	color: "#9ca3af",
+	flexDirection: "column",
+	gap: "4px",
+});
+
+export const cardTitle = style({
+	...themeVars.fonts.t4_1,
+	color: colors.grayscale[900],
+	margin: 0,
+});
+
+export const cardContent = style({
+	...themeVars.fonts.caption1_1,
+	color: colors.grayscale[600],
+	margin: 0,
+	height: "40px",
+	overflow: "hidden",
+	display: "-webkit-box",
+	WebkitLineClamp: 2,
+	WebkitBoxOrient: "vertical",
+});
+
+export const statsRow = style({
+	display: "flex",
+	alignItems: "center",
+	gap: "8px",
+});
+
+export const statItem = style({
+	display: "flex",
+	alignItems: "center",
+	gap: "2px",
+	...themeVars.fonts.caption2_2,
+	color: colors.grayscale[300],
 });
 
 export const thumbnail = style({
 	position: "relative",
-	width: "96px",
-	height: "96px",
-	borderRadius: "14px",
+	flexShrink: 0,
+	width: "80px",
+	height: "80px",
+	borderRadius: "8px",
+	backgroundColor: colors.grayscale[50],
 	overflow: "hidden",
-	background: "#f3f4f6",
-
-	"@media": {
-		"screen and (max-width: 600px)": {
-			width: "100%",
-			height: "180px",
-		},
-	},
-});
-
-export const thumbnailImage = style({
-	objectFit: "cover",
 });

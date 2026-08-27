@@ -41,3 +41,6 @@ yarn-error.log*
 
 # Local docs
 docs/
+
+# Local Claude Code config (개인 Obsidian vault 절대경로를 참조하므로 공유하지 않는다)
+.claude/
