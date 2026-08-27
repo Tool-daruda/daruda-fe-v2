@@ -1,32 +1,17 @@
 import { UserApi } from "@/common/api/user-api";
-import PostItem from "@/common/components/post-item/post-item";
-import { formatDate } from "@/common/utils";
-import * as styles from "../community.css";
+import { BoardList } from "../_components/board-list";
+
+const PAGE_SIZE = 10;
 
 export default async function SavedPostsPage() {
-	const scrapData = await UserApi.getScrapBoards({ page: 1, size: 5 });
-	const boardList = scrapData?.boardList || [];
-
-	if (boardList.length === 0) {
-		return <div>스크랩한 게시글이 없습니다.</div>;
-	}
+	const scrapData = await UserApi.getScrapBoards({ page: 1, size: PAGE_SIZE });
 
 	return (
-		<div className={styles.postList}>
-			{boardList.map((board) => {
-				const formattedPost = {
-					id: board.boardId,
-					tool: board.toolName,
-					author: board.author,
-					date: formatDate(board.updatedAt),
-					title: board.title,
-					content: board.content,
-					comments: board.commentCount,
-					bookmarks: board.scrapCount,
-				};
-
-				return <PostItem key={board.boardId} post={formattedPost} />;
-			})}
-		</div>
+		<BoardList
+			initialBoardList={scrapData?.boardList ?? []}
+			initialPageInfo={scrapData?.pageInfo ?? { pageNo: 1, size: PAGE_SIZE, totalPages: 1 }}
+			type="scrap"
+			emptyMessage="스크랩한 게시글이 없습니다."
+		/>
 	);
 }
