@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { fetchMoreToolListAction } from "@/common/api/actions/tool.actions";
 import type { ToolSummary } from "@/common/api/models/tool.model";
+import { LoadingSentinel } from "@/common/components/loading-spinner/loading-spinner";
 import ToolCard from "@/common/components/tool-card/tool-card";
 import { LICENSE_MAP } from "@/common/constants/price";
 import * as s from "./toollist.css";
@@ -123,11 +124,7 @@ export const ToolListGrid = ({
 				))}
 			</div>
 
-			{hasMore && (
-				<div ref={sentinelRef} className={s.loadingTrigger}>
-					{isLoading && <div className={s.spinner} />}
-				</div>
-			)}
+			{hasMore && <LoadingSentinel ref={sentinelRef} isLoading={isLoading} />}
 		</>
 	);
 };

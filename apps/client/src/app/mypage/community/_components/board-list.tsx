@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { MyBoardItem, PageInfo } from "@/common/api/models/tool.model";
+import { LoadingSentinel } from "@/common/components/loading-spinner/loading-spinner";
 import PostItem from "@/common/components/post-item/post-item";
 import { formatDate } from "@/common/utils";
 import { fetchMoreMyBoardsAction, fetchMoreScrapBoardsAction } from "../_actions/board.actions";
@@ -110,11 +111,7 @@ export function BoardList({
 				/>
 			))}
 
-			{hasMore && (
-				<div ref={sentinelRef} className={styles.loadingTrigger}>
-					{isLoading && <div className={styles.spinner} />}
-				</div>
-			)}
+			{hasMore && <LoadingSentinel ref={sentinelRef} isLoading={isLoading} />}
 		</div>
 	);
 }
