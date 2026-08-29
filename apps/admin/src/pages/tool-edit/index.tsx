@@ -140,8 +140,9 @@ async function handleFileUploads(
 	if (!cleanedName || cleanedName.length === 0) {
 		throw new Error("유효한 툴 이름을 입력해주세요.");
 	}
-	const encodedName = encodeURIComponent(cleanedName);
-	const toolPrefix = `tool/${encodedName}`;
+	// getPresignedUrls가 URLSearchParams로 한 번 더 인코딩하므로 여기서 인코딩하면
+	// 한글 툴 이름이 tool/%EA%B0%80... 리터럴 키로 저장된다.
+	const toolPrefix = `tool/${cleanedName}`;
 
 	const toolLogoUrl =
 		toolData.toolLogo instanceof File
