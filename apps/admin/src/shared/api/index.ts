@@ -1,7 +1,15 @@
 import axios from "axios";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+// dev에서는 경로만 남겨 vite 프록시를 태운다. 절대 URL로 두면 cross-site가 되어 쿠키가 실리지 않는다.
+const baseURL =
+	import.meta.env.DEV && API_BASE_URL
+		? new URL(API_BASE_URL, window.location.origin).pathname
+		: API_BASE_URL;
+
 export const instance = axios.create({
-	baseURL: import.meta.env.VITE_API_BASE_URL,
+	baseURL,
 	withCredentials: true,
 });
 

@@ -5,12 +5,14 @@
 	"type": "module",
 	"scripts": {
 		"build": "tsc -b && vite build",
+		"check-types": "tsc -b --noEmit",
 		"dev": "vite",
 		"lint": "eslint .",
 		"preview": "vite preview"
 	},
 	"dependencies": {
 		"@hookform/resolvers": "^5.2.2",
+		"@repo/api-types": "workspace:^",
 		"@repo/ui": "workspace:*",
 		"@tanstack/react-query": "^5.90.5",
 		"@vanilla-extract/recipes": "^0.5.7",

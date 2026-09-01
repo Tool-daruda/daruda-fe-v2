@@ -1,38 +1,18 @@
-export type PositionType = "STUDENT" | "WORKER" | "NORMAL" | "ADMIN";
-export type SocialType = "KAKAO";
+import type { FromSpec, Schemas } from "@repo/api-types/helpers";
 
-export interface SignupReq {
-	nickname: string;
-	email: string;
-	positions: string;
-}
+export type PositionType = NonNullable<Schemas["SignUpResponse"]["positions"]>;
 
-export interface SignupFormReq {
-	nickname: string;
-	positions: string;
-}
+export type LoginReq = Schemas["LoginRequest"];
 
-export interface SignupData {
-	userId: number;
-	nickname: string;
-	email: string;
-	positions: PositionType;
-}
+export type SignupReq = Schemas["SignUpRequest"];
 
-export interface LoginData {
-	isUser: boolean;
-	userId: number;
-	nickname: string;
-	email: string;
-	positions: PositionType;
-}
+// 소셜 로그인에서 이메일을 받아오므로 폼에서는 입력받지 않습니다.
+export type SignupFormReq = Omit<SignupReq, "email">;
 
-export interface ReissueData {
-	accessToken: string;
-}
+export type SignupData = FromSpec<"SignUpResponse">;
 
-export interface UserProfileData {
-	userId: number;
-	nickname: string;
-	positions: "STUDENT" | "WORKER" | "NORMAL" | "ADMIN";
-}
+export type LoginData = FromSpec<"LoginResponse">;
+
+export type ReissueData = FromSpec<"TokenResponse">;
+
+export type UserProfileData = FromSpec<"MyProfileResponse">;

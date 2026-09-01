@@ -24,9 +24,11 @@ const getYoutubeVideoId = (url: string) => {
 	}
 };
 
+// 유튜브가 아닌 주소는 썸네일을 유추할 수 없다. 원본 URL을 그대로 next/image에 넘기면
+// remotePatterns에 없는 도메인이라 렌더가 통째로 터지므로 null로 두고 대체 화면을 그린다.
 const getVideoThumbnailUrl = (url: string) => {
 	const videoId = getYoutubeVideoId(url);
-	return videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : url;
+	return videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : null;
 };
 
 export const ToolVideoSection = async ({ toolId }: Props) => {
@@ -56,22 +58,34 @@ export const ToolVideoSection = async ({ toolId }: Props) => {
 								rel="noopener noreferrer"
 								className={styles.card}
 							>
-								<Image
-									src={thumbnailUrl}
-									alt={`${info.toolMainName} 추천 영상 ${index + 1}`}
-									fill
-									sizes="(max-width: 768px) 100vw, 33vw"
-									className={styles.image}
-									style={{ objectFit: "cover" }}
-								/>
-								<div className={styles.dim} />
-								<Image
-									src="/icons/ic_video_play_48.svg"
-									alt=""
-									width={48}
-									height={48}
-									className={styles.playIcon}
-								/>
+								{thumbnailUrl ? (
+									<>
+										<Image
+											src={thumbnailUrl}
+											alt={`${info.toolMainName} 추천 영상 ${index + 1}`}
+											fill
+											sizes="(max-width: 768px) 100vw, 33vw"
+											className={styles.image}
+											style={{ objectFit: "cover" }}
+										/>
+										<div className={styles.dim} />
+										<Image
+											src="/icons/ic_video_play_48.svg"
+											alt=""
+											width={48}
+											height={48}
+											className={styles.playIcon}
+										/>
+									</>
+								) : (
+									<Image
+										src="/icons/ic_video_play_48.svg"
+										alt=""
+										width={48}
+										height={48}
+										className={styles.fallbackPlayIcon}
+									/>
+								)}
 							</a>
 						);
 					})}

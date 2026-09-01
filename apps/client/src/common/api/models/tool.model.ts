@@ -1,144 +1,62 @@
+import type { FromSpec } from "@repo/api-types/helpers";
 import type { ApiLicenseType } from "@/common/constants/price";
 
-export interface ToolSummary {
-	toolId: number;
-	toolName: string;
-	toolLogo: string;
-	description: string;
-	license: ApiLicenseType;
-	keywords: string[];
-	isScraped: boolean;
-}
+// license는 스펙상 string이지만 화면에서 가격 라벨(LICENSE_MAP)로 매핑해야 해 유니온으로 좁힙니다.
+export type ToolSummary = FromSpec<"ToolResponse", { license: ApiLicenseType }>;
 
-export interface ToolListRes {
-	tools: ToolSummary[];
-	scrollPaginationDto: {
-		totalElements: number;
-		nextCursor: number;
-	};
-}
+export type ToolListRes = FromSpec<"ToolListResponse", { tools: ToolSummary[] }>;
 
-export interface CategoryRes {
-	name: string;
-	koreanName: string;
-}
+export type CategoryRes = FromSpec<"CategoryResponse">;
 
-export interface ToolScrapRes {
-	toolId: number;
-	// 서버가 오타 필드명(scarp)으로 내려주고 있습니다. 서버가 바로잡아도 동작하도록 둘 다 받습니다.
-	scarp?: boolean;
-	scrap?: boolean;
-}
+// 서버가 오타 필드명(scarp)으로 내려주고 있습니다. 서버가 바로잡아도 동작하도록 둘 다 받습니다.
+export type ToolScrapRes = FromSpec<"ToolScrapResponse", { scarp?: boolean; scrap?: boolean }>;
 
-export interface ToolLikeRes {
-	toolId: number;
-	liked: boolean;
-	likeCount: number;
-}
+export type ToolLikeRes = FromSpec<"ToolLikeResponse">;
 
-export type FavoriteTool = {
-	toolId: number;
-	toolName: string;
-	toolLogo: string;
-	description: string;
-	license: ApiLicenseType;
-	keywords: string[];
-	isScraped: boolean;
-};
+export type FavoriteTool = FromSpec<"ToolDtoGetResponse", { license: ApiLicenseType }>;
 
-export interface FavoriteToolsRes {
-	toolList: FavoriteTool[];
-}
+export type FavoriteToolsRes = FromSpec<"FavoriteToolsResponse", { toolList: FavoriteTool[] }>;
 
-export type MyBoardItem = {
-	boardId: number;
-	toolName: string;
-	toolLogo: string;
-	author: string;
-	title: string;
-	content: string;
-	images: string[];
-	isScraped: boolean;
-	toolId: number;
-	updatedAt: string;
-	commentCount: number;
-	scrapCount: number;
-};
+export type MyBoardItem = FromSpec<"ScrapBoardsResponse">;
 
-export type PageInfo = {
-	pageNo: number;
-	size: number;
-	totalPages: number;
-};
+export type PageInfo = FromSpec<"PagenationDto">;
 
-export interface MyBoardsRes {
-	boardList: MyBoardItem[];
-	userId: number;
-	pageInfo: PageInfo;
-}
+export type MyBoardsRes = FromSpec<"ScrapBoardsRetrieveResponse", { boardList: MyBoardItem[] }>;
 
-export interface ToolDetailRes {
-	toolId: number;
-	toolLogo: string;
-	toolMainName: string;
-	toolSubName: string;
-	description: string;
-	license: string;
-	keywords: string[];
-	category: string;
-	toolLink: string;
-	supportKorea: boolean;
-	platform: Array<{
-		Web: boolean;
-		Windows: boolean;
-		Mac: boolean;
-	}>;
-	detailDescription: string;
-	videos: string[];
-	images: string[];
-	updatedAt: string;
-	isScrapped: boolean;
-	isLiked: boolean;
-	likeCount: number;
-}
+export type ToolDetailRes = FromSpec<"ToolDetailGetResponse">;
 
-export interface ToolPlanItem {
-	planId: number;
-	planName: string;
-	priceAnnual: number | null;
-	priceMonthly: number | null;
-	description: string;
-}
+// 무료 플랜은 가격이 내려오지 않습니다.
+export type ToolPlanItem = FromSpec<
+	"PlanResponse",
+	{ priceAnnual: number | null; priceMonthly: number | null }
+>;
 
-export interface ToolPlanRes {
-	planLink: string;
-	toolPlans: ToolPlanItem[];
-}
+export type ToolPlanRes = FromSpec<"PlanListResponse", { toolPlans: ToolPlanItem[] }>;
 
-export interface ToolCoreFeature {
-	coreId: number;
-	coreTitle: string;
-	coreContent: string;
-}
-export interface ToolCoreFeaturesRes {
-	toolCoreResList: ToolCoreFeature[];
-}
+export type ToolCoreFeature = FromSpec<"ToolCoreResponse">;
 
-export interface ToolBlog {
-	blogId: number;
-	blogUrl: string;
-}
-export interface ToolBlogsRes {
-	toolBlogs: ToolBlog[];
-}
+export type ToolCoreFeaturesRes = FromSpec<
+	"ToolCoreListResponse",
+	{ toolCoreResList: ToolCoreFeature[] }
+>;
 
-export interface AlternativeTool {
-	toolId: number;
-	toolName: string;
-	toolLogo: string;
-	license: string;
-	keywords: string[];
-}
-export interface ToolAlternativesRes {
-	relatedToolResList: AlternativeTool[];
-}
+// title 이하는 링크 미리보기용 메타데이터입니다. 원문에서 긁어오는 값이라 비어 있을 수 있습니다.
+export type ToolBlog = FromSpec<
+	"ToolBlogResponse",
+	{
+		title?: string;
+		thumbnailUrl?: string;
+		summary?: string;
+		siteName?: string;
+		faviconUrl?: string;
+	}
+>;
+
+export type ToolBlogsRes = FromSpec<"ToolBlogListResponse", { toolBlogs: ToolBlog[] }>;
+
+export type AlternativeTool = FromSpec<"RelatedToolResponse">;
+
+export type ToolAlternativesRes = FromSpec<
+	"RelatedToolListResponse",
+	{ relatedToolResList: AlternativeTool[] }
+>;

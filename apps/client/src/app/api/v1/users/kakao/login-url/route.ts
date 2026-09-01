@@ -5,7 +5,7 @@ import {
 	TEMP_COOKIE_OPTIONS,
 } from "@/common/api/cookie-utils";
 import type { ApiResponse } from "@/common/api/models/api-response.model";
-import type { LoginData } from "@/common/api/models/auth.model";
+import type { LoginData, LoginReq } from "@/common/api/models/auth.model";
 
 const API_BASE_URL = process.env.API_BASE_URL;
 
@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
 			{
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ socialType: "KAKAO" }),
+				body: JSON.stringify({ socialType: "KAKAO" } satisfies LoginReq),
 			}
 		);
 
