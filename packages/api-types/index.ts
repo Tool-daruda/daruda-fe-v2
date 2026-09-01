@@ -876,24 +876,24 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
-        ApiResponseToolScrapRes: {
+        SuccessResponseToolScrapResponse: {
             /** Format: int32 */
-            statusCode?: number;
+            status?: number;
             message?: string;
-            data?: components["schemas"]["ToolScrapRes"];
+            data?: components["schemas"]["ToolScrapResponse"];
         };
-        ToolScrapRes: {
+        ToolScrapResponse: {
             /** Format: int64 */
             toolId?: number;
             scarp?: boolean;
         };
-        ApiResponseToolLikeRes: {
+        SuccessResponseToolLikeResponse: {
             /** Format: int32 */
-            statusCode?: number;
+            status?: number;
             message?: string;
-            data?: components["schemas"]["ToolLikeRes"];
+            data?: components["schemas"]["ToolLikeResponse"];
         };
-        ToolLikeRes: {
+        ToolLikeResponse: {
             /** Format: int64 */
             toolId?: number;
             liked?: boolean;
@@ -931,12 +931,6 @@ export interface components {
              */
             title: string;
             commentReport?: boolean;
-        };
-        ApiResponseCreateReportResponse: {
-            /** Format: int32 */
-            statusCode?: number;
-            message?: string;
-            data?: components["schemas"]["CreateReportResponse"];
         };
         /** @description 신고 생성 응답 */
         CreateReportResponse: {
@@ -989,13 +983,19 @@ export interface components {
              */
             updatedAt?: string;
         };
+        SuccessResponseCreateReportResponse: {
+            /** Format: int32 */
+            status?: number;
+            message?: string;
+            data?: components["schemas"]["CreateReportResponse"];
+        };
         NoticeRequest: {
             title: string;
             url: string;
         };
-        ApiResponseVoid: {
+        SuccessResponseVoid: {
             /** Format: int32 */
-            statusCode?: number;
+            status?: number;
             message?: string;
             data?: Record<string, never>;
         };
@@ -1009,12 +1009,6 @@ export interface components {
             content?: string;
             photoUrl?: string;
         };
-        ApiResponseCreateCommentResponse: {
-            /** Format: int32 */
-            statusCode?: number;
-            message?: string;
-            data?: components["schemas"]["CreateCommentResponse"];
-        };
         CreateCommentResponse: {
             /** Format: int64 */
             commentId?: number;
@@ -1024,8 +1018,14 @@ export interface components {
             /** Format: date-time */
             updatedAt?: string;
         };
+        SuccessResponseCreateCommentResponse: {
+            /** Format: int32 */
+            status?: number;
+            message?: string;
+            data?: components["schemas"]["CreateCommentResponse"];
+        };
         /** @description 수정할 게시글 */
-        BoardCreateAndUpdateReq: {
+        BoardCreateAndUpdateRequest: {
             title: string;
             content: string;
             /** Format: int64 */
@@ -1033,13 +1033,7 @@ export interface components {
             isFree: boolean;
             imageList: string[];
         };
-        ApiResponseBoardRes: {
-            /** Format: int32 */
-            statusCode?: number;
-            message?: string;
-            data?: components["schemas"]["BoardRes"];
-        };
-        BoardRes: {
+        BoardResponse: {
             /** Format: int64 */
             boardId?: number;
             toolName?: string;
@@ -1058,27 +1052,27 @@ export interface components {
             /** Format: int32 */
             commentCount?: number;
         };
-        ApiResponseBoardScrapRes: {
+        SuccessResponseBoardResponse: {
             /** Format: int32 */
-            statusCode?: number;
+            status?: number;
             message?: string;
-            data?: components["schemas"]["BoardScrapRes"];
+            data?: components["schemas"]["BoardResponse"];
         };
-        BoardScrapRes: {
+        BoardScrapResponse: {
             /** Format: int64 */
             boardId?: number;
             scrap?: boolean;
+        };
+        SuccessResponseBoardScrapResponse: {
+            /** Format: int32 */
+            status?: number;
+            message?: string;
+            data?: components["schemas"]["BoardScrapResponse"];
         };
         SignUpRequest: {
             nickname: string;
             positions: string;
             email: string;
-        };
-        ApiResponseSignUpResponse: {
-            /** Format: int32 */
-            statusCode?: number;
-            message?: string;
-            data?: components["schemas"]["SignUpResponse"];
         };
         SignUpResponse: {
             /** Format: int64 */
@@ -1088,18 +1082,24 @@ export interface components {
             positions?: "STUDENT" | "WORKER" | "NORMAL" | "ADMIN";
             email?: string;
         };
-        ApiResponseTokenResponse: {
+        SuccessResponseSignUpResponse: {
             /** Format: int32 */
-            statusCode?: number;
+            status?: number;
+            message?: string;
+            data?: components["schemas"]["SignUpResponse"];
+        };
+        SuccessResponseTokenResponse: {
+            /** Format: int32 */
+            status?: number;
             message?: string;
             data?: components["schemas"]["TokenResponse"];
         };
         TokenResponse: {
             accessToken?: string;
         };
-        ApiResponseLong: {
+        SuccessResponseLong: {
             /** Format: int32 */
-            statusCode?: number;
+            status?: number;
             message?: string;
             /** Format: int64 */
             data?: number;
@@ -1107,12 +1107,6 @@ export interface components {
         LoginRequest: {
             /** @enum {string} */
             socialType: "KAKAO";
-        };
-        ApiResponseLoginResponse: {
-            /** Format: int32 */
-            statusCode?: number;
-            message?: string;
-            data?: components["schemas"]["LoginResponse"];
         };
         LoginResponse: {
             /** Format: int64 */
@@ -1122,6 +1116,12 @@ export interface components {
             nickname?: string;
             /** @enum {string} */
             positions?: "STUDENT" | "WORKER" | "NORMAL" | "ADMIN";
+        };
+        SuccessResponseLoginResponse: {
+            /** Format: int32 */
+            status?: number;
+            message?: string;
+            data?: components["schemas"]["LoginResponse"];
         };
         /** @description 핵심 기능 목록 */
         CreateToolCoreRequest: {
@@ -1242,19 +1242,13 @@ export interface components {
             /** @description 관련 툴 ID 목록 */
             relatedToolIds?: number[];
         };
-        SuccessResponseVoid: {
-            /** Format: int32 */
-            status?: number;
-            message?: string;
-            data?: Record<string, never>;
-        };
         UpdateMyRequest: {
             nickname?: string;
             positions?: string;
         };
-        ApiResponseUpdateMyResponse: {
+        SuccessResponseUpdateMyResponse: {
             /** Format: int32 */
-            statusCode?: number;
+            status?: number;
             message?: string;
             data?: components["schemas"]["UpdateMyResponse"];
         };
@@ -1284,12 +1278,6 @@ export interface components {
             processNote?: string;
             /** Format: int32 */
             suspensionDays?: number;
-        };
-        ApiResponseProcessReportResponse: {
-            /** Format: int32 */
-            statusCode?: number;
-            message?: string;
-            data?: components["schemas"]["ProcessReportResponse"];
         };
         /** @description 신고 처리 응답 */
         ProcessReportResponse: {
@@ -1333,6 +1321,12 @@ export interface components {
              * @example 불건전한 게시글로 인한 제재
              */
             processNote?: string;
+        };
+        SuccessResponseProcessReportResponse: {
+            /** Format: int32 */
+            status?: number;
+            message?: string;
+            data?: components["schemas"]["ProcessReportResponse"];
         };
         /** @description 수정 요청 DTO (플랜 정보 포함) */
         UpdateToolRequest: {
@@ -1396,16 +1390,16 @@ export interface components {
             /** @description 관련 툴 ID 목록 */
             relatedToolIds?: number[];
         };
-        ApiResponseFavoriteToolsResponse: {
+        FavoriteToolsResponse: {
+            toolList?: components["schemas"]["ToolDtoGetResponse"][];
+        };
+        SuccessResponseFavoriteToolsResponse: {
             /** Format: int32 */
-            statusCode?: number;
+            status?: number;
             message?: string;
             data?: components["schemas"]["FavoriteToolsResponse"];
         };
-        FavoriteToolsResponse: {
-            toolList?: components["schemas"]["ToolDtoGetRes"][];
-        };
-        ToolDtoGetRes: {
+        ToolDtoGetResponse: {
             /** Format: int64 */
             toolId?: number;
             toolName?: string;
@@ -1414,12 +1408,6 @@ export interface components {
             license?: string;
             keywords?: string[];
             isScraped?: boolean;
-        };
-        ApiResponseScrapBoardsRetrieveResponse: {
-            /** Format: int32 */
-            statusCode?: number;
-            message?: string;
-            data?: components["schemas"]["ScrapBoardsRetrieveResponse"];
         };
         PagenationDto: {
             /** Format: int32 */
@@ -1432,15 +1420,21 @@ export interface components {
         ScrapBoardsResponse: {
             /** Format: int64 */
             boardId?: number;
-            title?: string;
-            content?: string;
-            /** Format: date-time */
-            updatedAt?: string;
             toolName?: string;
             toolLogo?: string;
-            isScrapped?: boolean;
+            author?: string;
+            title?: string;
+            content?: string;
+            images?: string[];
+            isScraped?: boolean;
+            /** Format: int64 */
+            toolId?: number;
             /** Format: int64 */
             scrapCount?: number;
+            /** Format: date-time */
+            updatedAt?: string;
+            /** Format: int32 */
+            commentCount?: number;
         };
         ScrapBoardsRetrieveResponse: {
             /** Format: int64 */
@@ -1448,11 +1442,11 @@ export interface components {
             boardList?: components["schemas"]["ScrapBoardsResponse"][];
             pageInfo?: components["schemas"]["PagenationDto"];
         };
-        ApiResponseMyProfileResponse: {
+        SuccessResponseScrapBoardsRetrieveResponse: {
             /** Format: int32 */
-            statusCode?: number;
+            status?: number;
             message?: string;
-            data?: components["schemas"]["MyProfileResponse"];
+            data?: components["schemas"]["ScrapBoardsRetrieveResponse"];
         };
         MyProfileResponse: {
             /** Format: int64 */
@@ -1461,29 +1455,29 @@ export interface components {
             /** @enum {string} */
             positions?: "STUDENT" | "WORKER" | "NORMAL" | "ADMIN";
         };
-        ApiResponseBoolean: {
+        SuccessResponseMyProfileResponse: {
             /** Format: int32 */
-            statusCode?: number;
+            status?: number;
+            message?: string;
+            data?: components["schemas"]["MyProfileResponse"];
+        };
+        SuccessResponseBoolean: {
+            /** Format: int32 */
+            status?: number;
             message?: string;
             data?: boolean;
         };
-        ApiResponseBoardListResponse: {
-            /** Format: int32 */
-            statusCode?: number;
-            message?: string;
-            data?: components["schemas"]["BoardListResponse"];
-        };
         BoardListResponse: {
-            boardList?: components["schemas"]["BoardRes"][];
+            boardList?: components["schemas"]["BoardResponse"][];
             /** Format: int64 */
             userId?: number;
             pageInfo?: components["schemas"]["PagenationDto"];
         };
-        ApiResponseToolListRes: {
+        SuccessResponseBoardListResponse: {
             /** Format: int32 */
-            statusCode?: number;
+            status?: number;
             message?: string;
-            data?: components["schemas"]["ToolListRes"];
+            data?: components["schemas"]["BoardListResponse"];
         };
         ScrollPaginationDto: {
             /** Format: int64 */
@@ -1491,7 +1485,13 @@ export interface components {
             /** Format: int64 */
             nextCursor?: number;
         };
-        ToolListRes: {
+        SuccessResponseToolListResponse: {
+            /** Format: int32 */
+            status?: number;
+            message?: string;
+            data?: components["schemas"]["ToolListResponse"];
+        };
+        ToolListResponse: {
             tools?: components["schemas"]["ToolResponse"][];
             scrollPaginationDto?: components["schemas"]["ScrollPaginationDto"];
         };
@@ -1505,18 +1505,18 @@ export interface components {
             keywords?: string[];
             isScraped?: boolean;
         };
-        ApiResponseToolDetailGetRes: {
-            /** Format: int32 */
-            statusCode?: number;
-            message?: string;
-            data?: components["schemas"]["ToolDetailGetRes"];
-        };
-        PlatformRes: {
+        PlatformResponse: {
             Web?: boolean;
             Windows?: boolean;
             Mac?: boolean;
         };
-        ToolDetailGetRes: {
+        SuccessResponseToolDetailGetResponse: {
+            /** Format: int32 */
+            status?: number;
+            message?: string;
+            data?: components["schemas"]["ToolDetailGetResponse"];
+        };
+        ToolDetailGetResponse: {
             /** Format: int64 */
             toolId?: number;
             toolLogo?: string;
@@ -1528,7 +1528,7 @@ export interface components {
             category?: string;
             toolLink?: string;
             supportKorea?: boolean;
-            platform?: components["schemas"]["PlatformRes"][];
+            platform?: components["schemas"]["PlatformResponse"][];
             detailDescription?: string;
             videos?: string[];
             images?: string[];
@@ -1539,17 +1539,11 @@ export interface components {
             /** Format: int32 */
             likeCount?: number;
         };
-        ApiResponsePlanListRes: {
-            /** Format: int32 */
-            statusCode?: number;
-            message?: string;
-            data?: components["schemas"]["PlanListRes"];
-        };
-        PlanListRes: {
+        PlanListResponse: {
             planLink?: string;
-            toolPlans?: components["schemas"]["PlanRes"][];
+            toolPlans?: components["schemas"]["PlanResponse"][];
         };
-        PlanRes: {
+        PlanResponse: {
             /** Format: int64 */
             planId?: number;
             planName?: string;
@@ -1559,45 +1553,50 @@ export interface components {
             priceMonthly?: number;
             description?: string;
         };
-        ApiResponseToolCoreListRes: {
+        SuccessResponsePlanListResponse: {
             /** Format: int32 */
-            statusCode?: number;
+            status?: number;
             message?: string;
-            data?: components["schemas"]["ToolCoreListRes"];
+            data?: components["schemas"]["PlanListResponse"];
         };
-        ToolCoreListRes: {
-            toolCoreResList?: components["schemas"]["ToolCoreRes"][];
+        SuccessResponseToolCoreListResponse: {
+            /** Format: int32 */
+            status?: number;
+            message?: string;
+            data?: components["schemas"]["ToolCoreListResponse"];
         };
-        ToolCoreRes: {
+        ToolCoreListResponse: {
+            toolCoreResList?: components["schemas"]["ToolCoreResponse"][];
+        };
+        ToolCoreResponse: {
             /** Format: int64 */
             coreId?: number;
             coreTitle?: string;
             coreContent?: string;
         };
-        ApiResponseToolBlogListRes: {
+        SuccessResponseToolBlogListResponse: {
             /** Format: int32 */
-            statusCode?: number;
+            status?: number;
             message?: string;
-            data?: components["schemas"]["ToolBlogListRes"];
+            data?: components["schemas"]["ToolBlogListResponse"];
         };
-        ToolBlogListRes: {
-            toolBlogs?: components["schemas"]["ToolBlogRes"][];
+        ToolBlogListResponse: {
+            toolBlogs?: components["schemas"]["ToolBlogResponse"][];
         };
-        ToolBlogRes: {
+        ToolBlogResponse: {
             /** Format: int64 */
             blogId?: number;
             blogUrl?: string;
+            title?: string;
+            thumbnailUrl?: string;
+            summary?: string;
+            siteName?: string;
+            faviconUrl?: string;
         };
-        ApiResponseRelatedToolListRes: {
-            /** Format: int32 */
-            statusCode?: number;
-            message?: string;
-            data?: components["schemas"]["RelatedToolListRes"];
+        RelatedToolListResponse: {
+            relatedToolResList?: components["schemas"]["RelatedToolResponse"][];
         };
-        RelatedToolListRes: {
-            relatedToolResList?: components["schemas"]["RelatedToolRes"][];
-        };
-        RelatedToolRes: {
+        RelatedToolResponse: {
             /** Format: int64 */
             toolId?: number;
             toolName?: string;
@@ -1605,27 +1604,27 @@ export interface components {
             license?: string;
             keywords?: string[];
         };
-        ApiResponseListCategoryRes: {
+        SuccessResponseRelatedToolListResponse: {
             /** Format: int32 */
-            statusCode?: number;
+            status?: number;
             message?: string;
-            data?: components["schemas"]["CategoryRes"][];
+            data?: components["schemas"]["RelatedToolListResponse"];
         };
-        CategoryRes: {
+        CategoryResponse: {
             name?: string;
             koreanName?: string;
+        };
+        SuccessResponseListCategoryResponse: {
+            /** Format: int32 */
+            status?: number;
+            message?: string;
+            data?: components["schemas"]["CategoryResponse"][];
         };
         SuccessResponseObject: {
             /** Format: int32 */
             status?: number;
             message?: string;
             data?: Record<string, never>;
-        };
-        ApiResponseListNotificationResponse: {
-            /** Format: int32 */
-            statusCode?: number;
-            message?: string;
-            data?: components["schemas"]["NotificationResponse"][];
         };
         NotificationResponse: {
             /** Format: int64 */
@@ -1640,6 +1639,12 @@ export interface components {
             createdAt?: string;
             isRead?: boolean;
             url?: string;
+        };
+        SuccessResponseListNotificationResponse: {
+            /** Format: int32 */
+            status?: number;
+            message?: string;
+            data?: components["schemas"]["NotificationResponse"][];
         };
         SseEmitter: {
             /** Format: int64 */
@@ -1657,12 +1662,6 @@ export interface components {
             message?: string;
             data?: components["schemas"]["PresignedUrlResponse"];
         };
-        ApiResponseGetCommentRetrieveResponse: {
-            /** Format: int32 */
-            statusCode?: number;
-            message?: string;
-            data?: components["schemas"]["GetCommentRetrieveResponse"];
-        };
         GetCommentResponse: {
             content?: string;
             /** Format: int64 */
@@ -1676,26 +1675,32 @@ export interface components {
             commentList?: components["schemas"]["GetCommentResponse"][];
             pageInfo?: components["schemas"]["ScrollPaginationDto"];
         };
-        ApiResponseGetBoardResponse: {
+        SuccessResponseGetCommentRetrieveResponse: {
             /** Format: int32 */
-            statusCode?: number;
+            status?: number;
             message?: string;
-            data?: components["schemas"]["GetBoardResponse"];
+            data?: components["schemas"]["GetCommentRetrieveResponse"];
         };
         GetBoardResponse: {
-            contents?: components["schemas"]["BoardRes"][];
+            contents?: components["schemas"]["BoardResponse"][];
             scrollPaginationDto?: components["schemas"]["ScrollPaginationDto"];
             /** Format: int64 */
             nextScrapCount?: number;
         };
-        ApiResponseString: {
+        SuccessResponseGetBoardResponse: {
             /** Format: int32 */
-            statusCode?: number;
+            status?: number;
+            message?: string;
+            data?: components["schemas"]["GetBoardResponse"];
+        };
+        SuccessResponseString: {
+            /** Format: int32 */
+            status?: number;
             message?: string;
             data?: string;
         };
-        AdminToolPageRes: {
-            tools?: components["schemas"]["ToolRes"][];
+        AdminToolPageResponse: {
+            tools?: components["schemas"]["ToolResponse"][];
             /** Format: int32 */
             page?: number;
             /** Format: int32 */
@@ -1703,22 +1708,11 @@ export interface components {
             /** Format: int64 */
             totalElements?: number;
         };
-        SuccessResponseAdminToolPageRes: {
+        SuccessResponseAdminToolPageResponse: {
             /** Format: int32 */
             status?: number;
             message?: string;
-            data?: components["schemas"]["AdminToolPageRes"];
-        };
-        ToolRes: {
-            /** Format: int64 */
-            toolId?: number;
-            toolLogo?: string;
-            toolName?: string;
-            description?: string;
-            /** @enum {string} */
-            category?: "ALL" | "AI" | "DOCUMENT_EDITING" | "PRESENTATION" | "COLLABORATION" | "DATA" | "GRAPHIC_DESIGN" | "VIDEO_MUSIC" | "CODING" | "DESIGN_MODELING" | "LIFESTYLE" | "CAREER_DEVELOPMENT";
-            /** Format: date-time */
-            createdAt?: string;
+            data?: components["schemas"]["AdminToolPageResponse"];
         };
     };
     responses: never;
@@ -1750,7 +1744,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponseToolScrapRes"];
+                    "*/*": components["schemas"]["SuccessResponseToolScrapResponse"];
                 };
             };
         };
@@ -1776,7 +1770,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponseToolLikeRes"];
+                    "*/*": components["schemas"]["SuccessResponseToolLikeResponse"];
                 };
             };
         };
@@ -1800,7 +1794,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponseCreateReportResponse"];
+                    "*/*": components["schemas"]["SuccessResponseCreateReportResponse"];
                 };
             };
         };
@@ -1824,7 +1818,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponseVoid"];
+                    "*/*": components["schemas"]["SuccessResponseVoid"];
                 };
             };
         };
@@ -1848,7 +1842,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponseVoid"];
+                    "*/*": components["schemas"]["SuccessResponseVoid"];
                 };
             };
         };
@@ -1884,7 +1878,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponseGetCommentRetrieveResponse"];
+                    "*/*": components["schemas"]["SuccessResponseGetCommentRetrieveResponse"];
                 };
             };
         };
@@ -1914,7 +1908,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponseCreateCommentResponse"];
+                    "*/*": components["schemas"]["SuccessResponseCreateCommentResponse"];
                 };
             };
         };
@@ -1965,7 +1959,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponseGetBoardResponse"];
+                    "*/*": components["schemas"]["SuccessResponseGetBoardResponse"];
                 };
             };
         };
@@ -1979,7 +1973,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["BoardCreateAndUpdateReq"];
+                "application/json": components["schemas"]["BoardCreateAndUpdateRequest"];
             };
         };
         responses: {
@@ -1989,7 +1983,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponseBoardRes"];
+                    "*/*": components["schemas"]["SuccessResponseBoardResponse"];
                 };
             };
         };
@@ -2015,7 +2009,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponseBoardScrapRes"];
+                    "*/*": components["schemas"]["SuccessResponseBoardScrapResponse"];
                 };
             };
         };
@@ -2039,7 +2033,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponseSignUpResponse"];
+                    "*/*": components["schemas"]["SuccessResponseSignUpResponse"];
                 };
             };
         };
@@ -2059,7 +2053,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponseTokenResponse"];
+                    "*/*": components["schemas"]["SuccessResponseTokenResponse"];
                 };
             };
         };
@@ -2079,7 +2073,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponseLong"];
+                    "*/*": components["schemas"]["SuccessResponseLong"];
                 };
             };
         };
@@ -2109,7 +2103,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponseLoginResponse"];
+                    "*/*": components["schemas"]["SuccessResponseLoginResponse"];
                 };
             };
         };
@@ -2153,7 +2147,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponseMyProfileResponse"];
+                    "*/*": components["schemas"]["SuccessResponseMyProfileResponse"];
                 };
             };
         };
@@ -2177,7 +2171,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponseUpdateMyResponse"];
+                    "*/*": components["schemas"]["SuccessResponseUpdateMyResponse"];
                 };
             };
         };
@@ -2204,7 +2198,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponseProcessReportResponse"];
+                    "*/*": components["schemas"]["SuccessResponseProcessReportResponse"];
                 };
             };
         };
@@ -2230,7 +2224,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponseVoid"];
+                    "*/*": components["schemas"]["SuccessResponseVoid"];
                 };
             };
         };
@@ -2256,7 +2250,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponseBoardRes"];
+                    "*/*": components["schemas"]["SuccessResponseBoardResponse"];
                 };
             };
         };
@@ -2282,7 +2276,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponseVoid"];
+                    "*/*": components["schemas"]["SuccessResponseVoid"];
                 };
             };
         };
@@ -2302,7 +2296,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["BoardCreateAndUpdateReq"];
+                "application/json": components["schemas"]["BoardCreateAndUpdateRequest"];
             };
         };
         responses: {
@@ -2312,7 +2306,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponseBoardRes"];
+                    "*/*": components["schemas"]["SuccessResponseBoardResponse"];
                 };
             };
         };
@@ -2382,7 +2376,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponseFavoriteToolsResponse"];
+                    "*/*": components["schemas"]["SuccessResponseFavoriteToolsResponse"];
                 };
             };
         };
@@ -2418,7 +2412,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponseScrapBoardsRetrieveResponse"];
+                    "*/*": components["schemas"]["SuccessResponseScrapBoardsRetrieveResponse"];
                 };
             };
         };
@@ -2444,7 +2438,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponseBoolean"];
+                    "*/*": components["schemas"]["SuccessResponseBoolean"];
                 };
             };
         };
@@ -2480,7 +2474,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponseBoardListResponse"];
+                    "*/*": components["schemas"]["SuccessResponseBoardListResponse"];
                 };
             };
         };
@@ -2526,7 +2520,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponseToolListRes"];
+                    "*/*": components["schemas"]["SuccessResponseToolListResponse"];
                 };
             };
         };
@@ -2552,7 +2546,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponseToolDetailGetRes"];
+                    "*/*": components["schemas"]["SuccessResponseToolDetailGetResponse"];
                 };
             };
         };
@@ -2578,7 +2572,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponsePlanListRes"];
+                    "*/*": components["schemas"]["SuccessResponsePlanListResponse"];
                 };
             };
         };
@@ -2604,7 +2598,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponseToolCoreListRes"];
+                    "*/*": components["schemas"]["SuccessResponseToolCoreListResponse"];
                 };
             };
         };
@@ -2630,7 +2624,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponseToolBlogListRes"];
+                    "*/*": components["schemas"]["SuccessResponseToolBlogListResponse"];
                 };
             };
         };
@@ -2656,7 +2650,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponseRelatedToolListRes"];
+                    "*/*": components["schemas"]["SuccessResponseRelatedToolListResponse"];
                 };
             };
         };
@@ -2676,7 +2670,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponseListCategoryRes"];
+                    "*/*": components["schemas"]["SuccessResponseListCategoryResponse"];
                 };
             };
         };
@@ -2742,7 +2736,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponseListNotificationResponse"];
+                    "*/*": components["schemas"]["SuccessResponseListNotificationResponse"];
                 };
             };
         };
@@ -2762,7 +2756,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponseListNotificationResponse"];
+                    "*/*": components["schemas"]["SuccessResponseListNotificationResponse"];
                 };
             };
         };
@@ -2845,7 +2839,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponseString"];
+                    "*/*": components["schemas"]["SuccessResponseString"];
                 };
             };
         };
@@ -2886,7 +2880,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["SuccessResponseAdminToolPageRes"];
+                    "*/*": components["schemas"]["SuccessResponseAdminToolPageResponse"];
                 };
             };
         };
@@ -2936,7 +2930,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponseVoid"];
+                    "*/*": components["schemas"]["SuccessResponseVoid"];
                 };
             };
         };
@@ -2956,7 +2950,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "*/*": components["schemas"]["ApiResponseVoid"];
+                    "*/*": components["schemas"]["SuccessResponseVoid"];
                 };
             };
         };
