@@ -13,8 +13,8 @@ export default defineConfig({
 		dedupe: ["react", "react-dom"],
 	},
 	server: {
-		// 이 프록시가 없으면 브라우저가 api 서버를 직접 호출해 cross-site가 된다.
-		// 그러면 localhost 쿠키는 대상 도메인이 달라 요청에 실리지 않아 로컬 로그인이 끊긴다.
+		// 지우면 브라우저가 api 서버를 직접 호출해 cross-site가 되고,
+		// localhost 쿠키가 실리지 않아 로컬 로그인이 끊긴다.
 		proxy: {
 			"/api": {
 				target: "https://api.daruda.shop",

@@ -2,9 +2,7 @@ import axios from "axios";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-// dev에서는 경로만 남겨 vite 프록시(vite.config.ts)를 태웁니다.
-// 절대 URL로 두면 브라우저가 api 서버를 직접 호출해 cross-site가 되고, localhost 쿠키가 실리지 않습니다.
-// VITE_API_BASE_URL이 절대 URL이든 상대 경로든 결과는 같습니다.
+// dev에서는 경로만 남겨 vite 프록시를 태운다. 절대 URL로 두면 cross-site가 되어 쿠키가 실리지 않는다.
 const baseURL =
 	import.meta.env.DEV && API_BASE_URL
 		? new URL(API_BASE_URL, window.location.origin).pathname

@@ -16,5 +16,4 @@ export type GetCommentRetrieveResponse = FromSpec<
 
 export type CreateCommentReq = Schemas["CreateCommentRequest"];
 
-// 생성된 댓글 전체를 돌려주므로 재조회 없이 목록에 바로 이어붙일 수 있습니다.
 export type CreateCommentRes = FromSpec<"CreateCommentResponse", { image?: string }>;

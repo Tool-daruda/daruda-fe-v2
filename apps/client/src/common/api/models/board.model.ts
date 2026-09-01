@@ -30,5 +30,4 @@ export type BoardScrapRes = FromSpec<"BoardScrapResponse">;
 
 export type BoardWriteReq = Schemas["BoardCreateAndUpdateRequest"];
 
-// 작성·수정 응답은 게시글 전체를 주지만 화면에서는 이동할 id만 씁니다.
 export type BoardWriteRes = Pick<BoardItem, "boardId">;
