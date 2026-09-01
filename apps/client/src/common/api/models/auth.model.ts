@@ -1,7 +1,8 @@
 import type { FromSpec, Schemas } from "@repo/api-types/helpers";
 
 export type PositionType = NonNullable<Schemas["SignUpResponse"]["positions"]>;
-export type SocialType = "KAKAO";
+
+export type LoginReq = Schemas["LoginRequest"];
 
 export type SignupReq = Schemas["SignUpRequest"];
 
