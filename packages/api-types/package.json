@@ -5,6 +5,9 @@
 	"exports": {
 		".": {
 			"types": "./index.ts"
+		},
+		"./helpers": {
+			"types": "./helpers.ts"
 		}
 	},
 	"types": "./index.ts",
