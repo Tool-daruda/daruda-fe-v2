@@ -39,9 +39,8 @@ yarn-error.log*
 
 *storybook.log
 
-# Local docs (API 스펙 원본은 변경 이력을 추적해야 하므로 예외)
-docs/*
-!docs/swagger/
+# Local docs
+docs/
 
 # Local Claude Code config (개인 Obsidian vault 절대경로를 참조하므로 공유하지 않는다)
 .claude/

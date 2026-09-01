@@ -6,7 +6,7 @@
 		"check-types": "turbo run check-types",
 		"commit": "git-cz",
 		"dev": "turbo run dev",
-		"gen:api": "openapi-typescript docs/swagger/swagger.json -o packages/api-types/index.ts",
+		"gen:api": "openapi-typescript https://api.daruda.shop/v3/api-docs -o packages/api-types/index.ts",
 		"lint": "biome check --write --unsafe --no-errors-on-unmatched --files-ignore-unknown=true",
 		"prepare": "simple-git-hooks"
 	},
