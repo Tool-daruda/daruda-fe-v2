@@ -18,7 +18,8 @@
 			"!**/storybook-static",
 			"!**/storybook-static",
 			"**/*.{js,jsx,ts,tsx,json,css,scss,md,mdx}",
-			"!docs/swagger"
+			"!docs/swagger",
+			"!packages/api-types/index.ts"
 		]
 	},
 	"formatter": {
