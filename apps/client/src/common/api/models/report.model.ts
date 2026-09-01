@@ -1,32 +1,14 @@
-export type ReportType =
-	| "HATE_SPEECH"
-	| "ILLEGAL"
-	| "SPAM"
-	| "ADULT_CONTENT"
-	| "POLITICAL"
-	| "COMMERCIAL"
-	| "DEFAMATION";
+import type { FromSpec, Schemas } from "@repo/api-types/helpers";
 
-export interface CreateReportReq {
+export type ReportType = Schemas["CreateReportRequest"]["reportType"];
+
+// boardId·commentId는 둘 중 하나만 채워 보냅니다. 채우지 않는 쪽은 null로 명시합니다.
+export type CreateReportReq = Omit<Schemas["CreateReportRequest"], "boardId" | "commentId"> & {
 	boardId: number | null;
 	commentId: number | null;
-	reportType: ReportType;
-	title: string;
-	detail?: string;
-	commentReport: boolean;
-}
+};
 
-export interface CreateReportRes {
-	id: number;
-	reporterId: number;
-	reporterNickname: string;
-	reportedUserId: number;
-	reportedUserNickname: string;
-	boardId?: number;
-	commentId?: number;
-	reportType: ReportType;
-	title: string;
-	detail?: string;
-	createdAt: string;
-	updatedAt: string;
-}
+export type CreateReportRes = FromSpec<
+	"CreateReportResponse",
+	{ boardId?: number; commentId?: number; detail?: string }
+>;
