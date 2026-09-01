@@ -5,6 +5,7 @@
 	"scripts": {
 		"build": "next build --webpack",
 		"build:storybook": "storybook build",
+		"check-types": "tsc --noEmit",
 		"dev": "next dev --webpack -p 5173",
 		"dev:storybook": "storybook dev -p 6007",
 		"format": "biome format --write",
