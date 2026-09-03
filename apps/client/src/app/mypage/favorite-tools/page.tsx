@@ -28,6 +28,7 @@ export default async function FavoriteToolsPage() {
 						priceType={LICENSE_MAP[tool.license]}
 						badgeType={undefined}
 						variant="horizontal"
+						href={`/toollist/${tool.toolId}`}
 					/>
 				))}
 			</div>
