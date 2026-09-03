@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { ScrappedToolsProvider } from "@/common/context/scrap-context";
 import ToolCard from "./tool-card";
 
 const meta = {
@@ -25,6 +26,8 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const tags = ["생산성", "AI", "디자인"];
+
+const BOOKMARKED_TOOL_ID = 1;
 
 const defaultArgs = {
 	title: "Notion AI",
@@ -62,14 +65,21 @@ export const Horizontal: Story = {
 export const HorizontalBookmarked: Story = {
 	args: {
 		...defaultArgs,
+		toolId: BOOKMARKED_TOOL_ID,
 		title: "Figma",
 		description: "팀 기반 UI 디자인과 프로토타이핑 도구",
 		thumbnailUrl: "/window.svg",
 		priceType: "paid",
-		isBookmarked: true,
 		variant: "horizontal",
 	},
-	decorators: decorators.horizontal,
+	decorators: [
+		(Story: React.ElementType) => (
+			<ScrappedToolsProvider idsPromise={Promise.resolve([BOOKMARKED_TOOL_ID])}>
+				<Story />
+			</ScrappedToolsProvider>
+		),
+		...decorators.horizontal,
+	],
 };
 
 export const LongText: Story = {

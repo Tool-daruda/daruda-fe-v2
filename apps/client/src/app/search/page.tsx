@@ -5,7 +5,9 @@ import {
 	normalizeToolSearchResponse,
 } from "@/common/api/models/search.model";
 import type { ToolSummary } from "@/common/api/models/tool.model";
+import { getScrappedToolIds } from "@/common/api/scrap-tools";
 import { SearchApi } from "@/common/api/search-api";
+import { ScrappedToolsProvider } from "@/common/context/scrap-context";
 import { BoardSearchResults } from "./_components/board-search-results";
 import { SearchHeader } from "./_components/search-header";
 import { ToolSearchResults } from "./_components/tool-search-results";
@@ -69,7 +71,9 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 									</div>
 								}
 							>
-								<ToolSearchResults tools={tools} />
+								<ScrappedToolsProvider idsPromise={getScrappedToolIds()}>
+									<ToolSearchResults tools={tools} />
+								</ScrappedToolsProvider>
 								<BoardSearchResults
 									initialPosts={boardContents}
 									initialNextCursor={boardNextCursor}

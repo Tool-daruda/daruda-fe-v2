@@ -1,6 +1,6 @@
 "use server";
 
-import { updateTag } from "next/cache";
+import { revalidatePath, updateTag } from "next/cache";
 import { fetchServer } from "../fetch-server";
 import type { ToolLikeRes, ToolScrapRes } from "../models/tool.model";
 import { createSafeAction } from "../safe-action";
@@ -29,7 +29,10 @@ export const postToolScrapAction = createSafeAction(async (toolId: number) => {
 		method: "POST",
 	});
 
-	updateTag("tools");
+	// "tools" 태그는 건드리지 않습니다. 목록 캐시는 사용자와 무관해져서,
+	// 찜 한 번에 무효화하면 전 사용자가 쓰던 캐시가 통째로 날아갑니다.
+	revalidatePath("/mypage/favorite-tools");
+
 	return { toolId: data.toolId, isScrapped: data.scarp ?? data.scrap ?? false };
 });
 

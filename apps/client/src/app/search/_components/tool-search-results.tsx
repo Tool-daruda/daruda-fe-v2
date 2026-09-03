@@ -44,7 +44,6 @@ export function ToolSearchResults({ tools }: ToolSearchResultsProps) {
 							thumbnailUrl={tool.toolLogo}
 							description={tool.description}
 							priceType={SEARCH_LICENSE_MAP[tool.license]}
-							isBookmarked={tool.isScraped}
 							tags={tool.keywords}
 							variant="horizontal"
 							href={`/toollist/${tool.toolId}`}

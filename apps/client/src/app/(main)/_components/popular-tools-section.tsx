@@ -32,7 +32,6 @@ export const PopularToolsSection = async () => {
 						title={tool.toolName}
 						thumbnailUrl={tool.toolLogo}
 						priceType={LICENSE_MAP[tool.license]}
-						isBookmarked={tool.isScraped}
 						tags={tool.keywords}
 						badgeType="hot"
 						variant="vertical"
