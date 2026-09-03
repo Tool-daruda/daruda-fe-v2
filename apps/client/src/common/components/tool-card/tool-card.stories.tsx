@@ -74,7 +74,7 @@ export const HorizontalBookmarked: Story = {
 	},
 	decorators: [
 		(Story: React.ElementType) => (
-			<ScrappedToolsProvider idsPromise={Promise.resolve([BOOKMARKED_TOOL_ID])}>
+			<ScrappedToolsProvider initialIds={[BOOKMARKED_TOOL_ID]}>
 				<Story />
 			</ScrappedToolsProvider>
 		),

@@ -17,22 +17,10 @@ const getUserProfile = cache(async () => {
 });
 
 /**
- * @description 사용자가 찜한(스크랩한) 툴 목록 조회
- * @note 찜 목록 화면과 목록 카드의 찜 여부(getScrappedToolIds)가 같은 요청에서 함께 부르므로 캐싱합니다.
- */
-const getFavoriteTools = cache(async () => {
-	return fetchServer<FavoriteToolsRes>("/api/v1/user/scrap-tools", {
-		method: "GET",
-		cache: "no-store",
-	});
-});
-
-/**
  * @description /api/v1/user 엔드포인트와 통신하는 API 서비스입니다.
  */
 export const UserApi = {
 	getUserProfile,
-	getFavoriteTools,
 
 	/**
 	 * @description 인증이 선택적인 화면에서 현재 로그인 사용자를 조회합니다.
@@ -56,6 +44,16 @@ export const UserApi = {
 		return fetchServer<{ success: boolean }>("/api/v1/user/profile", {
 			method: "PATCH",
 			body: JSON.stringify(payload),
+		});
+	},
+
+	/**
+	 * @description 사용자가 찜한(스크랩한) 툴 목록 조회
+	 */
+	getFavoriteTools: async () => {
+		return fetchServer<FavoriteToolsRes>("/api/v1/user/scrap-tools", {
+			method: "GET",
+			cache: "no-store",
 		});
 	},
 

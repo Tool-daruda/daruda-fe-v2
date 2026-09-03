@@ -1,6 +1,4 @@
 import { Suspense } from "react";
-import { getScrappedToolIds } from "@/common/api/scrap-tools";
-import { ScrappedToolsProvider } from "@/common/context/scrap-context";
 import { FilterBar } from "./_components/filter-bar";
 import { SearchBar } from "./_components/search-bar";
 import { ToolListContent, ToolListContentSkeleton } from "./_components/tool-list-content";
@@ -27,15 +25,13 @@ export default async function ToolListPage({ searchParams }: Props) {
 			<SearchBar />
 			<div className={s.container}>
 				<FilterBar />
-				<ScrappedToolsProvider idsPromise={getScrappedToolIds()}>
-					<Suspense fallback={<ToolListContentSkeleton />}>
-						<ToolListContent
-							currentCategory={currentCategory}
-							currentCriteria={currentCriteria}
-							isFree={isFree}
-						/>
-					</Suspense>
-				</ScrappedToolsProvider>
+				<Suspense fallback={<ToolListContentSkeleton />}>
+					<ToolListContent
+						currentCategory={currentCategory}
+						currentCriteria={currentCriteria}
+						isFree={isFree}
+					/>
+				</Suspense>
 			</div>
 		</>
 	);
