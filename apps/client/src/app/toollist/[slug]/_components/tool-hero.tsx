@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { ToolApi } from "@/common/api/tool-api";
+import { getToolDetailOrNotFound } from "../_lib/get-tool-detail";
 import * as styles from "./styles/tool-hero.css";
 
 type Props = {
@@ -7,7 +7,7 @@ type Props = {
 };
 
 export const ToolHero = async ({ toolId }: Props) => {
-	const info = await ToolApi.getToolDetail(toolId);
+	const info = await getToolDetailOrNotFound(toolId);
 
 	return (
 		<section className={styles.container}>

@@ -1,11 +1,11 @@
 import Image from "next/image";
-import Link from "next/link";
-import { ToolApi } from "@/common/api/tool-api";
+import { Suspense } from "react";
+import { HeroCategoryNav, HeroCategoryNavSkeleton } from "./hero-category-nav";
 import * as s from "./hero-section.css";
 
-export const HeroSection = async () => {
-	const categories = (await ToolApi.getCategories().catch(() => null)) || [];
-
+// 제목·검색폼이 LCP라 히어로 자체는 동기 컴포넌트로 두고,
+// 데이터가 필요한 카테고리 칩만 아래에서 스트리밍합니다.
+export const HeroSection = () => {
 	return (
 		<header className={s.container}>
 			<div className={s.inner}>
@@ -37,21 +37,9 @@ export const HeroSection = async () => {
 						</button>
 					</form>
 
-					<div className={s.categorySection}>
-						<nav className={s.categoryList}>
-							{categories.map((category) => (
-								<Link
-									key={category.name}
-									href={
-										category.name === "ALL" ? "/toollist" : `/toollist?category=${category.name}`
-									}
-									className={category.name === "ALL" ? s.categoryChipActive : s.categoryChip}
-								>
-									{category.koreanName}
-								</Link>
-							))}
-						</nav>
-					</div>
+					<Suspense fallback={<HeroCategoryNavSkeleton />}>
+						<HeroCategoryNav />
+					</Suspense>
 				</div>
 			</div>
 		</header>

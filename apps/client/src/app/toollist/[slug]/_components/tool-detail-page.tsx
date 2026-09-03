@@ -1,3 +1,5 @@
+import { Suspense } from "react";
+import { Skeleton } from "@/common/components/skeleton/skeleton";
 import * as styles from "./styles/tool-detail-page.css";
 import { ToolFeatureGrid } from "./tool-feature-grid";
 import { ToolFeedbackSection } from "./tool-feedback-section";
@@ -14,6 +16,9 @@ type Props = {
 	toolId: number;
 };
 
+// ToolHero / ToolMetaBar / ToolIntroSection / ToolVideoSection / ToolFeedbackSection은
+// page.tsx가 이미 await한 상세를 요청 메모이제이션으로 재사용하므로 대기가 없습니다.
+// 자기 조회가 따로 있는 섹션만 Suspense로 끊어 스트리밍합니다.
 export const ToolDetailPage = ({ toolId }: Props) => {
 	return (
 		<div className={styles.page}>
@@ -26,16 +31,32 @@ export const ToolDetailPage = ({ toolId }: Props) => {
 
 			<div className={styles.contentLayout}>
 				<aside className={styles.sidebarArea}>
-					<ToolSidebar toolId={toolId} />
+					<Suspense fallback={<Skeleton height="320px" radius="12px" />}>
+						<ToolSidebar toolId={toolId} />
+					</Suspense>
 				</aside>
 
 				<main className={styles.mainArea}>
 					<ToolIntroSection toolId={toolId} />
-					<ToolFeatureGrid toolId={toolId} />
+
+					<Suspense fallback={<Skeleton height="180px" radius="12px" />}>
+						<ToolFeatureGrid toolId={toolId} />
+					</Suspense>
+
 					<ToolVideoSection toolId={toolId} />
-					<ToolPricingSection toolId={toolId} />
-					<ToolUseCaseSection toolId={toolId} />
-					<ToolRelatedPostSection toolId={toolId} />
+
+					<Suspense fallback={<Skeleton height="180px" radius="12px" />}>
+						<ToolPricingSection toolId={toolId} />
+					</Suspense>
+
+					<Suspense fallback={<Skeleton height="180px" radius="12px" />}>
+						<ToolUseCaseSection toolId={toolId} />
+					</Suspense>
+
+					<Suspense fallback={<Skeleton height="180px" radius="12px" />}>
+						<ToolRelatedPostSection toolId={toolId} />
+					</Suspense>
+
 					<ToolFeedbackSection toolId={toolId} />
 				</main>
 			</div>
