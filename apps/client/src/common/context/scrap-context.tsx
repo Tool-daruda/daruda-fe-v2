@@ -1,6 +1,14 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
+import {
+	createContext,
+	useCallback,
+	useContext,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from "react";
 import { useIsLoggedIn } from "./auth-context";
 
 interface ScrappedTools {
@@ -12,17 +20,11 @@ const EMPTY: ScrappedTools = { ids: new Set(), setScrapped: () => {} };
 
 const ScrappedToolsContext = createContext<ScrappedTools>(EMPTY);
 
-// 라우트를 옮겨다녀도 한 세션에 한 번만 부르도록 프로미스를 붙들어 둡니다.
-let pendingRequest: Promise<number[]> | null = null;
-
-const loadScrappedIds = () => {
-	pendingRequest ??= fetch("/api/scrap-tools")
+const fetchScrappedIds = () =>
+	fetch("/api/scrap-tools")
 		.then((res) => (res.ok ? res.json() : { toolIds: [] }))
 		.then((body: { toolIds?: number[] }) => body.toolIds ?? [])
-		.catch(() => []);
-
-	return pendingRequest;
-};
+		.catch((): number[] => []);
 
 /**
  * @description 찜한 툴 ID를 브라우저에서 받아 카드들에 뿌립니다.
@@ -40,6 +42,11 @@ export const ScrappedToolsProvider = ({
 	const isLoggedIn = useIsLoggedIn();
 	const [ids, setIds] = useState<Set<number>>(() => new Set(initialIds));
 
+	// 라우트를 옮겨다녀도 한 세션에 한 번만 부르도록 프로미스를 붙들어 둡니다.
+	// 모듈 전역이 아니라 ref에 두는 이유는, 클라이언트 컴포넌트 모듈이 SSR 때 서버에서도
+	// 평가되기 때문입니다. 전역에 두면 언젠가 한 사용자의 찜이 다른 사용자에게 새는 통로가 됩니다.
+	const pendingRequest = useRef<Promise<number[]> | null>(null);
+
 	// 배열을 그대로 의존성에 넣으면 인라인 리터럴마다 effect가 다시 돕니다.
 	const isFixed = initialIds !== undefined;
 
@@ -48,13 +55,15 @@ export const ScrappedToolsProvider = ({
 
 		if (!isLoggedIn) {
 			// 다음 로그인이 새로 받도록 붙들어둔 프로미스까지 버립니다.
-			pendingRequest = null;
+			pendingRequest.current = null;
 			setIds((prev) => (prev.size === 0 ? prev : new Set()));
 			return;
 		}
 
+		pendingRequest.current ??= fetchScrappedIds();
+
 		let alive = true;
-		loadScrappedIds().then((loaded) => {
+		pendingRequest.current.then((loaded) => {
 			if (alive) setIds(new Set(loaded));
 		});
 
