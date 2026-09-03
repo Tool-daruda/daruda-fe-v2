@@ -1,5 +1,4 @@
 import { Suspense } from "react";
-import { Skeleton } from "@/common/components/skeleton/skeleton";
 import * as styles from "./styles/tool-detail-page.css";
 import { ToolFeatureGrid } from "./tool-feature-grid";
 import { ToolFeedbackSection } from "./tool-feedback-section";
@@ -8,6 +7,7 @@ import { ToolIntroSection } from "./tool-intro-section";
 import { ToolMetaBar } from "./tool-meta-bar";
 import { ToolPricingSection } from "./tool-pricing-section";
 import { ToolRelatedPostSection } from "./tool-related-post-section";
+import { ToolSectionSkeleton } from "./tool-section-skeleton";
 import { ToolSidebar } from "./tool-sidebar";
 import { ToolUseCaseSection } from "./tool-use-case-section";
 import { ToolVideoSection } from "./tool-video-section";
@@ -31,7 +31,7 @@ export const ToolDetailPage = ({ toolId }: Props) => {
 
 			<div className={styles.contentLayout}>
 				<aside className={styles.sidebarArea}>
-					<Suspense fallback={<Skeleton height="320px" radius="12px" />}>
+					<Suspense fallback={<ToolSectionSkeleton bodyHeight="260px" />}>
 						<ToolSidebar toolId={toolId} />
 					</Suspense>
 				</aside>
@@ -39,21 +39,21 @@ export const ToolDetailPage = ({ toolId }: Props) => {
 				<main className={styles.mainArea}>
 					<ToolIntroSection toolId={toolId} />
 
-					<Suspense fallback={<Skeleton height="180px" radius="12px" />}>
+					<Suspense fallback={<ToolSectionSkeleton bodyHeight="120px" cards={4} />}>
 						<ToolFeatureGrid toolId={toolId} />
 					</Suspense>
 
 					<ToolVideoSection toolId={toolId} />
 
-					<Suspense fallback={<Skeleton height="180px" radius="12px" />}>
+					<Suspense fallback={<ToolSectionSkeleton bodyHeight="240px" />}>
 						<ToolPricingSection toolId={toolId} />
 					</Suspense>
 
-					<Suspense fallback={<Skeleton height="180px" radius="12px" />}>
+					<Suspense fallback={<ToolSectionSkeleton bodyHeight="160px" />}>
 						<ToolUseCaseSection toolId={toolId} />
 					</Suspense>
 
-					<Suspense fallback={<Skeleton height="180px" radius="12px" />}>
+					<Suspense fallback={<ToolSectionSkeleton bodyHeight="200px" />}>
 						<ToolRelatedPostSection toolId={toolId} />
 					</Suspense>
 
