@@ -32,8 +32,7 @@ export const ToolApi = {
 			...(params.lastToolId && { lastToolId: String(params.lastToolId) }),
 		}).toString();
 
-		// 쿠키를 안 붙여야 전 사용자가 캐시를 공유합니다.
-		// 그래서 응답의 isScraped는 항상 false로 오고, 찜 여부는 getScrappedToolIds로 따로 받습니다.
+		// 쿠키를 안 붙여야 전 사용자가 캐시를 공유합니다. 응답의 isScraped는 항상 false로 옵니다.
 		// tags만으로는 Data Cache에 들어가지 않아 force-cache/revalidate가 함께 있어야 합니다.
 		return fetchPublic<ToolListRes>(`/api/v1/tool?${query}`, {
 			cache: "force-cache",

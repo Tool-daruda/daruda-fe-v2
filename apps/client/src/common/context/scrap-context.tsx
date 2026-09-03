@@ -27,15 +27,14 @@ const fetchScrappedIds = () =>
 		.catch((): number[] => []);
 
 /**
- * @description 찜한 툴 ID를 브라우저에서 받아 카드들에 뿌립니다.
- * @note 서버에서 받지 않는 이유는 scrap-tools가 200ms 넘게 걸려 RSC 스트림을 붙잡기 때문입니다.
- * 툴 목록은 공개 캐시라 즉시 나가고, 찜 여부만 뒤늦게 칠해집니다.
+ * @description 찜한 툴 ID를 브라우저에서 조회합니다.
+ * 서버에서 받으면 scrap-tools의 200ms만큼 RSC 스트림이 붙잡힙니다.
  */
 export const ScrappedToolsProvider = ({
 	initialIds,
 	children,
 }: {
-	/** 조회 없이 값을 고정합니다. 스토리북처럼 네트워크가 없는 환경용입니다. */
+	/** 스토리북처럼 네트워크가 없는 환경에서 값을 고정합니다. */
 	initialIds?: number[];
 	children: React.ReactNode;
 }) => {
@@ -43,8 +42,7 @@ export const ScrappedToolsProvider = ({
 	const [ids, setIds] = useState<Set<number>>(() => new Set(initialIds));
 
 	// 라우트를 옮겨다녀도 한 세션에 한 번만 부르도록 프로미스를 붙들어 둡니다.
-	// 모듈 전역이 아니라 ref에 두는 이유는, 클라이언트 컴포넌트 모듈이 SSR 때 서버에서도
-	// 평가되기 때문입니다. 전역에 두면 언젠가 한 사용자의 찜이 다른 사용자에게 새는 통로가 됩니다.
+	// 모듈 전역에 두면 SSR 때 서버에서도 평가돼 사용자끼리 공유됩니다.
 	const pendingRequest = useRef<Promise<number[]> | null>(null);
 
 	// 배열을 그대로 의존성에 넣으면 인라인 리터럴마다 effect가 다시 돕니다.

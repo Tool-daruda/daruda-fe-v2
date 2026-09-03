@@ -16,7 +16,7 @@ interface Props {
 }
 
 /**
- * @note 메뉴는 열렸을 때만 그려집니다. 프로필을 기다리는 지점을 카드 본문 밖인 여기까지 미루려고 분리했습니다.
+ * @note 프로필을 기다리는 지점을 카드 본문 밖으로 밀려고 분리했습니다. 메뉴는 열렸을 때만 그려집니다.
  */
 export const MainCommunityMenu = ({ post, onClose, onReport }: Props) => {
 	const currentUser = useCurrentUser();

@@ -22,9 +22,7 @@ export const UserProvider = ({
 }) => <UserContext.Provider value={user}>{children}</UserContext.Provider>;
 
 /**
- * @description 현재 사용자를 읽습니다.
- * @note 프로바이더가 프로미스를 받았다면 풀릴 때까지 서스펜드하므로,
- * 그런 화면에서는 이 훅을 쓰는 부분을 `<Suspense>` 안에 둬야 합니다.
+ * @note 프로바이더가 프로미스를 받았다면 풀릴 때까지 서스펜드합니다. `<Suspense>` 안에서 써야 합니다.
  */
 export const useCurrentUser = (): ContextUser => {
 	const value = useContext(UserContext);
