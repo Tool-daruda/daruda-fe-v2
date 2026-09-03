@@ -4,7 +4,8 @@ import { Skeleton } from "@/common/components/skeleton/skeleton";
 import * as s from "./hero-section.css";
 
 // 칩 폭이 제각각이라 대표적인 너비를 섞어 실제 줄바꿈에 가깝게 맞춥니다.
-const CHIP_WIDTHS = [
+// 폭은 겹칠 수 있어 키로 못 쓰므로 생성 시점에 고유 id를 붙입니다.
+const CHIP_SLOTS = [
 	"52px",
 	"76px",
 	"64px",
@@ -15,13 +16,13 @@ const CHIP_WIDTHS = [
 	"60px",
 	"74px",
 	"66px",
-];
+].map((width, i) => ({ id: `chip-${i}`, width }));
 
 export const HeroCategoryNavSkeleton = () => (
 	<div className={s.categorySection}>
 		<div className={s.categoryList}>
-			{CHIP_WIDTHS.map((width) => (
-				<Skeleton key={width} width={width} height="24px" radius="39px" />
+			{CHIP_SLOTS.map(({ id, width }) => (
+				<Skeleton key={id} width={width} height="24px" radius="39px" />
 			))}
 		</div>
 	</div>

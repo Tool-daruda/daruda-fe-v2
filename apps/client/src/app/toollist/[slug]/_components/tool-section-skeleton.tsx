@@ -2,13 +2,10 @@ import { Skeleton } from "@/common/components/skeleton/skeleton";
 import * as styles from "./styles/tool-section-skeleton.css";
 
 type Props = {
-	/** 본문 자리 높이. 섹션마다 실제 콘텐츠에 가깝게 넘깁니다. */
 	bodyHeight: string;
-	/** 2열 그리드로 그릴 카드 수. 없으면 단일 블록입니다. */
+	/** 넘기면 2열 그리드로, 없으면 단일 블록으로 그립니다. */
 	cards?: number;
 };
-
-const CARD_SLOTS = ["1", "2", "3", "4", "5", "6"];
 
 /**
  * @description 툴 상세 섹션의 로딩 자리를 채웁니다.
@@ -21,7 +18,7 @@ export const ToolSectionSkeleton = ({ bodyHeight, cards }: Props) => (
 
 		{cards ? (
 			<div className={styles.grid}>
-				{CARD_SLOTS.slice(0, cards).map((slot) => (
+				{Array.from({ length: cards }, (_, i) => `card-${i}`).map((slot) => (
 					<Skeleton key={slot} height={bodyHeight} radius="12px" />
 				))}
 			</div>

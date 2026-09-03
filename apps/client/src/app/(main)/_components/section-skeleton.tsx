@@ -3,9 +3,9 @@ import * as postGrid from "./popular-posts-section.css";
 import * as header from "./section-header.css";
 import * as toolRow from "./tool-row.css";
 
-// Biome noArrayIndexKey를 피하려고 자리 개수를 고정 배열로 둡니다.
-const TOOL_SLOTS = ["1", "2", "3", "4", "5"];
-const POST_SLOTS = ["1", "2", "3", "4", "5", "6"];
+// Biome noArrayIndexKey를 피하려고 인덱스 대신 고유 키를 만들어 둡니다.
+const TOOL_SLOTS = Array.from({ length: 5 }, (_, i) => `tool-${i}`);
+const POST_SLOTS = Array.from({ length: 6 }, (_, i) => `post-${i}`);
 
 // 섹션 헤더는 SectionHeader와 같은 컨테이너를 써서 marginBottom(20px)까지 맞춥니다.
 const SectionHeaderSkeleton = () => (
