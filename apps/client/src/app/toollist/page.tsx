@@ -12,9 +12,8 @@ interface Props {
 	}>;
 }
 
-// 데이터가 필요한 건 사이드바와 목록뿐이라 그 아래만 Suspense로 끊습니다.
-// loading.tsx를 쓰면 중첩 세그먼트인 /toollist/[slug]까지 덮여
-// 없는 툴이 404 대신 200으로 나갑니다.
+// loading.tsx를 두면 중첩 세그먼트인 /toollist/[slug]까지 덮여서
+// 없는 툴이 404 대신 200으로 나갑니다. 그래서 페이지 안에서 끊습니다.
 export default async function ToolListPage({ searchParams }: Props) {
 	const resolvedSearchParams = await searchParams;
 	const currentCategory = resolvedSearchParams.category || "ALL";

@@ -1,6 +1,6 @@
 import { style } from "@vanilla-extract/css";
 
-// 각 섹션의 container(padding 32px / gap 20px)와 같은 리듬을 씁니다.
+// 각 섹션의 container와 같은 값이어야 로딩 자리와 실제 콘텐츠가 어긋나지 않습니다.
 export const container = style({
 	padding: "32px",
 	display: "flex",

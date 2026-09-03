@@ -173,9 +173,9 @@ async function handleRequest(request: NextRequest) {
 }
 
 export const config = {
-	// isAuthProtected가 다루는 경로 + /signup만 매칭한다.
-	// toollist는 보호 경로가 아니라 미들웨어가 아무 일도 하지 않으므로 뺐다.
-	// (로그인 상태에서 clearLegacyHostOnlyCookies가 Set-Cookie를 붙여 캐시를 깨뜨리기도 한다)
+	// isAuthProtected가 보는 경로와 /signup만 넣습니다.
+	// toollist는 보호 경로가 아니라 미들웨어가 하는 일이 없고,
+	// 로그인 상태에서는 Set-Cookie가 붙어 캐시만 깨뜨렸습니다.
 	matcher: [
 		"/signup",
 		"/community/write",

@@ -3,8 +3,8 @@ import { Suspense } from "react";
 import { HeroCategoryNav, HeroCategoryNavSkeleton } from "./hero-category-nav";
 import * as s from "./hero-section.css";
 
-// 제목·검색폼이 LCP라 히어로 자체는 동기 컴포넌트로 두고,
-// 데이터가 필요한 카테고리 칩만 아래에서 스트리밍합니다.
+// 제목과 검색폼이 LCP라 히어로는 기다리지 않고 바로 내보냅니다.
+// 조회가 필요한 카테고리 칩만 아래에서 따로 스트리밍합니다.
 export const HeroSection = () => {
 	return (
 		<header className={s.container}>

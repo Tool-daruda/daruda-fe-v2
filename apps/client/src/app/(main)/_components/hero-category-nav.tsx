@@ -4,7 +4,7 @@ import { Skeleton } from "@/common/components/skeleton/skeleton";
 import * as s from "./hero-section.css";
 
 // 칩 폭이 제각각이라 대표적인 너비를 섞어 실제 줄바꿈에 가깝게 맞춥니다.
-// 폭은 겹칠 수 있어 키로 못 쓰므로 생성 시점에 고유 id를 붙입니다.
+// 폭은 서로 겹칠 수 있어 key로 쓰지 못합니다.
 const CHIP_SLOTS = [
 	"52px",
 	"76px",

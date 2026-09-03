@@ -16,9 +16,8 @@ type Props = {
 	toolId: number;
 };
 
-// ToolHero / ToolMetaBar / ToolIntroSection / ToolVideoSection / ToolFeedbackSection은
-// page.tsx가 이미 await한 상세를 요청 메모이제이션으로 재사용하므로 대기가 없습니다.
-// 자기 조회가 따로 있는 섹션만 Suspense로 끊어 스트리밍합니다.
+// 상세만 읽는 섹션들은 page.tsx가 이미 받아온 걸 재사용하므로 기다릴 게 없습니다.
+// 자기 조회가 따로 있는 섹션만 Suspense로 끊습니다.
 export const ToolDetailPage = ({ toolId }: Props) => {
 	return (
 		<div className={styles.page}>

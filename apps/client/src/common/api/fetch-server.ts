@@ -19,15 +19,12 @@ const SPRING_API_URL = process.env.API_BASE_URL;
 
 const AUTH_REISSUE_ENDPOINT = "/api/v1/auth/reissue";
 
-// 요청 성공 경로의 로그는 개발용입니다. 실패 로그(warn/error)는 항상 남깁니다.
-// DEBUG_FETCH_LOG=1은 성능 측정 때 프로덕션 빌드에서 업스트림 호출을 세기 위한 스위치입니다.
+// 성공 로그는 개발용입니다. 실패 로그는 프로덕션에서도 남깁니다.
+// DEBUG_FETCH_LOG=1은 프로덕션 빌드에서 업스트림 호출을 셀 때 씁니다.
 const isDev = process.env.NODE_ENV === "development" || process.env.DEBUG_FETCH_LOG === "1";
 
 export type FetchOptions = RequestInit & {
-	/**
-	 * 200 응답에 `data`가 없어도 통과시킵니다.
-	 * 본문을 돌려주지 않는 뮤테이션(탈퇴, 알림 읽음 처리 등)에만 씁니다.
-	 */
+	/** 200에 `data`가 없어도 통과시킵니다. 본문을 안 주는 뮤테이션에만 씁니다. */
 	allowEmptyData?: boolean;
 };
 
@@ -169,7 +166,7 @@ export async function fetchServer<T>(endpoint: string, options: FetchOptions = {
 	const refreshToken = cookieStore.get("refreshToken")?.value;
 	const mergedHeaders = createHeaders(init, createCookieHeader(accessToken, refreshToken));
 
-	// 헤더 순회와 JSON.stringify가 요청마다 도는 비용이라 개발 환경에서만 남깁니다.
+	// 헤더 순회와 JSON.stringify가 요청마다 도니 개발에서만 찍습니다.
 	if (isDev) {
 		console.log(`\n[FETCH START] ${init.method || "GET"} -> ${SPRING_API_URL}${endpoint}`);
 		console.log("[FETCH COOKIE]", {
@@ -237,8 +234,8 @@ export async function fetchServer<T>(endpoint: string, options: FetchOptions = {
 
 		const result: ApiResponse<T> = await response.json();
 
-		// ApiResponse는 `data: T`로 항상 있다고 선언하지만 런타임 보장이 없습니다.
-		// 여기서 끊지 않으면 undefined가 화면까지 흘러가 어느 엔드포인트가 문제인지 안 드러납니다.
+		// ApiResponse는 `data: T`라고 선언하지만 서버가 빠뜨릴 수 있습니다.
+		// 여기서 안 끊으면 undefined가 화면까지 흘러가 어디가 문제인지 안 보입니다.
 		if (!allowEmptyData && (result.data === undefined || result.data === null)) {
 			throw new ApiError(`응답에 data가 없습니다`, response.status, result);
 		}

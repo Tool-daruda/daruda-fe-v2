@@ -3,11 +3,10 @@ import * as postGrid from "./popular-posts-section.css";
 import * as header from "./section-header.css";
 import * as toolRow from "./tool-row.css";
 
-// Biome noArrayIndexKey를 피하려고 인덱스 대신 고유 키를 만들어 둡니다.
+// 인덱스를 key로 쓰면 Biome이 막으므로 고유 키를 미리 만들어 둡니다.
 const TOOL_SLOTS = Array.from({ length: 5 }, (_, i) => `tool-${i}`);
 const POST_SLOTS = Array.from({ length: 6 }, (_, i) => `post-${i}`);
 
-// 섹션 헤더는 SectionHeader와 같은 컨테이너를 써서 marginBottom(20px)까지 맞춥니다.
 const SectionHeaderSkeleton = () => (
 	<div className={header.container}>
 		<Skeleton width="280px" height="26px" />
@@ -15,10 +14,8 @@ const SectionHeaderSkeleton = () => (
 	</div>
 );
 
-/**
- * @description 메인 툴 섹션(가로 5칸)의 로딩 자리를 채웁니다.
- * @note 카드 높이 150px은 ToolCard vertical variant와 같습니다.
- */
+// 150px, 148px은 각각 ToolCard vertical과 MainCommunityCard의 실제 높이입니다.
+// 다르게 잡으면 스트리밍이 끝나는 순간 아래 섹션이 밀립니다.
 export const ToolRowSkeleton = () => (
 	<section>
 		<SectionHeaderSkeleton />
@@ -30,9 +27,6 @@ export const ToolRowSkeleton = () => (
 	</section>
 );
 
-/**
- * @description 메인 인기글 섹션(2열 그리드)의 로딩 자리를 채웁니다.
- */
 export const PostGridSkeleton = () => (
 	<section>
 		<SectionHeaderSkeleton />
