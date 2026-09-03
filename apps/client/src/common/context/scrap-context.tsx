@@ -40,8 +40,18 @@ export const ScrappedToolsProvider = ({
 	const isLoggedIn = useIsLoggedIn();
 	const [ids, setIds] = useState<Set<number>>(() => new Set(initialIds));
 
+	// 배열을 그대로 의존성에 넣으면 인라인 리터럴마다 effect가 다시 돕니다.
+	const isFixed = initialIds !== undefined;
+
 	useEffect(() => {
-		if (initialIds || !isLoggedIn) return;
+		if (isFixed) return;
+
+		if (!isLoggedIn) {
+			// 다음 로그인이 새로 받도록 붙들어둔 프로미스까지 버립니다.
+			pendingRequest = null;
+			setIds((prev) => (prev.size === 0 ? prev : new Set()));
+			return;
+		}
 
 		let alive = true;
 		loadScrappedIds().then((loaded) => {
@@ -51,7 +61,7 @@ export const ScrappedToolsProvider = ({
 		return () => {
 			alive = false;
 		};
-	}, [initialIds, isLoggedIn]);
+	}, [isFixed, isLoggedIn]);
 
 	const setScrapped = useCallback((toolId: number, next: boolean) => {
 		setIds((prev) => {
