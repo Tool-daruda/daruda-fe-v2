@@ -19,6 +19,10 @@ const SPRING_API_URL = process.env.API_BASE_URL;
 
 const AUTH_REISSUE_ENDPOINT = "/api/v1/auth/reissue";
 
+// 요청 성공 경로의 로그는 개발용입니다. 실패 로그(warn/error)는 항상 남깁니다.
+// DEBUG_FETCH_LOG=1은 성능 측정 때 프로덕션 빌드에서 업스트림 호출을 세기 위한 스위치입니다.
+const isDev = process.env.NODE_ENV === "development" || process.env.DEBUG_FETCH_LOG === "1";
+
 function createHeaders(options: RequestInit, cookieHeader: string) {
 	const defaultHeaders: Record<string, string> = {
 		"Content-Type": "application/json",
@@ -61,7 +65,7 @@ async function clearAuthCookiesSafely() {
 async function reissueAccessToken(refreshToken: string) {
 	if (!SPRING_API_URL) return null;
 
-	console.log(`[FETCH REISSUE START] POST -> ${SPRING_API_URL}${AUTH_REISSUE_ENDPOINT}`);
+	if (isDev) console.log(`[FETCH REISSUE START] POST -> ${SPRING_API_URL}${AUTH_REISSUE_ENDPOINT}`);
 
 	try {
 		const response = await fetch(`${SPRING_API_URL}${AUTH_REISSUE_ENDPOINT}`, {
@@ -97,7 +101,7 @@ async function reissueAccessToken(refreshToken: string) {
 			return null;
 		}
 
-		console.log(`[FETCH REISSUE SUCCESS] New accessToken obtained`);
+		if (isDev) console.log(`[FETCH REISSUE SUCCESS] New accessToken obtained`);
 
 		if (accessToken && setCookieHeaders.length === 0) {
 			try {
@@ -155,39 +159,42 @@ export async function fetchServer<T>(endpoint: string, options: RequestInit = {}
 	const refreshToken = cookieStore.get("refreshToken")?.value;
 	const mergedHeaders = createHeaders(options, createCookieHeader(accessToken, refreshToken));
 
-	console.log(`\n[FETCH START] ${options.method || "GET"} -> ${SPRING_API_URL}${endpoint}`);
-	console.log("[FETCH COOKIE]", {
-		hasAccessToken: Boolean(accessToken),
-		hasRefreshToken: Boolean(refreshToken),
-	});
+	// 헤더 순회와 JSON.stringify가 요청마다 도는 비용이라 개발 환경에서만 남깁니다.
+	if (isDev) {
+		console.log(`\n[FETCH START] ${options.method || "GET"} -> ${SPRING_API_URL}${endpoint}`);
+		console.log("[FETCH COOKIE]", {
+			hasAccessToken: Boolean(accessToken),
+			hasRefreshToken: Boolean(refreshToken),
+		});
 
-	console.log(`\n=================== [FETCH REQUEST] ===================`);
-	console.log(`▶ URL    : [${options.method || "GET"}] ${SPRING_API_URL}${endpoint}`);
+		console.log(`\n=================== [FETCH REQUEST] ===================`);
+		console.log(`▶ URL    : [${options.method || "GET"}] ${SPRING_API_URL}${endpoint}`);
 
-	const headersObj: Record<string, string> = {};
-	mergedHeaders.forEach((value, key) => {
-		headersObj[key] = value;
-	});
-	const redactedHeaders = {
-		...headersObj,
-		cookie: headersObj.cookie ? "[REDACTED]" : undefined,
-		authorization: headersObj.authorization ? "[REDACTED]" : undefined,
-	};
-	console.log(`▶ HEADERS:`, redactedHeaders);
+		const headersObj: Record<string, string> = {};
+		mergedHeaders.forEach((value, key) => {
+			headersObj[key] = value;
+		});
+		const redactedHeaders = {
+			...headersObj,
+			cookie: headersObj.cookie ? "[REDACTED]" : undefined,
+			authorization: headersObj.authorization ? "[REDACTED]" : undefined,
+		};
+		console.log(`▶ HEADERS:`, redactedHeaders);
 
-	if (options.body && !endpoint.startsWith("/api/v1/auth")) {
-		try {
-			const parsedBody = JSON.parse(options.body as string);
-			console.log(`▶ PAYLOAD:\n`, JSON.stringify(parsedBody, null, 2));
-		} catch {
-			console.log(`▶ PAYLOAD:`, options.body);
+		if (options.body && !endpoint.startsWith("/api/v1/auth")) {
+			try {
+				const parsedBody = JSON.parse(options.body as string);
+				console.log(`▶ PAYLOAD:\n`, JSON.stringify(parsedBody, null, 2));
+			} catch {
+				console.log(`▶ PAYLOAD:`, options.body);
+			}
+		} else if (options.body) {
+			console.log(`▶ PAYLOAD: [REDACTED]`);
+		} else {
+			console.log(`▶ PAYLOAD: None`);
 		}
-	} else if (options.body) {
-		console.log(`▶ PAYLOAD: [REDACTED]`);
-	} else {
-		console.log(`▶ PAYLOAD: None`);
+		console.log(`=======================================================\n`);
 	}
-	console.log(`=======================================================\n`);
 
 	try {
 		let response = await fetch(`${SPRING_API_URL}${endpoint}`, {
@@ -216,11 +223,11 @@ export async function fetchServer<T>(endpoint: string, options: RequestInit = {}
 			await parseErrorResponse(response, endpoint);
 		}
 
-		console.log(`[FETCH SUCCESS] ${response.status} <- ${endpoint}`);
+		if (isDev) console.log(`[FETCH SUCCESS] ${response.status} <- ${endpoint}`);
 
 		const result: ApiResponse<T> = await response.json();
 
-		if (process.env.NODE_ENV === "development") {
+		if (isDev) {
 			console.log(`⬅️ RESPONSE:`, JSON.stringify(result.data, null, 2));
 		}
 
