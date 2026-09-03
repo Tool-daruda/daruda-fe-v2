@@ -1,5 +1,6 @@
 import { ApiError } from "./errors/api-error";
 import type { FetchOptions } from "./fetch-server";
+import { maskEndpoint } from "./mask-endpoint";
 import type { ApiResponse } from "./models/api-response.model";
 
 const SPRING_API_URL = process.env.API_BASE_URL;
@@ -63,13 +64,13 @@ export async function fetchPublic<T>(endpoint: string, options: FetchOptions = {
 		}
 
 		if (isDev) {
-			console.log(`[PUBLIC] ${response.status} <- ${endpoint}`);
+			console.log(`[PUBLIC] ${response.status} <- ${maskEndpoint(endpoint)}`);
 		}
 
 		return result.data;
 	} catch (error) {
 		if (!(error instanceof ApiError)) {
-			console.error(`[fetchPublic Error] ${endpoint}:`, error);
+			console.error(`[fetchPublic Error] ${maskEndpoint(endpoint)}:`, error);
 		}
 		throw error;
 	}
