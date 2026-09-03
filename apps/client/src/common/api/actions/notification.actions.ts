@@ -20,6 +20,8 @@ async function getRecentNotifications(_?: undefined) {
 
 async function readNotification(id: number) {
 	return fetchServer<void>(`/api/v1/notification/read/${id}`, {
+		// 본문 없이 200만 돌려주는 엔드포인트입니다.
+		allowEmptyData: true,
 		method: "PATCH",
 	});
 }

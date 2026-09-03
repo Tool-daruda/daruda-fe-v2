@@ -34,8 +34,6 @@ const getVideoThumbnailUrl = (url: string) => {
 export const ToolVideoSection = async ({ toolId }: Props) => {
 	const info = await getToolDetailOrNotFound(toolId);
 
-	if (!info) return null;
-
 	const videos = info.videos ?? [];
 
 	return (

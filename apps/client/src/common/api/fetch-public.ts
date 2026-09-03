@@ -1,4 +1,5 @@
 import { ApiError } from "./errors/api-error";
+import type { FetchOptions } from "./fetch-server";
 import type { ApiResponse } from "./models/api-response.model";
 
 const SPRING_API_URL = process.env.API_BASE_URL;
@@ -8,22 +9,24 @@ const SPRING_API_URL = process.env.API_BASE_URL;
  * 쿠키를 붙이지 않으므로 Next.js Data Cache가 사용자 구분 없이 공유됩니다.
  * 반드시 서버 컴포넌트 또는 Server Action 내에서만 호출하세요.
  */
-export async function fetchPublic<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
+export async function fetchPublic<T>(endpoint: string, options: FetchOptions = {}): Promise<T> {
 	if (!SPRING_API_URL) {
 		throw new Error("API_BASE_URL is not configured");
 	}
 
+	const { allowEmptyData = false, ...init } = options;
+
 	const headers = new Headers({ "Content-Type": "application/json" });
 
-	if (options.headers) {
-		for (const [key, value] of new Headers(options.headers).entries()) {
+	if (init.headers) {
+		for (const [key, value] of new Headers(init.headers).entries()) {
 			headers.set(key, value);
 		}
 	}
 
 	try {
 		const response = await fetch(`${SPRING_API_URL}${endpoint}`, {
-			...options,
+			...init,
 			headers,
 		});
 
@@ -50,6 +53,11 @@ export async function fetchPublic<T>(endpoint: string, options: RequestInit = {}
 		}
 
 		const result: ApiResponse<T> = await response.json();
+
+		// fetchServer와 같은 이유로 data 누락을 여기서 끊습니다.
+		if (!allowEmptyData && (result.data === undefined || result.data === null)) {
+			throw new ApiError(`응답에 data가 없습니다`, response.status, result);
+		}
 
 		if (process.env.NODE_ENV === "development") {
 			console.log(`[PUBLIC] ${response.status} <- ${endpoint}`);

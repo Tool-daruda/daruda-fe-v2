@@ -11,7 +11,6 @@ type Props = {
 export const ToolIntroSection = async ({ toolId }: Props) => {
 	const info = await getToolDetailOrNotFound(toolId);
 
-	if (!info) return null;
 	const introImages = info.images || [];
 
 	const imageCountByUrl = new Map<string, number>();

@@ -21,8 +21,6 @@ const getSupportedPlatforms = (platforms: ToolDetailRes["platform"]): string[] =
 export const ToolMetaBar = async ({ toolId }: Props) => {
 	const info = await getToolDetailOrNotFound(toolId);
 
-	if (!info) return null;
-
 	const keywords = info.keywords ? info.keywords.slice(0, 2) : [];
 	const platforms = getSupportedPlatforms(info.platform);
 
