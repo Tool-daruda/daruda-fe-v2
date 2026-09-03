@@ -45,6 +45,9 @@ export const ScrappedToolsProvider = ({
 	// 모듈 전역에 두면 SSR 때 서버에서도 평가돼 사용자끼리 공유됩니다.
 	const pendingRequest = useRef<Promise<number[]> | null>(null);
 
+	// 목록이 도착하기 전에 사용자가 누른 것들. 스냅샷은 이 클릭 이전 상태라 그대로 덮으면 되돌아갑니다.
+	const localEdits = useRef(new Map<number, boolean>());
+
 	// 배열을 그대로 의존성에 넣으면 인라인 리터럴마다 effect가 다시 돕니다.
 	const isFixed = initialIds !== undefined;
 
@@ -54,6 +57,7 @@ export const ScrappedToolsProvider = ({
 		if (!isLoggedIn) {
 			// 다음 로그인이 새로 받도록 붙들어둔 프로미스까지 버립니다.
 			pendingRequest.current = null;
+			localEdits.current.clear();
 			setIds((prev) => (prev.size === 0 ? prev : new Set()));
 			return;
 		}
@@ -62,7 +66,15 @@ export const ScrappedToolsProvider = ({
 
 		let alive = true;
 		pendingRequest.current.then((loaded) => {
-			if (alive) setIds(new Set(loaded));
+			if (!alive) return;
+
+			const next = new Set(loaded);
+			// 기다리는 동안 누른 건 서버가 이미 처리했으니 스냅샷보다 우선합니다.
+			for (const [toolId, scrapped] of localEdits.current) {
+				if (scrapped) next.add(toolId);
+				else next.delete(toolId);
+			}
+			setIds(next);
 		});
 
 		return () => {
@@ -71,6 +83,7 @@ export const ScrappedToolsProvider = ({
 	}, [isFixed, isLoggedIn]);
 
 	const setScrapped = useCallback((toolId: number, next: boolean) => {
+		localEdits.current.set(toolId, next);
 		setIds((prev) => {
 			const updated = new Set(prev);
 			if (next) updated.add(toolId);
