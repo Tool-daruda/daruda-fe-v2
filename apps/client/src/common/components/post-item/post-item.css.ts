@@ -4,6 +4,8 @@ export const postCard = style({
 	display: "flex",
 	justifyContent: "space-between",
 	alignItems: "flex-start",
+	// 썸네일이 없으면 간격도 같이 사라지도록 padding이 아닌 gap으로 띄웁니다.
+	gap: "32px",
 	padding: "24px 0",
 	borderBottom: "1px solid #F0F0F0",
 	cursor: "pointer",
@@ -11,7 +13,6 @@ export const postCard = style({
 
 export const postContent = style({
 	flex: 1,
-	paddingRight: "32px",
 });
 
 export const postHeader = style({
@@ -76,13 +77,12 @@ export const iconText = style({
 	gap: "4px",
 });
 
-export const thumbnailPlaceholder = style({
+export const thumbnail = style({
+	position: "relative",
 	width: "120px",
 	height: "120px",
 	borderRadius: "8px",
 	flexShrink: 0,
+	overflow: "hidden",
 	backgroundColor: "#F9F9F9",
-	backgroundImage: `linear-gradient(45deg, #EBEBEB 25%, transparent 25%, transparent 75%, #EBEBEB 75%, #EBEBEB), linear-gradient(45deg, #EBEBEB 25%, transparent 25%, transparent 75%, #EBEBEB 75%, #EBEBEB)`,
-	backgroundSize: "8px 8px",
-	backgroundPosition: "0 0, 4px 4px",
 });

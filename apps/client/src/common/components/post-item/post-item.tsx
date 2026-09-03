@@ -11,6 +11,7 @@ export interface PostType {
 	content: string;
 	comments: number;
 	bookmarks: number;
+	thumbnailUrl?: string;
 }
 
 export default function PostItem({ post }: { post: PostType }) {
@@ -43,7 +44,17 @@ export default function PostItem({ post }: { post: PostType }) {
 					</div>
 				</div>
 
-				<div className={styles.thumbnailPlaceholder} />
+				{post.thumbnailUrl && (
+					<div className={styles.thumbnail}>
+						<Image
+							src={post.thumbnailUrl}
+							alt={post.title}
+							fill
+							sizes="120px"
+							style={{ objectFit: "cover" }}
+						/>
+					</div>
+				)}
 			</article>
 		</Link>
 	);

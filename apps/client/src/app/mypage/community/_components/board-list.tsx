@@ -107,6 +107,7 @@ export function BoardList({
 						content: board.content,
 						comments: board.commentCount,
 						bookmarks: board.scrapCount,
+						thumbnailUrl: board.images?.[0],
 					}}
 				/>
 			))}
