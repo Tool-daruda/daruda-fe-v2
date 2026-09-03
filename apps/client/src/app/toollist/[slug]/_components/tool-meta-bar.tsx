@@ -1,6 +1,6 @@
 import Image from "next/image";
 import type { ToolDetailRes } from "@/common/api/models/tool.model";
-import { ToolApi } from "@/common/api/tool-api";
+import { getToolDetailOrNotFound } from "../_lib/get-tool-detail";
 import { BookmarkButton } from "./bookmark-button";
 import { ShareButton } from "./share-button";
 import * as styles from "./styles/tool-meta-bar.css";
@@ -19,9 +19,7 @@ const getSupportedPlatforms = (platforms: ToolDetailRes["platform"]): string[] =
 };
 
 export const ToolMetaBar = async ({ toolId }: Props) => {
-	const info = await ToolApi.getToolDetail(toolId);
-
-	if (!info) return null;
+	const info = await getToolDetailOrNotFound(toolId);
 
 	const keywords = info.keywords ? info.keywords.slice(0, 2) : [];
 	const platforms = getSupportedPlatforms(info.platform);

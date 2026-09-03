@@ -94,6 +94,8 @@ export const UserApi = {
 	 */
 	withdrawUser: async () => {
 		return fetchServer<void>("/api/v1/auth/withdraw", {
+			// 본문 없이 200만 돌려주는 엔드포인트입니다.
+			allowEmptyData: true,
 			method: "DELETE",
 		});
 	},

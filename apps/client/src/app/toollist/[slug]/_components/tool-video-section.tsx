@@ -1,6 +1,6 @@
 import Image from "next/image";
-import { ToolApi } from "@/common/api/tool-api";
 import { TOOL_SECTION_IDS } from "../_constants/toc";
+import { getToolDetailOrNotFound } from "../_lib/get-tool-detail";
 import * as styles from "./styles/tool-video-section.css";
 import { ToolEmptyState } from "./tool-empty-state";
 
@@ -32,9 +32,7 @@ const getVideoThumbnailUrl = (url: string) => {
 };
 
 export const ToolVideoSection = async ({ toolId }: Props) => {
-	const info = await ToolApi.getToolDetail(toolId);
-
-	if (!info) return null;
+	const info = await getToolDetailOrNotFound(toolId);
 
 	const videos = info.videos ?? [];
 

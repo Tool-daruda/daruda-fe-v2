@@ -1,4 +1,4 @@
-import { ToolApi } from "@/common/api/tool-api";
+import { getToolDetailOrNotFound } from "../_lib/get-tool-detail";
 import * as styles from "./styles/tool-feedback-section.css";
 import { ToolLikeButton } from "./tool-like-button";
 
@@ -6,7 +6,7 @@ type Props = {
 	toolId: number;
 };
 export const ToolFeedbackSection = async ({ toolId }: Props) => {
-	const info = await ToolApi.getToolDetail(toolId);
+	const info = await getToolDetailOrNotFound(toolId);
 	return (
 		<section className={styles.container}>
 			<h2 className={styles.title}>내용이 도움이 되었나요?</h2>

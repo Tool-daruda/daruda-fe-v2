@@ -1,6 +1,6 @@
-import { ToolApi } from "@/common/api/tool-api";
 import { withObjectJosa } from "@/common/utils";
 import { TOOL_SECTION_IDS } from "../_constants/toc";
+import { getToolDetailOrNotFound } from "../_lib/get-tool-detail";
 import * as styles from "./styles/tool-intro-section.css";
 import { ToolIntroImages } from "./tool-intro-images";
 
@@ -9,9 +9,8 @@ type Props = {
 };
 
 export const ToolIntroSection = async ({ toolId }: Props) => {
-	const info = await ToolApi.getToolDetail(toolId);
+	const info = await getToolDetailOrNotFound(toolId);
 
-	if (!info) return null;
 	const introImages = info.images || [];
 
 	const imageCountByUrl = new Map<string, number>();

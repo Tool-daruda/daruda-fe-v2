@@ -72,16 +72,16 @@ export const ToolRelatedPostSection = async ({ toolId }: Props) => {
 									</div>
 								</div>
 
-								<div className={styles.thumbnail}>
-									{post.images[0] && (
+								{post.images[0] && (
+									<div className={styles.thumbnail}>
 										<Image
 											src={post.images[0]}
 											alt={post.title}
 											fill
 											style={{ objectFit: "cover" }}
 										/>
-									)}
-								</div>
+									</div>
+								)}
 							</div>
 						</Link>
 					))}

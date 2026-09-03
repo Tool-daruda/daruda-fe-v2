@@ -19,6 +19,15 @@ const SPRING_API_URL = process.env.API_BASE_URL;
 
 const AUTH_REISSUE_ENDPOINT = "/api/v1/auth/reissue";
 
+// 성공 로그는 개발용입니다. 실패 로그는 프로덕션에서도 남깁니다.
+// DEBUG_FETCH_LOG=1은 프로덕션 빌드에서 업스트림 호출을 셀 때 씁니다.
+const isDev = process.env.NODE_ENV === "development" || process.env.DEBUG_FETCH_LOG === "1";
+
+export type FetchOptions = RequestInit & {
+	/** 200에 `data`가 없어도 통과시킵니다. 본문을 안 주는 뮤테이션에만 씁니다. */
+	allowEmptyData?: boolean;
+};
+
 function createHeaders(options: RequestInit, cookieHeader: string) {
 	const defaultHeaders: Record<string, string> = {
 		"Content-Type": "application/json",
@@ -61,7 +70,7 @@ async function clearAuthCookiesSafely() {
 async function reissueAccessToken(refreshToken: string) {
 	if (!SPRING_API_URL) return null;
 
-	console.log(`[FETCH REISSUE START] POST -> ${SPRING_API_URL}${AUTH_REISSUE_ENDPOINT}`);
+	if (isDev) console.log(`[FETCH REISSUE START] POST -> ${SPRING_API_URL}${AUTH_REISSUE_ENDPOINT}`);
 
 	try {
 		const response = await fetch(`${SPRING_API_URL}${AUTH_REISSUE_ENDPOINT}`, {
@@ -97,7 +106,7 @@ async function reissueAccessToken(refreshToken: string) {
 			return null;
 		}
 
-		console.log(`[FETCH REISSUE SUCCESS] New accessToken obtained`);
+		if (isDev) console.log(`[FETCH REISSUE SUCCESS] New accessToken obtained`);
 
 		if (accessToken && setCookieHeaders.length === 0) {
 			try {
@@ -145,53 +154,58 @@ async function parseErrorResponse(response: Response, endpoint: string) {
 	throw new ApiError(errorMessage, response.status, errorBody);
 }
 
-export async function fetchServer<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
+export async function fetchServer<T>(endpoint: string, options: FetchOptions = {}): Promise<T> {
 	if (!SPRING_API_URL) {
 		throw new Error("API_BASE_URL is not configured");
 	}
 
+	const { allowEmptyData = false, ...init } = options;
+
 	const cookieStore = await cookies();
 	const accessToken = cookieStore.get("accessToken")?.value;
 	const refreshToken = cookieStore.get("refreshToken")?.value;
-	const mergedHeaders = createHeaders(options, createCookieHeader(accessToken, refreshToken));
+	const mergedHeaders = createHeaders(init, createCookieHeader(accessToken, refreshToken));
 
-	console.log(`\n[FETCH START] ${options.method || "GET"} -> ${SPRING_API_URL}${endpoint}`);
-	console.log("[FETCH COOKIE]", {
-		hasAccessToken: Boolean(accessToken),
-		hasRefreshToken: Boolean(refreshToken),
-	});
+	// 헤더 순회와 JSON.stringify가 요청마다 도니 개발에서만 찍습니다.
+	if (isDev) {
+		console.log(`\n[FETCH START] ${init.method || "GET"} -> ${SPRING_API_URL}${endpoint}`);
+		console.log("[FETCH COOKIE]", {
+			hasAccessToken: Boolean(accessToken),
+			hasRefreshToken: Boolean(refreshToken),
+		});
 
-	console.log(`\n=================== [FETCH REQUEST] ===================`);
-	console.log(`▶ URL    : [${options.method || "GET"}] ${SPRING_API_URL}${endpoint}`);
+		console.log(`\n=================== [FETCH REQUEST] ===================`);
+		console.log(`▶ URL    : [${init.method || "GET"}] ${SPRING_API_URL}${endpoint}`);
 
-	const headersObj: Record<string, string> = {};
-	mergedHeaders.forEach((value, key) => {
-		headersObj[key] = value;
-	});
-	const redactedHeaders = {
-		...headersObj,
-		cookie: headersObj.cookie ? "[REDACTED]" : undefined,
-		authorization: headersObj.authorization ? "[REDACTED]" : undefined,
-	};
-	console.log(`▶ HEADERS:`, redactedHeaders);
+		const headersObj: Record<string, string> = {};
+		mergedHeaders.forEach((value, key) => {
+			headersObj[key] = value;
+		});
+		const redactedHeaders = {
+			...headersObj,
+			cookie: headersObj.cookie ? "[REDACTED]" : undefined,
+			authorization: headersObj.authorization ? "[REDACTED]" : undefined,
+		};
+		console.log(`▶ HEADERS:`, redactedHeaders);
 
-	if (options.body && !endpoint.startsWith("/api/v1/auth")) {
-		try {
-			const parsedBody = JSON.parse(options.body as string);
-			console.log(`▶ PAYLOAD:\n`, JSON.stringify(parsedBody, null, 2));
-		} catch {
-			console.log(`▶ PAYLOAD:`, options.body);
+		if (init.body && !endpoint.startsWith("/api/v1/auth")) {
+			try {
+				const parsedBody = JSON.parse(init.body as string);
+				console.log(`▶ PAYLOAD:\n`, JSON.stringify(parsedBody, null, 2));
+			} catch {
+				console.log(`▶ PAYLOAD:`, init.body);
+			}
+		} else if (init.body) {
+			console.log(`▶ PAYLOAD: [REDACTED]`);
+		} else {
+			console.log(`▶ PAYLOAD: None`);
 		}
-	} else if (options.body) {
-		console.log(`▶ PAYLOAD: [REDACTED]`);
-	} else {
-		console.log(`▶ PAYLOAD: None`);
+		console.log(`=======================================================\n`);
 	}
-	console.log(`=======================================================\n`);
 
 	try {
 		let response = await fetch(`${SPRING_API_URL}${endpoint}`, {
-			...options,
+			...init,
 			headers: mergedHeaders,
 		});
 
@@ -200,8 +214,8 @@ export async function fetchServer<T>(endpoint: string, options: RequestInit = {}
 				const reissuedAccessToken = await reissueAccessToken(refreshToken);
 				if (reissuedAccessToken) {
 					response = await fetch(`${SPRING_API_URL}${endpoint}`, {
-						...options,
-						headers: createHeaders(options, createCookieHeader(reissuedAccessToken, refreshToken)),
+						...init,
+						headers: createHeaders(init, createCookieHeader(reissuedAccessToken, refreshToken)),
 					});
 				}
 			} else if (accessToken) {
@@ -216,11 +230,17 @@ export async function fetchServer<T>(endpoint: string, options: RequestInit = {}
 			await parseErrorResponse(response, endpoint);
 		}
 
-		console.log(`[FETCH SUCCESS] ${response.status} <- ${endpoint}`);
+		if (isDev) console.log(`[FETCH SUCCESS] ${response.status} <- ${endpoint}`);
 
 		const result: ApiResponse<T> = await response.json();
 
-		if (process.env.NODE_ENV === "development") {
+		// ApiResponse는 `data: T`라고 선언하지만 서버가 빠뜨릴 수 있습니다.
+		// 여기서 안 끊으면 undefined가 화면까지 흘러가 어디가 문제인지 안 보입니다.
+		if (!allowEmptyData && (result.data === undefined || result.data === null)) {
+			throw new ApiError(`응답에 data가 없습니다`, response.status, result);
+		}
+
+		if (isDev) {
 			console.log(`⬅️ RESPONSE:`, JSON.stringify(result.data, null, 2));
 		}
 

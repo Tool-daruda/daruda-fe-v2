@@ -173,6 +173,9 @@ async function handleRequest(request: NextRequest) {
 }
 
 export const config = {
+	// isAuthProtected가 보는 경로와 /signup만 넣습니다.
+	// toollist는 보호 경로가 아니라 미들웨어가 하는 일이 없고,
+	// 로그인 상태에서는 Set-Cookie가 붙어 캐시만 깨뜨렸습니다.
 	matcher: [
 		"/signup",
 		"/community/write",
@@ -180,7 +183,5 @@ export const config = {
 		"/mypage/:path*",
 		"/notification/:path*",
 		"/notification",
-		"/toollist/:path*",
-		"/favoriteTools/:path*",
 	],
 };
