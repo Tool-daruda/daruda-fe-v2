@@ -1,3 +1,4 @@
+import { fetchPublic } from "./fetch-public";
 import { fetchServer } from "./fetch-server";
 import type { BoardListRes } from "./models/board.model";
 import type { SearchBoardParams } from "./models/search.model";
@@ -13,7 +14,10 @@ export const SearchApi = {
 	searchTool: async (keyword: string) => {
 		if (!keyword.trim()) return [];
 		const query = new URLSearchParams({ keyword: keyword.trim() }).toString();
-		return fetchServer<ToolSummary[] | ToolListRes>(`/api/v1/search/tool?${query}`, {
+		// 툴 목록과 같은 이유로 공개 fetcher를 씁니다. 쿠키를 실은 채 캐시하면
+		// 사용자별로 캐시 엔트리가 갈라져 캐시가 사실상 동작하지 않습니다.
+		return fetchPublic<ToolSummary[] | ToolListRes>(`/api/v1/search/tool?${query}`, {
+			cache: "force-cache",
 			next: { revalidate: 60, tags: ["search-tool"] },
 		});
 	},
