@@ -17,7 +17,6 @@ export default function Home() {
 
 			<div className={s.content}>
 				<AdBannerSection banners={AD_BANNERS} />
-
 				<div className={s.sections}>
 					<Suspense fallback={<ToolRowSkeleton />}>
 						<PopularToolsSection />

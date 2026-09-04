@@ -1,16 +1,12 @@
 "use client";
 
+// 카드 자체에는 상호작용이 없지만, @repo/ui 번들이 클라이언트 전용이라 서버 컴포넌트로 둘 수 없습니다.
+
 import { cx } from "@repo/ui";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
-import { postToolScrapAction } from "@/common/api/actions/tool.actions";
-import { toast } from "@/common/components/toast";
 import { PRICE_LABEL, type PriceType } from "@/common/constants/price";
-import { useIsLoggedIn } from "@/common/context/auth-context";
-import { useActionError } from "@/common/hooks/use-action-error";
-import BookmarkIcon from "../icons/bookmark";
+import { ToolBookmarkButton } from "./tool-bookmark-button";
 import * as styles from "./tool-card.css";
 
 type ToolCardVariant = "horizontal" | "vertical" | "alternative";
@@ -23,7 +19,6 @@ type Props = {
 	thumbnailUrl?: string;
 	tags?: string[];
 	priceType?: PriceType;
-	isBookmarked?: boolean;
 	badgeType?: BadgeType;
 	variant?: ToolCardVariant;
 	href?: string;
@@ -36,63 +31,16 @@ export default function ToolCard({
 	thumbnailUrl,
 	tags = [],
 	priceType,
-	isBookmarked = false,
 	badgeType,
 	variant = "horizontal",
 	href,
 }: Props) {
 	// 대안툴 카드는 사이드바용 축약형이라 찜 버튼과 한 줄 소개가 없다.
 	const isAlternative = variant === "alternative";
-	const isLoggedIn = useIsLoggedIn();
-	const router = useRouter();
-	const handleActionError = useActionError();
-	// 재검증 리프레시로 prop이 갱신돼도 상태를 되돌리지 않습니다.
-	// 서버 응답으로 이미 확정한 값이라, prop을 다시 반영하면 아이콘이 튑니다.
-	// 카드는 toolId를 key로 렌더되므로 다른 툴이면 인스턴스가 새로 만들어집니다.
-	const [isScrapped, setIsScrapped] = useState(isBookmarked);
-	const [isPending, startTransition] = useTransition();
-
-	const handleBookmarkClick = (e: React.MouseEvent) => {
-		e.preventDefault();
-		e.stopPropagation();
-
-		if (!isLoggedIn) {
-			router.push("/login");
-			return;
-		}
-
-		const next = !isScrapped;
-		setIsScrapped(next);
-
-		if (toolId === undefined) return;
-
-		startTransition(async () => {
-			const result = await postToolScrapAction(toolId);
-
-			if (!result.success) {
-				setIsScrapped(!next);
-				handleActionError(result, "찜하기에 실패했어요. 다시 시도해 주세요.");
-				return;
-			}
-
-			setIsScrapped(result.data.isScrapped);
-			toast(result.data.isScrapped ? "툴을 찜했어요." : "찜을 취소했어요.");
-		});
-	};
 
 	const contentInner = (
 		<>
-			{!isAlternative && (
-				<button
-					type="button"
-					className={styles.bookmarkButton}
-					onClick={handleBookmarkClick}
-					disabled={isPending}
-					aria-pressed={isScrapped}
-				>
-					<BookmarkIcon isBookmarked={isScrapped} />
-				</button>
-			)}
+			{!isAlternative && <ToolBookmarkButton toolId={toolId} />}
 
 			<div className={cx(styles.body, styles.bodyVariant[variant])}>
 				<div className={styles.thumbnailSection}>

@@ -32,7 +32,6 @@ export const FreeToolsSection = async () => {
 						title={tool.toolName}
 						thumbnailUrl={tool.toolLogo}
 						priceType={LICENSE_MAP[tool.license]}
-						isBookmarked={tool.isScraped}
 						tags={tool.keywords}
 						variant="vertical"
 						href={`/toollist/${tool.toolId}`}

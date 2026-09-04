@@ -2,72 +2,17 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { deleteBoardAction, postBoardScrapAction } from "@/common/api/actions/board.actions";
+import { Suspense, useState } from "react";
 import type { BoardItem } from "@/common/api/models/board.model";
-import { MoreMenu, type MoreMenuItem } from "@/common/components/more-menu/more-menu";
 import { ReportModal } from "@/common/components/report-modal/report-modal";
-import { toast } from "@/common/components/toast";
-import { useActionError } from "@/common/hooks/use-action-error";
-import { useContentMenu } from "@/common/hooks/use-content-menu";
+import { useMoreMenu } from "@/common/hooks/use-more-menu";
 import { formatDate } from "@/common/utils";
 import * as s from "./main-community-card.css";
+import { MainCommunityMenu } from "./main-community-menu";
 
 export const MainCommunityCard = ({ post }: { post: BoardItem }) => {
-	const router = useRouter();
-	const handleActionError = useActionError();
-	const { isOpen, toggle, close, containerRef, isOwner, currentUser } = useContentMenu(post.author);
+	const { isOpen, toggle, close, containerRef } = useMoreMenu();
 	const [reportOpen, setReportOpen] = useState(false);
-
-	const ownerItems: MoreMenuItem[] = [
-		{
-			label: "수정하기",
-			iconSrc: "/icons/community/ic_edit_20.svg",
-			onClick: () => router.push(`/community/${post.boardId}/edit`),
-		},
-		{
-			label: "삭제하기",
-			iconSrc: "/icons/community/ic_delete_20.svg",
-			onClick: async () => {
-				const result = await deleteBoardAction({
-					boardId: post.boardId,
-					toolId: post.toolId || undefined,
-				});
-				if (result.success) {
-					toast("게시글을 삭제했어요.");
-					router.refresh();
-				} else {
-					toast(result.error || "삭제에 실패했어요.");
-				}
-			},
-		},
-	];
-
-	const otherItems: MoreMenuItem[] = [
-		{
-			label: "저장하기",
-			iconSrc: "/icons/community/ic_bookmark_20.svg",
-			onClick: async () => {
-				if (!currentUser) {
-					router.push("/login");
-					return;
-				}
-				const result = await postBoardScrapAction(post.boardId);
-				if (result.success) {
-					toast(result.data.scrap ? "게시글을 저장했어요." : "저장을 취소했어요.");
-					router.refresh();
-				} else {
-					handleActionError(result, "저장에 실패했어요.");
-				}
-			},
-		},
-		{
-			label: "신고하기",
-			iconSrc: "/icons/community/ic_report_20.svg",
-			onClick: () => setReportOpen(true),
-		},
-	];
 
 	return (
 		<div ref={containerRef} className={s.cardWrapper}>
@@ -128,11 +73,9 @@ export const MainCommunityCard = ({ post }: { post: BoardItem }) => {
 			</button>
 
 			{isOpen && (
-				<MoreMenu
-					items={isOwner ? ownerItems : otherItems}
-					onClose={close}
-					className={s.dropdownCard}
-				/>
+				<Suspense fallback={null}>
+					<MainCommunityMenu post={post} onClose={close} onReport={() => setReportOpen(true)} />
+				</Suspense>
 			)}
 
 			<ReportModal
