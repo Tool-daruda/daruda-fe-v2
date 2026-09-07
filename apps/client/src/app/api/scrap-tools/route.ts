@@ -5,7 +5,8 @@ import type { FavoriteToolsRes } from "@/common/api/models/tool.model";
 
 /**
  * @note 인증 쿠키가 HttpOnly라 브라우저가 Spring을 직접 부를 수 없어 이 통로를 둡니다.
- * 실패해도 화면을 막지 않도록 빈 목록으로 떨어뜨립니다.
+ * 실패를 빈 목록으로 바꾸지 않습니다. 찜 버튼이 화면의 상태로 토글 방향을 정하므로,
+ * 못 받은 걸 "찜 없음"으로 확정하면 이미 찜한 툴을 누른 사용자가 찜을 취소하게 됩니다.
  */
 export async function GET() {
 	if (!(await hasAuthSession())) {
@@ -20,6 +21,6 @@ export async function GET() {
 
 		return NextResponse.json({ toolIds: toolList.map((tool) => tool.toolId) });
 	} catch {
-		return NextResponse.json({ toolIds: [] });
+		return NextResponse.json({ message: "찜 목록을 불러오지 못했습니다" }, { status: 502 });
 	}
 }

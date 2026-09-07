@@ -156,6 +156,9 @@ export const bookmarkButton = style({
 	background: "transparent",
 	cursor: "pointer",
 	lineHeight: 0,
+	":disabled": {
+		cursor: "default",
+	},
 });
 
 export const tagList = style({
