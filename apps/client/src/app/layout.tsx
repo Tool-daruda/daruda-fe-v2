@@ -13,6 +13,7 @@ import ScrollToTop from "@/common/components/scroll-to-top/scroll-to-top";
 import { Toaster } from "@/common/components/toast";
 import { AuthProvider } from "@/common/context/auth-context";
 import { NotificationProvider } from "@/common/context/notification-context";
+import { ScrappedToolsProvider } from "@/common/context/scrap-context";
 import "../common/styles/reset.css";
 
 export const metadata: Metadata = {
@@ -33,13 +34,15 @@ export default async function RootLayout({ children }: PropsWithChildren) {
 			<body>
 				<AuthProvider isLoggedIn={isLoggedIn}>
 					<NotificationProvider>
-						<ScrollToTop />
-						<Header isLoggedIn={isLoggedIn} />
-						<main>{children}</main>
-						<Footer />
-						<Toaster />
-						<ModalHost />
-						{process.env.NODE_ENV !== "production" && <DevAuthPanel isLoggedIn={isLoggedIn} />}
+						<ScrappedToolsProvider>
+							<ScrollToTop />
+							<Header isLoggedIn={isLoggedIn} />
+							<main>{children}</main>
+							<Footer />
+							<Toaster />
+							<ModalHost />
+							{process.env.NODE_ENV !== "production" && <DevAuthPanel isLoggedIn={isLoggedIn} />}
+						</ScrappedToolsProvider>
 					</NotificationProvider>
 				</AuthProvider>
 			</body>

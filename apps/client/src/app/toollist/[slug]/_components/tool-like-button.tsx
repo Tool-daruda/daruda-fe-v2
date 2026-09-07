@@ -31,22 +31,26 @@ export const ToolLikeButton = ({ toolId, initialLiked, initialLikeCount }: Props
 			return;
 		}
 
+		// 서버가 주는 likeCount는 반영 전 값입니다. 좋아요 직후 응답이 liked: true에 likeCount: 0이고,
+		// 같은 요청 안에서 상세를 다시 읽으면 1입니다. 그래서 개수는 liked로만 다시 세웁니다.
 		const next = !isLiked;
+		const countWithoutMine = isLiked ? Math.max(likeCount - 1, 0) : likeCount;
+
 		setIsLiked(next);
-		setLikeCount((prev) => (next ? prev + 1 : Math.max(prev - 1, 0)));
+		setLikeCount(next ? countWithoutMine + 1 : countWithoutMine);
 
 		startTransition(async () => {
 			const result = await postToolLikeAction(toolId);
 
 			if (!result.success) {
 				setIsLiked(!next);
-				setLikeCount((prev) => (next ? Math.max(prev - 1, 0) : prev + 1));
+				setLikeCount(next ? countWithoutMine : countWithoutMine + 1);
 				handleActionError(result, "좋아요에 실패했어요. 다시 시도해 주세요.");
 				return;
 			}
 
 			setIsLiked(result.data.liked);
-			setLikeCount(result.data.likeCount);
+			setLikeCount(result.data.liked ? countWithoutMine + 1 : countWithoutMine);
 			toast(result.data.liked ? "도움이 되었어요를 눌렀어요." : "도움이 되었어요를 취소했어요.");
 		});
 	};

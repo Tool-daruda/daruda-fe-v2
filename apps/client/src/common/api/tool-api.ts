@@ -32,9 +32,11 @@ export const ToolApi = {
 			...(params.lastToolId && { lastToolId: String(params.lastToolId) }),
 		}).toString();
 
-		// 응답의 isScraped가 로그인 사용자 기준이라 쿠키를 실어 보내야 합니다.
-		return fetchServer<ToolListRes>(`/api/v1/tool?${query}`, {
-			next: { tags: ["tools"] },
+		// 쿠키를 안 붙여야 전 사용자가 캐시를 공유합니다. 응답의 isScraped는 항상 false로 옵니다.
+		// tags만으로는 Data Cache에 들어가지 않아 force-cache/revalidate가 함께 있어야 합니다.
+		return fetchPublic<ToolListRes>(`/api/v1/tool?${query}`, {
+			cache: "force-cache",
+			next: { tags: ["tools"], revalidate: 300 },
 		});
 	},
 

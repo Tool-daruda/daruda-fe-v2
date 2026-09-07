@@ -22,9 +22,9 @@ export default async function FavoriteToolsPage() {
 					thumbnailUrl={tool.toolLogo}
 					tags={tool.keywords}
 					priceType={LICENSE_MAP[tool.license]}
-					isBookmarked={tool.isScraped}
 					badgeType={undefined}
 					variant="horizontal"
+					href={`/toollist/${tool.toolId}`}
 				/>
 			))}
 		</div>

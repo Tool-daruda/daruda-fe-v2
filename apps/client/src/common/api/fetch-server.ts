@@ -7,6 +7,7 @@ import {
 	getCookieFromSetCookie,
 } from "./cookie-utils";
 import { ApiError } from "./errors/api-error";
+import { maskEndpoint } from "./mask-endpoint";
 import type { ApiResponse } from "./models/api-response.model";
 import type { ReissueData } from "./models/auth.model";
 
@@ -149,7 +150,7 @@ async function parseErrorResponse(response: Response, endpoint: string) {
 	// 그 외는 error로 처리
 	const isExpectedStatus = response.status === 404 || response.status === 401;
 	const log = isExpectedStatus ? console.warn : console.error;
-	log(`[FETCH ERROR] ${response.status} <- ${endpoint}`, errorBody);
+	log(`[FETCH ERROR] ${response.status} <- ${maskEndpoint(endpoint)}`, errorBody);
 
 	throw new ApiError(errorMessage, response.status, errorBody);
 }
@@ -168,14 +169,16 @@ export async function fetchServer<T>(endpoint: string, options: FetchOptions = {
 
 	// 헤더 순회와 JSON.stringify가 요청마다 도니 개발에서만 찍습니다.
 	if (isDev) {
-		console.log(`\n[FETCH START] ${init.method || "GET"} -> ${SPRING_API_URL}${endpoint}`);
+		console.log(
+			`\n[FETCH START] ${init.method || "GET"} -> ${SPRING_API_URL}${maskEndpoint(endpoint)}`
+		);
 		console.log("[FETCH COOKIE]", {
 			hasAccessToken: Boolean(accessToken),
 			hasRefreshToken: Boolean(refreshToken),
 		});
 
 		console.log(`\n=================== [FETCH REQUEST] ===================`);
-		console.log(`▶ URL    : [${init.method || "GET"}] ${SPRING_API_URL}${endpoint}`);
+		console.log(`▶ URL    : [${init.method || "GET"}] ${SPRING_API_URL}${maskEndpoint(endpoint)}`);
 
 		const headersObj: Record<string, string> = {};
 		mergedHeaders.forEach((value, key) => {
@@ -230,7 +233,7 @@ export async function fetchServer<T>(endpoint: string, options: FetchOptions = {
 			await parseErrorResponse(response, endpoint);
 		}
 
-		if (isDev) console.log(`[FETCH SUCCESS] ${response.status} <- ${endpoint}`);
+		if (isDev) console.log(`[FETCH SUCCESS] ${response.status} <- ${maskEndpoint(endpoint)}`);
 
 		const result: ApiResponse<T> = await response.json();
 
@@ -247,7 +250,7 @@ export async function fetchServer<T>(endpoint: string, options: FetchOptions = {
 		return result.data;
 	} catch (error) {
 		if (!(error instanceof ApiError)) {
-			console.error(`[fetchServer Network Error] ${endpoint}:`, error);
+			console.error(`[fetchServer Network Error] ${maskEndpoint(endpoint)}:`, error);
 		}
 		throw error;
 	}

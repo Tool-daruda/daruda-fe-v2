@@ -1,8 +1,12 @@
 import { ApiError } from "./errors/api-error";
 import type { FetchOptions } from "./fetch-server";
+import { maskEndpoint } from "./mask-endpoint";
 import type { ApiResponse } from "./models/api-response.model";
 
 const SPRING_API_URL = process.env.API_BASE_URL;
+
+// fetchServer와 같은 스위치입니다. 캐시가 붙은 뒤로는 업스트림 호출을 여기서 세야 합니다.
+const isDev = process.env.NODE_ENV === "development" || process.env.DEBUG_FETCH_LOG === "1";
 
 /**
  * 로그인 불필요한 공개 API 전용 fetcher.
@@ -59,14 +63,14 @@ export async function fetchPublic<T>(endpoint: string, options: FetchOptions = {
 			throw new ApiError(`응답에 data가 없습니다`, response.status, result);
 		}
 
-		if (process.env.NODE_ENV === "development") {
-			console.log(`[PUBLIC] ${response.status} <- ${endpoint}`);
+		if (isDev) {
+			console.log(`[PUBLIC] ${response.status} <- ${maskEndpoint(endpoint)}`);
 		}
 
 		return result.data;
 	} catch (error) {
 		if (!(error instanceof ApiError)) {
-			console.error(`[fetchPublic Error] ${endpoint}:`, error);
+			console.error(`[fetchPublic Error] ${maskEndpoint(endpoint)}:`, error);
 		}
 		throw error;
 	}

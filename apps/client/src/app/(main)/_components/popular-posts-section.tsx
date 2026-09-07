@@ -6,16 +6,15 @@ import * as s from "./popular-posts-section.css";
 import { SectionHeader } from "./section-header";
 
 export const PopularPostsSection = async () => {
-	// 카드 더보기 메뉴의 소유자 판정(useContentMenu)에 닉네임이 필요합니다.
 	// 메인은 community 레이아웃 밖이라 이 섹션에서 직접 UserProvider를 붙입니다.
-	const [boardListRes, user] = await Promise.all([
-		BoardApi.getBoardList({
-			noTopic: true,
-			size: 6,
-			sortBy: "SCRAP",
-		}).catch(() => null),
-		UserApi.getCurrentUser(),
-	]);
+	// 닉네임은 더보기 메뉴의 소유자 판정에만 쓰이므로 기다리지 않고 프로미스로 내려보냅니다.
+	const userPromise = UserApi.getCurrentUser().catch(() => null);
+
+	const boardListRes = await BoardApi.getBoardList({
+		noTopic: true,
+		size: 6,
+		sortBy: "SCRAP",
+	}).catch(() => null);
 
 	const posts = boardListRes?.contents || [];
 
@@ -29,7 +28,7 @@ export const PopularPostsSection = async () => {
 				moreHref="/community"
 			/>
 
-			<UserProvider user={user}>
+			<UserProvider user={userPromise}>
 				<div className={s.grid}>
 					{posts.map((post) => (
 						<MainCommunityCard key={post.boardId} post={post} />

@@ -109,7 +109,6 @@ export const ToolListGrid = ({
 						thumbnailUrl={tool.toolLogo}
 						description={tool.description}
 						priceType={LICENSE_MAP[tool.license]}
-						isBookmarked={tool.isScraped}
 						tags={tool.keywords}
 						variant="horizontal"
 						href={`/toollist/${tool.toolId}`}
