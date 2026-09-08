@@ -102,7 +102,13 @@ export const PostTagSelector = ({ tools, selectedTool, onSelectTool }: PostTagSe
 										>
 											{tool.toolLogo ? (
 												<span className={s.toolLogo}>
-													<Image src={tool.toolLogo} alt="" fill style={{ objectFit: "cover" }} />
+													<Image
+														src={tool.toolLogo}
+														alt=""
+														fill
+														sizes="20px"
+														style={{ objectFit: "cover" }}
+													/>
 												</span>
 											) : (
 												<span className={s.toolLogo} />
@@ -119,7 +125,13 @@ export const PostTagSelector = ({ tools, selectedTool, onSelectTool }: PostTagSe
 						<div className={s.chip}>
 							{selectedTool.toolLogo ? (
 								<span className={s.chipLogo}>
-									<Image src={selectedTool.toolLogo} alt="" fill style={{ objectFit: "cover" }} />
+									<Image
+										src={selectedTool.toolLogo}
+										alt=""
+										fill
+										sizes="24px"
+										style={{ objectFit: "cover" }}
+									/>
 								</span>
 							) : (
 								<span className={s.chipLogo} />

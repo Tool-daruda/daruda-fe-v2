@@ -53,7 +53,13 @@ export default function ToolCard({
 
 					<div className={cx(styles.thumbnail, styles.thumbnailVariant[variant])}>
 						{thumbnailUrl && (
-							<Image src={thumbnailUrl} alt={title} fill className={styles.thumbnailImage} />
+							<Image
+								src={thumbnailUrl}
+								alt={title}
+								fill
+								sizes="60px"
+								className={styles.thumbnailImage}
+							/>
 						)}
 					</div>
 				</div>

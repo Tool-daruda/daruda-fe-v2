@@ -56,7 +56,13 @@ export const PostHeader = ({ post }: PostHeaderProps) => {
 					<div className={s.toolBadge}>
 						<div className={s.toolLogo}>
 							{post.toolLogo && (
-								<Image src={post.toolLogo} alt="" fill style={{ objectFit: "cover" }} />
+								<Image
+									src={post.toolLogo}
+									alt=""
+									fill
+									sizes="24px"
+									style={{ objectFit: "cover" }}
+								/>
 							)}
 						</div>
 						<span className={s.toolName}>{post.toolName}</span>

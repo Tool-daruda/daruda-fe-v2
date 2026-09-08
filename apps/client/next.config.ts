@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
 	transpilePackages: ["@repo/ui"],
 
 	images: {
+		formats: ["image/avif", "image/webp"],
 		remotePatterns: [
 			{
 				protocol: "https",

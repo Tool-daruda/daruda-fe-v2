@@ -99,7 +99,7 @@ const CommentRow = ({ comment, boardId }: { comment: CommentItem; boardId: numbe
 
 			{comment.image && (
 				<div className={s.image}>
-					<Image src={comment.image} alt="" fill style={{ objectFit: "cover" }} />
+					<Image src={comment.image} alt="" fill sizes="240px" style={{ objectFit: "cover" }} />
 				</div>
 			)}
 

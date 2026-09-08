@@ -224,6 +224,7 @@ export const CommunityFilterSidebar = ({
 												src={selectedTool.toolLogo}
 												alt=""
 												fill
+												sizes="20px"
 												style={{ objectFit: "cover" }}
 											/>
 										</span>
@@ -359,7 +360,7 @@ const ToolRow = ({ tool, selected, onSelect }: ToolRowProps) => {
 			>
 				{tool.toolLogo ? (
 					<span className={s.toolLogo}>
-						<Image src={tool.toolLogo} alt="" fill style={{ objectFit: "cover" }} />
+						<Image src={tool.toolLogo} alt="" fill sizes="20px" style={{ objectFit: "cover" }} />
 					</span>
 				) : (
 					<span className={s.toolLogo} />
