@@ -234,7 +234,13 @@ export const PostCard = ({ post, onDeleted, onScrapChanged }: PostCardProps) => 
 							<div className={s.toolChip}>
 								<div className={s.toolLogo}>
 									{post.toolLogo && (
-										<Image src={post.toolLogo} alt="" fill style={{ objectFit: "cover" }} />
+										<Image
+											src={post.toolLogo}
+											alt=""
+											fill
+											sizes="20px"
+											style={{ objectFit: "cover" }}
+										/>
 									)}
 								</div>
 								<span className={s.toolName}>{post.toolName}</span>
@@ -267,7 +273,13 @@ export const PostCard = ({ post, onDeleted, onScrapChanged }: PostCardProps) => 
 					</div>
 					{post.images?.[0] && (
 						<div className={s.thumbnail}>
-							<Image src={post.images[0]} alt={post.title} fill style={{ objectFit: "cover" }} />
+							<Image
+								src={post.images[0]}
+								alt={post.title}
+								fill
+								sizes="92px"
+								style={{ objectFit: "cover" }}
+							/>
 						</div>
 					)}
 				</div>

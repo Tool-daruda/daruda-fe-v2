@@ -39,7 +39,13 @@ export const ToolRelatedPostSection = async ({ toolId }: Props) => {
 									<div className={styles.toolChip}>
 										<div className={styles.toolLogo}>
 											{post.toolLogo && (
-												<Image src={post.toolLogo} alt="" fill style={{ objectFit: "cover" }} />
+												<Image
+													src={post.toolLogo}
+													alt=""
+													fill
+													sizes="20px"
+													style={{ objectFit: "cover" }}
+												/>
 											)}
 										</div>
 										<span className={styles.toolName}>{post.toolName}</span>
@@ -78,6 +84,7 @@ export const ToolRelatedPostSection = async ({ toolId }: Props) => {
 											src={post.images[0]}
 											alt={post.title}
 											fill
+											sizes="80px"
 											style={{ objectFit: "cover" }}
 										/>
 									</div>

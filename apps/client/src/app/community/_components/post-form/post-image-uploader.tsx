@@ -72,6 +72,7 @@ export const PostImageUploader = ({
 							src={src}
 							alt=""
 							fill
+							sizes="80px"
 							className={s.thumbnailImg}
 							style={{ objectFit: "cover" }}
 						/>

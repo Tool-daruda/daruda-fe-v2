@@ -34,6 +34,7 @@ export const ToolIntroImages = ({ items, toolMainName }: Props) => {
 							src={item.imageUrl}
 							alt={`${toolMainName} 이미지 ${index + 1}`}
 							fill
+							sizes="(max-width: 768px) 85vw, 354px"
 							className={styles.image}
 						/>
 					</button>

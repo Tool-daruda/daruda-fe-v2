@@ -32,11 +32,23 @@ export const CommunityHotSection = ({ posts }: CommunityHotSectionProps) => {
 					<Link key={post.boardId} href={`/community/${post.boardId}`} className={s.card}>
 						<div className={s.thumbnailWrapper}>
 							{post.images[0] && (
-								<Image src={post.images[0]} alt={post.title} fill style={{ objectFit: "cover" }} />
+								<Image
+									src={post.images[0]}
+									alt={post.title}
+									fill
+									sizes="(max-width: 1054px) 33vw, 255px"
+									style={{ objectFit: "cover" }}
+								/>
 							)}
 							<div className={s.badge}>
 								{post.toolLogo && (
-									<Image src={post.toolLogo} alt="" fill style={{ objectFit: "cover" }} />
+									<Image
+										src={post.toolLogo}
+										alt=""
+										fill
+										sizes="28px"
+										style={{ objectFit: "cover" }}
+									/>
 								)}
 							</div>
 						</div>

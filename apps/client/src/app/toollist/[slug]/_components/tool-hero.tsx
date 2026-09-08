@@ -12,7 +12,13 @@ export const ToolHero = async ({ toolId }: Props) => {
 	return (
 		<section className={styles.container}>
 			<div className={styles.thumbnail}>
-				<Image src={info.toolLogo} alt={info.toolMainName} fill className={styles.thumbnailImage} />
+				<Image
+					src={info.toolLogo}
+					alt={info.toolMainName}
+					fill
+					sizes="80px"
+					className={styles.thumbnailImage}
+				/>
 			</div>
 
 			<div className={styles.info}>
