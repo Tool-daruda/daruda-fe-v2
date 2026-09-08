@@ -2,8 +2,10 @@
 
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { fetchMoreCommentsAction } from "@/app/community/_actions/comment-actions";
 import type { CommentItem } from "@/common/api/models/comment.model";
+import { LoadingSentinel } from "@/common/components/loading-spinner/loading-spinner";
 import { MoreMenu, type MoreMenuItem } from "@/common/components/more-menu/more-menu";
 import { ReportModal } from "@/common/components/report-modal/report-modal";
 import { toast } from "@/common/components/toast";
@@ -12,13 +14,84 @@ import { formatDate, formatTime } from "@/common/utils";
 import { deleteCommentAction } from "../../_actions/comment-actions";
 import * as s from "./styles/comment-section.css";
 
+const hasValidCursor = (cursor: number | null): cursor is number =>
+	cursor !== null && Number.isFinite(cursor) && cursor > 0;
+
 interface CommentSectionProps {
 	boardId: number;
 	commentCount: number;
-	comments: CommentItem[];
+	initialComments: CommentItem[];
+	initialNextCursor: number | null;
+	pageSize: number;
 }
 
-export const CommentSection = ({ boardId, commentCount, comments }: CommentSectionProps) => {
+export const CommentSection = ({
+	boardId,
+	commentCount,
+	initialComments,
+	initialNextCursor,
+	pageSize,
+}: CommentSectionProps) => {
+	const [comments, setComments] = useState(initialComments);
+	const [nextCursor, setNextCursor] = useState(initialNextCursor);
+	const [isLoading, setIsLoading] = useState(false);
+
+	const sentinelRef = useRef<HTMLDivElement>(null);
+	const hasMore = hasValidCursor(nextCursor);
+
+	const loadMore = useCallback(async () => {
+		if (isLoading || !hasValidCursor(nextCursor)) return;
+
+		setIsLoading(true);
+
+		try {
+			const res = await fetchMoreCommentsAction({
+				boardId,
+				size: pageSize,
+				lastCommentId: nextCursor,
+			});
+
+			if (!res.success || !res.data || res.data.commentList.length === 0) {
+				setNextCursor(null);
+				return;
+			}
+
+			setComments((prev) => [...prev, ...res.data.commentList]);
+
+			const newCursor = res.data.pageInfo?.nextCursor ?? null;
+			setNextCursor(hasValidCursor(newCursor) && newCursor !== nextCursor ? newCursor : null);
+		} catch (error) {
+			console.error("댓글 추가 조회 실패:", error);
+			setNextCursor(null);
+		} finally {
+			setIsLoading(false);
+		}
+	}, [isLoading, nextCursor, boardId, pageSize]);
+
+	useEffect(() => {
+		const sentinelEl = sentinelRef.current;
+		if (!sentinelEl || !hasMore) return;
+
+		const observer = new IntersectionObserver(
+			(entries) => {
+				if (entries[0]?.isIntersecting) {
+					loadMore();
+				}
+			},
+			{ rootMargin: "200px" }
+		);
+
+		observer.observe(sentinelEl);
+
+		return () => {
+			observer.unobserve(sentinelEl);
+		};
+	}, [loadMore, hasMore]);
+
+	const handleDeleted = useCallback((commentId: number) => {
+		setComments((prev) => prev.filter((comment) => comment.commentId !== commentId));
+	}, []);
+
 	return (
 		<div className={s.wrapper}>
 			<div className={s.headRow}>
@@ -32,14 +105,27 @@ export const CommentSection = ({ boardId, commentCount, comments }: CommentSecti
 
 			<div className={s.list}>
 				{comments.map((comment) => (
-					<CommentRow key={comment.commentId} comment={comment} boardId={boardId} />
+					<CommentRow
+						key={comment.commentId}
+						comment={comment}
+						boardId={boardId}
+						onDeleted={handleDeleted}
+					/>
 				))}
 			</div>
+
+			{hasMore && <LoadingSentinel ref={sentinelRef} isLoading={isLoading} />}
 		</div>
 	);
 };
 
-const CommentRow = ({ comment, boardId }: { comment: CommentItem; boardId: number }) => {
+interface CommentRowProps {
+	comment: CommentItem;
+	boardId: number;
+	onDeleted: (commentId: number) => void;
+}
+
+const CommentRow = ({ comment, boardId, onDeleted }: CommentRowProps) => {
 	const router = useRouter();
 	const { isOpen, toggle, close, containerRef, isOwner } = useContentMenu(comment.nickname);
 	const [reportOpen, setReportOpen] = useState(false);
@@ -50,8 +136,12 @@ const CommentRow = ({ comment, boardId }: { comment: CommentItem; boardId: numbe
 			iconSrc: "/icons/community/ic_delete_20.svg",
 			onClick: async () => {
 				const result = await deleteCommentAction({ commentId: comment.commentId, boardId });
-				if (result.success) router.refresh();
-				else toast(result.error || "삭제에 실패했어요.");
+				if (result.success) {
+					onDeleted(comment.commentId);
+					router.refresh();
+				} else {
+					toast(result.error || "삭제에 실패했어요.");
+				}
 			},
 		},
 	];
