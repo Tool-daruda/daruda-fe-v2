@@ -10,7 +10,7 @@ export const root = style({
 	flexShrink: 0,
 	width: "192px",
 	alignSelf: "flex-start",
-	zIndex: 1,
+	zIndex: 2,
 });
 
 export const card = style({
@@ -18,7 +18,6 @@ export const card = style({
 	flexDirection: "column",
 	width: "192px",
 	maxHeight: "calc(100vh - 48px)",
-	overflow: "hidden",
 	backgroundColor: colors.grayscale[0],
 	border: `1px solid ${colors.grayscale[50]}`,
 	borderRadius: "16px",
@@ -195,7 +194,7 @@ export const listSection = style({
 
 	selectors: {
 		"&[data-capped='true']": {
-			flex: "none",
+			flex: "0 1 auto",
 			maxHeight: `${LIST_ROW_HEIGHT * VISIBLE_ROW_COUNT}px`,
 		},
 	},
