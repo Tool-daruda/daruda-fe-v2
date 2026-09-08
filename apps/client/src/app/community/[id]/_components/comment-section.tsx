@@ -51,7 +51,11 @@ export const CommentSection = ({
 				lastCommentId: nextCursor,
 			});
 
-			if (!res.success || !res.data || res.data.commentList.length === 0) {
+			if (!res.success || !res.data) {
+				return;
+			}
+
+			if (res.data.commentList.length === 0) {
 				setNextCursor(null);
 				return;
 			}
