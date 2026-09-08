@@ -3,6 +3,9 @@ html {
 }
 
 body {
+	/* next/font가 폰트 + metric 보정 폴백 + 시스템 스택까지 이 변수 하나에 담아준다.
+	   var()가 비면 선언 전체가 무효가 되므로 폴백을 둔다. */
+	font-family: var(--font-pretendard, system-ui, sans-serif);
 	font-size: 1.6rem;
 	margin: 0;
 	display: flex;

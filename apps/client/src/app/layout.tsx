@@ -14,6 +14,7 @@ import { Toaster } from "@/common/components/toast";
 import { AuthProvider } from "@/common/context/auth-context";
 import { NotificationProvider } from "@/common/context/notification-context";
 import { ScrappedToolsProvider } from "@/common/context/scrap-context";
+import { pretendard } from "@/common/fonts/pretendard";
 import "../common/styles/reset.css";
 
 export const metadata: Metadata = {
@@ -30,7 +31,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
 	const isLoggedIn = await hasAuthSession();
 
 	return (
-		<html lang="ko" className={themeClass}>
+		<html lang="ko" className={`${themeClass} ${pretendard.variable}`}>
 			<body>
 				<AuthProvider isLoggedIn={isLoggedIn}>
 					<NotificationProvider>

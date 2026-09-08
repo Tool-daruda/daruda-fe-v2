@@ -1,4 +1,4 @@
-import { colors, themeVars } from "@repo/ui/foundations";
+import { colors, fontFamily, themeVars } from "@repo/ui/foundations";
 import { style } from "@vanilla-extract/css";
 
 export const container = style({
@@ -36,7 +36,7 @@ export const withdrawButton = style({
 	color: themeVars.colors.system.red.lt,
 	whiteSpace: "nowrap",
 	// Figma의 Body/B3_2. 공용 타이포 토큰에는 없는 조합이라 값을 직접 적는다.
-	fontFamily: "Pretendard",
+	fontFamily,
 	fontWeight: 500,
 	fontSize: "16px",
 	lineHeight: "24px",
