@@ -1,3 +1,4 @@
+import { media } from "@repo/ui/foundations";
 import { style } from "@vanilla-extract/css";
 
 /**
@@ -7,6 +8,12 @@ import { style } from "@vanilla-extract/css";
 export const CONTENT_MAX_WIDTH = "1054px";
 
 export const CONTENT_SIDE_PADDING = "24px";
+
+/**
+ * 모바일(767px 이하) 콘텐츠 좌우 여백.
+ * 디자인 헤더는 16px이지만 전 페이지 공통 패딩과 통일하기 위해 20px로 맞춘다.
+ */
+export const CONTENT_SIDE_PADDING_MOBILE = "20px";
 
 /**
  * 전 페이지 공통 콘텐츠 컨테이너.
@@ -21,4 +28,12 @@ export const pageContainer = style({
 	margin: "0 auto",
 	paddingLeft: CONTENT_SIDE_PADDING,
 	paddingRight: CONTENT_SIDE_PADDING,
+
+	"@media": {
+		[media.belowMd]: {
+			// 가로 방향 safe-area는 가로모드 노치에서만 0이 아니다.
+			paddingLeft: `calc(${CONTENT_SIDE_PADDING_MOBILE} + env(safe-area-inset-left))`,
+			paddingRight: `calc(${CONTENT_SIDE_PADDING_MOBILE} + env(safe-area-inset-right))`,
+		},
+	},
 });
