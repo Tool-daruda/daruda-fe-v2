@@ -65,7 +65,7 @@ export const MainCommunityCard = ({ post }: { post: BoardItem }) => {
 								src={post.images[0]}
 								alt={post.title}
 								fill
-								sizes="80px"
+								sizes="(max-width: 767px) 96px, 80px"
 								style={{ objectFit: "cover" }}
 							/>
 						</div>

@@ -1,4 +1,4 @@
-import { colors, themeVars } from "@repo/ui/foundations";
+import { colors, media, themeVars } from "@repo/ui/foundations";
 import { style } from "@vanilla-extract/css";
 import { pageContainer } from "@/common/styles/layout.css";
 
@@ -9,6 +9,13 @@ export const container = style({
 	minHeight: "268px",
 	overflow: "hidden",
 	background: colors.brand.iris[50],
+
+	"@media": {
+		// 모바일 디자인에는 히어로가 없다. 검색은 헤더 아이콘 → /search로 간다.
+		[media.belowMd]: {
+			display: "none",
+		},
+	},
 });
 
 export const inner = style([

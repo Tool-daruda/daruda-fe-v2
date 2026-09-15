@@ -29,14 +29,17 @@ const Footer = () => {
 					</div>
 				</div>
 
-				<a
-					href="https://www.instagram.com/daruda.official/"
-					target="_blank"
-					rel="noopener noreferrer"
-					aria-label="다루다 인스타그램"
-				>
-					<Image src="/icons/ic_insta_24.svg" alt="" width={24} height={24} />
-				</a>
+				<div className={s.bottomRow}>
+					<p className={s.copyright}>© Daruda. All rights reserved.</p>
+					<a
+						href="https://www.instagram.com/daruda.official/"
+						target="_blank"
+						rel="noopener noreferrer"
+						aria-label="다루다 인스타그램"
+					>
+						<Image src="/icons/ic_insta_24.svg" alt="" width={24} height={24} />
+					</a>
+				</div>
 			</div>
 		</footer>
 	);
