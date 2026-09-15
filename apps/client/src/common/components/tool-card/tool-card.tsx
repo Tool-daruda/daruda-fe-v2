@@ -1,11 +1,7 @@
-"use client";
-
-// 카드 자체에는 상호작용이 없지만, @repo/ui 번들이 클라이언트 전용이라 서버 컴포넌트로 둘 수 없습니다.
-
-import { cx } from "@repo/ui";
 import Image from "next/image";
 import Link from "next/link";
 import { PRICE_LABEL, type PriceType } from "@/common/constants/price";
+import { cx } from "@/common/utils";
 import { ToolBookmarkButton } from "./tool-bookmark-button";
 import * as styles from "./tool-card.css";
 
