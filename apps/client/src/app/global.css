@@ -9,7 +9,10 @@ body {
 	font-size: 1.6rem;
 	margin: 0;
 	display: flex;
+	/* dvh 미지원 브라우저 폴백. 아래 100dvh가 지원 브라우저에서 이 값을 덮어쓴다. */
 	min-height: 100vh;
+	/* biome-ignore lint/suspicious/noDuplicateProperties: dvh 미지원 브라우저를 위한 의도된 폴백 */
+	min-height: 100dvh;
 	flex-direction: column;
 }
 
