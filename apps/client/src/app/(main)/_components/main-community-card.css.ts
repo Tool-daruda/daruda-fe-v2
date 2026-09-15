@@ -1,5 +1,8 @@
-import { colors, themeVars } from "@repo/ui/foundations";
+import { colors, media, themeVars } from "@repo/ui/foundations";
 import { style } from "@vanilla-extract/css";
+
+/** 모바일에서 카드 높이를 고정한다. 스켈레톤이 이 값을 그대로 가져다 쓴다. */
+export const MAIN_COMMUNITY_CARD_HEIGHT = { mobile: "196px", desktop: "148px" } as const;
 
 export const cardWrapper = style({
 	position: "relative",
@@ -16,6 +19,15 @@ export const card = style({
 	border: `1px solid ${colors.grayscale[25]}`,
 	backgroundColor: colors.grayscale[0],
 	textDecoration: "none",
+
+	"@media": {
+		[media.belowMd]: {
+			// 툴칩·썸네일 유무로 높이가 흔들리면 스켈레톤과 어긋나 CLS가 생긴다.
+			height: MAIN_COMMUNITY_CARD_HEIGHT.mobile,
+			padding: "18px",
+			boxSizing: "border-box",
+		},
+	},
 });
 
 export const cardHead = style({
@@ -24,6 +36,14 @@ export const cardHead = style({
 	gap: "10px",
 	width: "100%",
 	paddingRight: "36px",
+
+	"@media": {
+		[media.belowMd]: {
+			flexDirection: "column",
+			alignItems: "flex-start",
+			gap: "8px",
+		},
+	},
 });
 
 export const toolChip = style({
@@ -88,6 +108,12 @@ export const cardBody = style({
 	alignItems: "flex-start",
 	gap: "28px",
 	width: "100%",
+
+	"@media": {
+		[media.belowMd]: {
+			gap: "12px",
+		},
+	},
 });
 
 export const cardBodyLeft = style({
@@ -146,4 +172,11 @@ export const thumbnail = style({
 	borderRadius: "8px",
 	backgroundColor: colors.grayscale[50],
 	overflow: "hidden",
+
+	"@media": {
+		[media.belowMd]: {
+			width: "96px",
+			height: "96px",
+		},
+	},
 });
