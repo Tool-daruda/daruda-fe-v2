@@ -87,7 +87,11 @@ export default function ToolCard({
 		</>
 	);
 
-	const className = cx(styles.card, styles.variant[variant]);
+	const className = cx(
+		styles.card,
+		styles.variant[variant],
+		variant === "vertical" && styles.verticalResponsive
+	);
 
 	if (href) {
 		return (

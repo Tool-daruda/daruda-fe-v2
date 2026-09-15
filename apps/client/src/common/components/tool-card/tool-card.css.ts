@@ -1,5 +1,8 @@
-import { colors, themeVars } from "@repo/ui/foundations";
+import { colors, media, themeVars } from "@repo/ui/foundations";
 import { style, styleVariants } from "@vanilla-extract/css";
+
+/** vertical 카드의 실제 높이. 스켈레톤이 이 값을 그대로 가져다 쓴다. */
+export const TOOL_CARD_VERTICAL_HEIGHT = { mobile: "156px", desktop: "150px" } as const;
 
 export const card = style({
 	position: "relative",
@@ -17,12 +20,19 @@ export const card = style({
 			backgroundColor: themeVars.colors.grayscale[30],
 		},
 	},
+
+	"@media": {
+		[media.belowMd]: {
+			// 모바일 가로 스크롤에서는 row(부모)가 폭을 정한다.
+			maxWidth: "none",
+		},
+	},
 });
 
 export const variant = styleVariants({
 	vertical: {
 		minWidth: "188px",
-		height: "150px",
+		height: TOOL_CARD_VERTICAL_HEIGHT.desktop,
 		padding: "16px",
 		borderRadius: "16px",
 	},
@@ -37,6 +47,20 @@ export const variant = styleVariants({
 		padding: "14px 14px 12px",
 		gap: "8px",
 		borderRadius: "12px",
+	},
+});
+
+/**
+ * vertical variant 전용 모바일 오버라이드.
+ * styleVariants는 `@media`를 직접 못 받으므로 별도 스타일로 합성한다.
+ */
+export const verticalResponsive = style({
+	"@media": {
+		[media.belowMd]: {
+			height: TOOL_CARD_VERTICAL_HEIGHT.mobile,
+			padding: "18px",
+			minWidth: 0,
+		},
 	},
 });
 
