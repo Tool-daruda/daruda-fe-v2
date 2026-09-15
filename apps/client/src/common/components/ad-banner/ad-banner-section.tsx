@@ -17,12 +17,13 @@ export type AdBanner = {
 
 type Props = {
 	banners: AdBanner[];
+	className?: string;
 };
 
 /** 트랙 앞뒤에 복제 슬라이드를 하나씩 두므로 실제 첫 광고의 트랙 위치는 1이다 */
 const FIRST_POSITION = 1;
 
-export const AdBannerSection = ({ banners }: Props) => {
+export const AdBannerSection = ({ banners, className }: Props) => {
 	const total = banners.length;
 	const isLoop = total > 1;
 
@@ -78,7 +79,11 @@ export const AdBannerSection = ({ banners }: Props) => {
 	};
 
 	return (
-		<section className={s.section} aria-label="광고 배너" aria-roledescription="carousel">
+		<section
+			className={cx(s.section, className)}
+			aria-label="광고 배너"
+			aria-roledescription="carousel"
+		>
 			<div className={s.viewport}>
 				<ul
 					className={cx(s.track, !isAnimated && s.trackStatic)}
@@ -101,7 +106,7 @@ export const AdBannerSection = ({ banners }: Props) => {
 											alt={slide.banner.title}
 											fill
 											className={s.slideImage}
-											sizes="1006px"
+											sizes="(max-width: 767px) 100vw, 1006px"
 										/>
 									) : (
 										<span className={s.slideText}>

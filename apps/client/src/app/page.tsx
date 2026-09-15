@@ -13,10 +13,11 @@ import * as s from "./page-style.css";
 export default function Home() {
 	return (
 		<div className={s.page}>
+			<h1 className={s.mobileHeading}>대학 생활에 필요한 툴을 다루다</h1>
 			<HeroSection />
 
 			<div className={s.content}>
-				<AdBannerSection banners={AD_BANNERS} />
+				<AdBannerSection banners={AD_BANNERS} className={s.fullBleed} />
 				<div className={s.sections}>
 					<Suspense fallback={<ToolRowSkeleton />}>
 						<PopularToolsSection />

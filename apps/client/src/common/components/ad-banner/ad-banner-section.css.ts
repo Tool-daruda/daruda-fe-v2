@@ -1,4 +1,4 @@
-import { colors, themeVars } from "@repo/ui/foundations";
+import { colors, media, themeVars } from "@repo/ui/foundations";
 import { style } from "@vanilla-extract/css";
 
 export const section = style({
@@ -8,6 +8,14 @@ export const section = style({
 	border: `1px solid ${colors.grayscale[50]}`,
 	boxSizing: "border-box",
 	overflow: "hidden",
+
+	"@media": {
+		[media.belowMd]: {
+			height: "136px",
+			borderRadius: "0",
+			border: "none",
+		},
+	},
 });
 
 export const viewport = style({
@@ -21,6 +29,12 @@ export const track = style({
 	height: "100%",
 	listStyle: "none",
 	transition: "transform 0.4s ease",
+
+	"@media": {
+		[media.reducedMotion]: {
+			transition: "none",
+		},
+	},
 });
 
 /** 복제 슬라이드에서 실제 슬라이드로 되돌릴 때, 그 이동만 애니메이션 없이 처리한다 */
@@ -42,6 +56,13 @@ export const slideLink = style({
 	padding: "0 64px",
 	overflow: "hidden",
 	backgroundColor: colors.brand.iris[100],
+
+	"@media": {
+		[media.belowMd]: {
+			// 좌우 화살표(20px 위치 + 32px 폭) 자리를 피한다.
+			padding: "0 60px",
+		},
+	},
 });
 
 export const slideImage = style({
@@ -57,11 +78,23 @@ export const slideText = style({
 export const slideTitle = style({
 	...themeVars.fonts.t2_1,
 	color: colors.brand.iris[700],
+
+	"@media": {
+		[media.belowMd]: {
+			...themeVars.fonts.t3_1,
+		},
+	},
 });
 
 export const slideDescription = style({
 	...themeVars.fonts.b4_1,
 	color: colors.brand.iris[500],
+
+	"@media": {
+		[media.belowMd]: {
+			...themeVars.fonts.caption2_2,
+		},
+	},
 });
 
 export const arrow = style({
@@ -79,11 +112,23 @@ export const arrow = style({
 export const arrowPrev = style({
 	left: "16px",
 	transform: "translateY(-50%) rotate(180deg)",
+
+	"@media": {
+		[media.belowMd]: {
+			left: "20px",
+		},
+	},
 });
 
 export const arrowNext = style({
 	right: "16px",
 	transform: "translateY(-50%)",
+
+	"@media": {
+		[media.belowMd]: {
+			right: "20px",
+		},
+	},
 });
 
 export const dots = style({
