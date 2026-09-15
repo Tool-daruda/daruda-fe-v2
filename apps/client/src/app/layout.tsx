@@ -2,7 +2,7 @@ import "./global.css";
 import "@repo/ui/index.css";
 import "@repo/ui/foundations.css";
 import { themeClass } from "@repo/ui/foundations";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import type { PropsWithChildren } from "react";
 import { hasAuthSession } from "@/common/api/auth-session";
 import DevAuthPanel from "@/common/components/dev-auth/dev-auth-panel";
@@ -25,6 +25,12 @@ export const metadata: Metadata = {
 		shortcut: "/icons/ic_logo_20.svg",
 		apple: "/icons/ic_logo_20.svg",
 	},
+};
+
+export const viewport: Viewport = {
+	width: "device-width",
+	initialScale: 1,
+	viewportFit: "cover",
 };
 
 export default async function RootLayout({ children }: PropsWithChildren) {
