@@ -1,3 +1,4 @@
+export { breakpoints, media } from "./breakpoints";
 export { type Colors, colors } from "./color.css";
 export { type ThemeClass, type ThemeVars, themeClass, themeVars } from "./theme.css";
 export {
