@@ -1,4 +1,5 @@
 import type { CSSProperties } from "react";
+import { cx } from "@/common/utils";
 import * as s from "./skeleton.css";
 
 type Props = {
@@ -16,5 +17,5 @@ type Props = {
 export const Skeleton = ({ width = "100%", height, radius = "8px", className }: Props) => {
 	const style: CSSProperties = { width, height, borderRadius: radius };
 
-	return <div aria-hidden className={`${s.skeleton} ${className ?? ""}`} style={style} />;
+	return <div aria-hidden className={cx(s.skeleton, className)} style={style} />;
 };
